@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:qanda/MenuPage.dart';
@@ -25,6 +26,28 @@ class _SignInUpPageState extends State<SignInUpPage> {
     print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(animationTime).then((_) async {
 
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: data.name,
+          password: data.password,
+        );
+        print(userCredential);
+      }
+      on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('Password is too weak');
+          return 'Password is too weak';
+        } else if (e.code == 'email-already-in-use') {
+          print('Account exists');
+          return 'Account exists';
+        } else if (e.code == 'invalid-email') {
+          print('Invalid email');
+          return 'Invalid email';
+        }
+      }
+      catch (e) {
+        print(e);
+      }
       return null;
     });
   }
