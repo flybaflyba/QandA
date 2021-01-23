@@ -18,6 +18,37 @@ class _SignInUpPageState extends State<SignInUpPage> {
     print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(animationTime).then((_) async {
 
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: data.name,
+            password: data.password
+        );
+
+        // print(userCredential);
+        if(userCredential != null) {
+          print("I'm signing in!!!");
+        }
+
+      } on FirebaseAuthException catch (e) {
+        print(e);
+        if (e.code == 'user-not-found') {
+          print('No user found');
+          return 'No user found';
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password');
+          return 'Wrong password';
+        } else if (e.code == 'invalid-email') {
+          print('Invalid email');
+          return 'Invalid email';
+        } else {
+          print('Something went wrong');
+          return 'Something went wrong';
+        }
+      }
+      catch (e) {
+        print(e);
+      }
+
       return null;
     });
   }
@@ -31,7 +62,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
           email: data.name,
           password: data.password,
         );
-        print(userCredential);
+        // print(userCredential);
       }
       on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
