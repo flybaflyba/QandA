@@ -1,5 +1,7 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalValues.dart';
 
 class CreatePostPage extends StatefulWidget{
@@ -11,6 +13,9 @@ class CreatePostPage extends StatefulWidget{
 class _CreatePostPageState extends State<CreatePostPage>{
 
   TextEditingController titleTextEditingController = new TextEditingController();
+
+  var title = "";
+  var content = "";
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       style: TextStyle(fontSize: 25),
                       textAlign: TextAlign.center,
                       onChanged: (value){
-                        //  = value;
+                         title = value;
                       },
                       decoration: InputDecoration(
                         hintText: "Title",
@@ -53,7 +58,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       maxLines: 100,
                       textAlign: TextAlign.left,
                       onChanged: (value){
-                        //  = value;
+                        content = value;
                       },
                       decoration: InputDecoration(
                         hintText: "Content",
@@ -67,7 +72,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       ),
                     ),
                   ),
-                  
+
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: ClipRRect(
@@ -75,8 +80,15 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       child: Container(
                         height: 60,
                         child: RaisedButton(
-                          onPressed: () async {
-
+                          onPressed: () {
+                            Post post = new Post(
+                                title: title,
+                                content: content,
+                                author: FirebaseAuth.instance.currentUser.email,
+                                createdTime: DateTime.now().toString()
+                            );
+                            post.printOut();
+                            post.create();
                           },
                           color: UniversalValues.buttonColor,
                           child: Text(
@@ -90,13 +102,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       ),
                     ),
                   ),
-
-
-
-
-
-
-
                 ],
 
               ),

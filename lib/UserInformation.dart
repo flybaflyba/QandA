@@ -16,7 +16,7 @@ class UserInformation {
     if(major != null){ this.major = major; }
   }
 
-  void setUserInfoWithDocumentSnapshot(DocumentSnapshot userInformationDocumentSnapshot) {
+  void setUserInformationWithDocumentSnapshot(DocumentSnapshot userInformationDocumentSnapshot) {
     name = userInformationDocumentSnapshot["name"];
     email = userInformationDocumentSnapshot["email"];
     major= userInformationDocumentSnapshot["major"];
