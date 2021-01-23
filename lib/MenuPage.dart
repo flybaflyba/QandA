@@ -30,19 +30,19 @@ class _MenuPageState extends State<MenuPage>{
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.home),
         title: ("World"),
-        activeColor: Color.fromRGBO(158, 27, 52, 100), // TODO externalize color Crimson
+        activeColor: Colors.redAccent, // Color.fromRGBO(158, 27, 52, 100),
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.create),
         title: ("Create"),
-        activeColor: Color.fromRGBO(158, 27, 52, 100), // TODO externalize color Crimson
+        activeColor: Colors.redAccent,
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.person),
         title: ("Home"),
-        activeColor: Color.fromRGBO(158, 27, 52, 100), // TODO externalize color Crimson
+        activeColor: Colors.redAccent,
         inactiveColor: CupertinoColors.systemGrey,
       ),
     ];
@@ -53,7 +53,7 @@ class _MenuPageState extends State<MenuPage>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(158, 27, 52, 100), // TODO externalize color Crimson
+        backgroundColor: Colors.redAccent,
         title: Text("Q&A"),
       ),
       body: PersistentTabView(
