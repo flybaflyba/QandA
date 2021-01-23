@@ -63,7 +63,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
           password: data.password,
         );
         print(userCredential);
-        // we can use this to set some simple user info 
+        // we can use this to set some simple user info
         // userCredential.user.updateProfile(displayName: 'Litian', photoURL: 'www.litianzhang.com');
 
 
