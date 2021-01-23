@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:qanda/MenuPage.dart';
+import 'package:qanda/UniversalValues.dart';
 
 class SignInUpPage extends StatefulWidget{
 
@@ -64,14 +65,11 @@ class _SignInUpPageState extends State<SignInUpPage> {
         onRecoverPassword: recoverPassword,
         // showDebugButtons: true,
         theme: LoginTheme(
-          primaryColor:  Colors.redAccent,
+          primaryColor: UniversalValues.primaryColor,
           buttonTheme: LoginButtonTheme(
-            backgroundColor: Colors.pinkAccent,
-
+            backgroundColor: UniversalValues.buttonColor,
           ),
         ),
-
-
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/BlankPage.dart';
+import 'package:qanda/UniversalValues.dart';
 
 BuildContext selectedTabScreenContext;
 
@@ -30,19 +31,19 @@ class _MenuPageState extends State<MenuPage>{
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.home),
         title: ("World"),
-        activeColor: Colors.redAccent, // Color.fromRGBO(158, 27, 52, 100),
+        activeColor: UniversalValues.primaryColor, // Color.fromRGBO(158, 27, 52, 100),
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.create),
         title: ("Create"),
-        activeColor: Colors.redAccent,
+        activeColor: UniversalValues.primaryColor,
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.person),
         title: ("Home"),
-        activeColor: Colors.redAccent,
+        activeColor: UniversalValues.primaryColor,
         inactiveColor: CupertinoColors.systemGrey,
       ),
     ];
@@ -53,7 +54,7 @@ class _MenuPageState extends State<MenuPage>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
+        // backgroundColor: UniversalValues.primaryColor,
         title: Text("Q&A"),
       ),
       body: PersistentTabView(
@@ -94,7 +95,7 @@ class _MenuPageState extends State<MenuPage>{
         screenTransitionAnimation: ScreenTransitionAnimation(
           animateTabTransition: true,
           curve: Curves.ease,
-          duration: Duration(milliseconds: 400),
+          duration: Duration(milliseconds: 200),
         ),
         navBarStyle: NavBarStyle.style3, // Choose the nav bar style with this property
       )
