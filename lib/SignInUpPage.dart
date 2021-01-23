@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:qanda/MenuPage.dart';
 import 'package:qanda/UniversalValues.dart';
+import 'package:qanda/UserInformation.dart';
 
 class SignInUpPage extends StatefulWidget{
 
@@ -63,9 +64,12 @@ class _SignInUpPageState extends State<SignInUpPage> {
           password: data.password,
         );
         print(userCredential);
-        // we can use this to set some simple user info
+        // we can use this to set some simple user inf
         // userCredential.user.updateProfile(displayName: 'Litian', photoURL: 'www.litianzhang.com');
 
+        // create a user information document in database
+        UserInformation userInformation = UserInformation(email: data.name);
+        userInformation.create();
 
       }
       on FirebaseAuthException catch (e) {
