@@ -24,7 +24,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
             password: data.password
         );
 
-        // print(userCredential);
+        print(userCredential);
         if(userCredential != null) {
           print("I'm signing in!!!");
         }
@@ -62,7 +62,11 @@ class _SignInUpPageState extends State<SignInUpPage> {
           email: data.name,
           password: data.password,
         );
-        // print(userCredential);
+        print(userCredential);
+        // we can use this to set some simple user info 
+        // userCredential.user.updateProfile(displayName: 'Litian', photoURL: 'www.litianzhang.com');
+
+
       }
       on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
