@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/BlankPage.dart';
+import 'package:qanda/CreatePostPage.dart';
 import 'package:qanda/UniversalValues.dart';
 
 BuildContext selectedTabScreenContext;
@@ -22,7 +23,7 @@ class _MenuPageState extends State<MenuPage>{
 
   List<Widget> buildScreens = [
     BlankPage(),
-    BlankPage(),
+    CreatePostPage(),
     BlankPage(),
   ];
 
