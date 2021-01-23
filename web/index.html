@@ -40,6 +40,35 @@
       });
     }
   </script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-firestore.js"></script>
+
+  <script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyAqtsWJ92iRB7eqcgiHqz7lPqBYB5ZNQKA",
+    authDomain: "qanda-f4dae.firebaseapp.com",
+    projectId: "qanda-f4dae",
+    storageBucket: "qanda-f4dae.appspot.com",
+    messagingSenderId: "301360363544",
+    appId: "1:301360363544:web:f98740ac78ecd01ebeeb6d",
+    measurementId: "G-XBC1XC7GWN"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>
