@@ -90,7 +90,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
     if (!mounted) return;
 
     setState(() {
-      images = resultList;
+      if (resultList.length != 0) {
+        images = resultList;
+      }
       _error = error;
     });
   }
