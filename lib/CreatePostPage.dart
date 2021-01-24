@@ -47,16 +47,27 @@ class _CreatePostPageState extends State<CreatePostPage>{
           Asset asset = images[index];
           return Stack(
             children: [
-            AssetThumb(
-            asset: asset,
-            width: 300,
-            height: 300,
-          ),
-        IconButton(icon: Icon(Icons.delete), onPressed: () {
-          setState(() {
-            images.removeAt(index);
-          });
-        })
+              AssetThumb(
+                asset: asset,
+                width: 300,
+                height: 300,
+              ),
+              // IconButton(
+              //   iconSize: 25,
+              //     color: Colors.white,
+              //     icon: Icon(Icons.circle),
+              //     onPressed: () {
+              //     }
+              // ),
+              IconButton(
+                iconSize: 20,
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      images.removeAt(index);
+                    });
+                  }
+              )
             ],
           );
         }
@@ -178,11 +189,12 @@ class _CreatePostPageState extends State<CreatePostPage>{
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.only(bottom: 50),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(30),
                         child: Container(
                           height: 60,
+                          width: 120,
                           child: RaisedButton(
                             onPressed: () {
                               Post post = new Post(
