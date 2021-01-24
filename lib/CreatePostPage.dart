@@ -114,33 +114,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
     });
   }
 
-
-  void uploadImages(List<Asset> imageAssets) async {
-    List<String> urlList = [];
-    try {
-      imageAssets.forEach((imageAsset) async {
-        final filePath = await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
-
-        File imageFile = File(filePath);
-        if (imageFile.existsSync()) {
-          print(imageAsset.toString() + " --- converted image asset to file --- " + imageFile.toString());
-        }
-
-        String name = DateTime.now().toString() + " - " + images.indexOf(imageAsset).toString();
-        StorageReference reference =
-        FirebaseStorage.instance.ref().child('Post Images').child(DateTime.now().toString()).child(name);
-        StorageUploadTask uploadTask = reference.putFile(imageFile);
-        StorageTaskSnapshot downloadUrl = await uploadTask.onComplete;
-        String url = await downloadUrl.ref.getDownloadURL();
-        urlList.add(url);
-        print(urlList.length);
-      });
-    } catch(e) {
-      print("something went wrong $e");
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,17 +201,16 @@ class _CreatePostPageState extends State<CreatePostPage>{
                           child: RaisedButton(
                             onPressed: () {
 
-                              uploadImages(images);
-
-                              print(images);
+                              // print(images);
                               Post post = new Post(
-                                  title: title,
-                                  content: content,
-                                  author: FirebaseAuth.instance.currentUser.email,
-                                  createdTime: DateTime.now().toString()
+                                title: title,
+                                content: content,
+                                author: FirebaseAuth.instance.currentUser.email,
+                                createdTime: DateTime.now().toString(),
+                                images: images,
                               );
                               post.printOut();
-                              // post.create();
+                              post.create();
 
                             },
                             color: UniversalValues.buttonColor,
@@ -254,7 +226,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       ),
                     ),
                   ],
-
                 ),
               ),
             ],
