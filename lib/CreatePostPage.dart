@@ -43,10 +43,19 @@ class _CreatePostPageState extends State<CreatePostPage>{
           return IconButton(icon: Icon(Icons.add), onPressed: () {loadAssets();});
         } else {
           Asset asset = images[index];
-          return AssetThumb(
+          return Stack(
+            children: [
+            AssetThumb(
             asset: asset,
             width: 300,
             height: 300,
+          ),
+        IconButton(icon: Icon(Icons.delete), onPressed: () {
+          setState(() {
+            images.removeAt(index);
+          });
+        })
+            ],
           );
         }
       }),
