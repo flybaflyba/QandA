@@ -37,6 +37,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
       physics: ScrollPhysics(), // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
       shrinkWrap: true,
       crossAxisCount: 3,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
       children: List.generate(loopTimes, (index) {
         if (index == images.length) {
           // loop again after all images, add a icon button in the end
