@@ -1,8 +1,12 @@
 
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalValues.dart';
@@ -110,12 +114,38 @@ class _CreatePostPageState extends State<CreatePostPage>{
     });
   }
 
+
+  void uploadImages(List<Asset> imageAssets) async {
+    List<String> urlList = [];
+    try {
+      imageAssets.forEach((imageAsset) async {
+        final filePath = await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
+
+        File imageFile = File(filePath);
+        if (imageFile.existsSync()) {
+          print(imageAsset.toString() + " --- converted image asset to file --- " + imageFile.toString());
+        }
+
+        String name = DateTime.now().toString() + " - " + images.indexOf(imageAsset).toString();
+        StorageReference reference =
+        FirebaseStorage.instance.ref().child('Post Images').child(DateTime.now().toString()).child(name);
+        StorageUploadTask uploadTask = reference.putFile(imageFile);
+        StorageTaskSnapshot downloadUrl = await uploadTask.onComplete;
+        String url = await downloadUrl.ref.getDownloadURL();
+        urlList.add(url);
+        print(urlList.length);
+      });
+    } catch(e) {
+      print("something went wrong $e");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
           child: ListView(
-
             children: [
               Container(
                 constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
@@ -197,6 +227,10 @@ class _CreatePostPageState extends State<CreatePostPage>{
                           width: 120,
                           child: RaisedButton(
                             onPressed: () {
+
+                              uploadImages(images);
+
+                              print(images);
                               Post post = new Post(
                                   title: title,
                                   content: content,
@@ -204,7 +238,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   createdTime: DateTime.now().toString()
                               );
                               post.printOut();
-                              post.create();
+                              // post.create();
+
                             },
                             color: UniversalValues.buttonColor,
                             child: Text(
