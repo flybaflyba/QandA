@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:qanda/Post.dart';
+import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 
 class CreatePostPage extends StatefulWidget{
@@ -202,15 +203,20 @@ class _CreatePostPageState extends State<CreatePostPage>{
                             onPressed: () {
 
                               // print(images);
-                              Post post = new Post(
-                                title: title,
-                                content: content,
-                                author: FirebaseAuth.instance.currentUser.email,
-                                createdTime: DateTime.now().toString(),
-                                images: images,
-                              );
-                              post.printOut();
-                              post.create();
+                              if (title != "" && content != "") {
+                                Post post = new Post(
+                                  title: title,
+                                  content: content,
+                                  author: FirebaseAuth.instance.currentUser.email,
+                                  createdTime: DateTime.now().toString(),
+                                  images: images,
+                                );
+                                post.printOut();
+                                post.create();
+                              } else {
+                                UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
+                              }
+
 
                             },
                             color: UniversalValues.buttonColor,

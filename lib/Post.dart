@@ -76,10 +76,7 @@ class Post {
           })
               .then((value) => print("Post Created"))
               .catchError((error) => print("Failed to create Post: $error"));
-
         });
-
-
 
   }
 
