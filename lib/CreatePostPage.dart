@@ -15,7 +15,6 @@ import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:universal_html/prefer_universal/html.dart' as universal_html;
 
 class CreatePostPage extends StatefulWidget{
 
@@ -31,7 +30,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
   var content = "";
 
   List<Asset> imageAssets = List<Asset>();
-  List<dynamic> imageUint8Lists = List<dynamic>();
+  List<Uint8List> imageUint8Lists = List<Uint8List>();
   String _error = 'No Error Detected';
 
   @override
@@ -56,48 +55,16 @@ class _CreatePostPageState extends State<CreatePostPage>{
           return
             IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () async {
+                onPressed: () {
                   // hide keyboard when pick images
                   FocusScope.of(context).requestFocus(new FocusNode()); // do not show keyboard
                   if(kIsWeb) {
                     print("web");
-                    // final image = await FlutterWebImagePicker.getImage;
-                    // setState(() {
-                    //   // add image to list
-                    // });
-
-                    FilePickerResult result = await FilePicker.platform.pickFiles(
-                        type: FileType.custom,
-                        allowMultiple: true,
-                        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']);
-
-                    if (result != null) {
-                      // cannot use path, does not support on web https://github.com/miguelpruivo/flutter_file_picker/issues/591
-                      // List<File> files = result.paths.map((path) => File(path)).toList();
-                      // File file = File(result.paths.first);
-
-                      print(result.files.first);
-                      Uint8List imageValue = result.files.first.bytes;
-                      // File imageFile = File.fromRawPath(imageValue); // uses dart.io, not supported on web
-
-                      List<Uint8List> imageUint8ListsTemp = result.files.map((file) => file.bytes).toList();
-
-                      setState(() {
-                        // imageFiles = files;
-                        imageUint8Lists = imageUint8ListsTemp;
-                      });
-
-                    } else {
-                      // User canceled the picker
-                    }
-
-                    print(imageUint8Lists);
-
+                    loadImagesOnWeb();
                   } else {
                     print("app");
-                    loadAssets();
+                    loadImagesOnDevices();
                   }
-
                 }
             );
         } else {
@@ -131,7 +98,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
     );
   }
 
-  Future<void> loadAssets() async {
+  Future<void> loadImagesOnDevices() async {
     List<Asset> resultList = List<Asset>();
     String error = 'No Error Detected';
 
@@ -179,6 +146,33 @@ class _CreatePostPageState extends State<CreatePostPage>{
     });
   }
 
+
+  Future<void> loadImagesOnWeb() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']);
+
+    if (result != null) {
+      // cannot use path, does not support on web https://github.com/miguelpruivo/flutter_file_picker/issues/591
+      // List<File> files = result.paths.map((path) => File(path)).toList();
+      // File file = File(result.paths.first);
+
+      // print(result.files.first);
+      Uint8List imageValue = result.files.first.bytes;
+      // File imageFile = File.fromRawPath(imageValue); // uses dart.io, not supported on web
+
+      List<Uint8List> imageUint8ListsTemp = result.files.map((file) => file.bytes).toList();
+
+      setState(() {
+        // imageFiles = files;
+        imageUint8Lists = imageUint8ListsTemp;
+      });
+
+    } else {
+      // User canceled the picker
+    }
+  }
 
 
   @override
@@ -275,7 +269,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   content: content,
                                   author: FirebaseAuth.instance.currentUser.email,
                                   createdTime: DateTime.now().toString(),
-                                  imageFiles: imageUint8Lists,
+                                  imageUint8Lists: imageUint8Lists,
                                 );
                                 post.printOut();
                                 post.create();
