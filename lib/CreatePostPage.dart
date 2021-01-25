@@ -1,4 +1,6 @@
 
+import 'dart:async';
+import 'dart:html' as Html;
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,10 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:flutter_web_image_picker/flutter_web_image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class CreatePostPage extends StatefulWidget{
 
@@ -25,7 +29,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
   var title = "";
   var content = "";
 
-  List<Asset> images = List<Asset>();
+  List<Asset> imageAssets = List<Asset>();
+  List<File> imageFiles = List<File>();
   String _error = 'No Error Detected';
 
   @override
@@ -34,8 +39,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
   }
 
   Widget buildGridView() {
-    var loopTimes = images.length + 1;
-    if (images.length == 9) {
+    var loopTimes = imageAssets.length + 1;
+    if (imageAssets.length == 9) {
       loopTimes = 9;
     }
     return GridView.count(
@@ -45,11 +50,27 @@ class _CreatePostPageState extends State<CreatePostPage>{
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       children: List.generate(loopTimes, (index) {
-        if (index == images.length) {
+        if (index == imageAssets.length) {
           // loop again after all images, add a icon button in the end
-          return IconButton(icon: Icon(Icons.add), onPressed: () {loadAssets();});
+          return
+            IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () async {
+                  if(kIsWeb) {
+                    print("web");
+                    final image = await FlutterWebImagePicker.getImage;
+                    setState(() {
+                      imageAssets.add(image as Asset);
+                    });
+                  } else {
+                    print("app");
+                    loadAssets();
+                  }
+
+                }
+            );
         } else {
-          Asset asset = images[index];
+          Asset asset = imageAssets[index];
           return Stack(
             children: [
               AssetThumb(
@@ -69,7 +90,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   icon: Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
-                      images.removeAt(index);
+                      imageAssets.removeAt(index);
                     });
                   }
               )
@@ -88,7 +109,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
       resultList = await MultiImagePicker.pickImages(
         maxImages: 9,
         enableCamera: true,
-        selectedAssets: images,
+        selectedAssets: imageAssets,
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
           actionBarColor: "#abcdef",
@@ -109,11 +130,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
     setState(() {
       if (resultList.length != 0) {
-        images = resultList;
+        imageAssets = resultList;
       }
       _error = error;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -209,15 +232,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   content: content,
                                   author: FirebaseAuth.instance.currentUser.email,
                                   createdTime: DateTime.now().toString(),
-                                  images: images,
+                                  images: imageAssets,
                                 );
                                 post.printOut();
                                 post.create();
                               } else {
                                 UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
                               }
-
-
                             },
                             color: UniversalValues.buttonColor,
                             child: Text(
