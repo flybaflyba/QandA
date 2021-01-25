@@ -54,6 +54,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
             IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () async {
+
+                  FocusScope.of(context).requestFocus(new FocusNode()); // do not show keyboard
+
                   if(kIsWeb) {
                     print("web");
                     // final image = await FlutterWebImagePicker.getImage;
