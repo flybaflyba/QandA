@@ -11,7 +11,7 @@ class Post {
   var content = "";
   var author = "";
   var createdTime = "";
-  List<Asset> images = [];
+  List<File> imageFiles = [];
 
   List<String> imageUrls = [];
 
@@ -20,13 +20,13 @@ class Post {
     var content,
     var author,
     var createdTime,
-    var images,
+    var imageFiles,
   }){
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
     if(author != null){ this.author = author; }
     if(createdTime != null){ this.createdTime = createdTime; }
-    if(images != null){ this.images = images; }
+    if(imageFiles != null){ this.imageFiles = imageFiles; }
   }
 
   void setPostWithDocumentSnapshot(DocumentSnapshot postDocumentSnapshot) {
@@ -38,15 +38,10 @@ class Post {
   }
 
   // upload images, and get their urls to store in the post doc
-  Future<void> uploadImages(List<Asset> imageAssets) async {
-    for (Asset imageAsset in imageAssets) {
-      final filePath = await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
+  Future<void> uploadImages(List<File> imageFiles) async {
+    for (File imageFile in imageFiles) {
 
-      File imageFile = File(filePath);
-      if (imageFile.existsSync()) {
-        print(imageAsset.toString() + " --- converted image asset to file --- " + imageFile.toString());
-      }
-      String name = createdTime + " - " + imageAssets.indexOf(imageAsset).toString();
+      String name = createdTime + " - " + imageFiles.indexOf(imageFile).toString();
       StorageReference reference =
       FirebaseStorage.instance.ref().child('post Images').child(createdTime).child(name);
       StorageUploadTask uploadTask = reference.putFile(imageFile);
@@ -61,7 +56,7 @@ class Post {
 
   Future<void> create() async {
 
-    await uploadImages(images)
+    await uploadImages(imageFiles)
         .then((value) {
           print("after upload images function is done, we create post doc with url list ready");
           // url list is where the images are saved
@@ -86,7 +81,7 @@ class Post {
       content,
       author,
       createdTime,
-      images,
+      imageFiles,
       imageUrls,
     ]);
   }

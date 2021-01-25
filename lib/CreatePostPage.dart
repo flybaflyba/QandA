@@ -243,7 +243,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   content: content,
                                   author: FirebaseAuth.instance.currentUser.email,
                                   createdTime: DateTime.now().toString(),
-                                  images: imageAssets,
+                                  imageFiles: imageFiles,
                                 );
                                 post.printOut();
                                 post.create();
