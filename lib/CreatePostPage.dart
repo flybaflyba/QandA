@@ -1,6 +1,5 @@
 
 import 'dart:async';
-import 'dart:html' as Html;
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
-import 'package:flutter_web_image_picker/flutter_web_image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
@@ -39,8 +37,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
   }
 
   Widget buildGridView() {
-    var loopTimes = imageAssets.length + 1;
-    if (imageAssets.length == 9) {
+    var loopTimes = imageFiles.length + 1;
+    if (imageFiles.length == 9) {
       loopTimes = 9;
     }
     return GridView.count(
@@ -50,7 +48,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       children: List.generate(loopTimes, (index) {
-        if (index == imageAssets.length) {
+        if (index == imageFiles.length) {
           // loop again after all images, add a icon button in the end
           return
             IconButton(
@@ -58,10 +56,10 @@ class _CreatePostPageState extends State<CreatePostPage>{
                 onPressed: () async {
                   if(kIsWeb) {
                     print("web");
-                    final image = await FlutterWebImagePicker.getImage;
-                    setState(() {
-                      imageAssets.add(image as Asset);
-                    });
+                    // final image = await FlutterWebImagePicker.getImage;
+                    // setState(() {
+                    //   // add image to list
+                    // });
                   } else {
                     print("app");
                     loadAssets();
@@ -70,21 +68,22 @@ class _CreatePostPageState extends State<CreatePostPage>{
                 }
             );
         } else {
-          Asset asset = imageAssets[index];
+          // Asset asset = imageAssets[index];
+          File file = imageFiles[index];
           return Stack(
             children: [
-              AssetThumb(
-                asset: asset,
+              // AssetThumb(
+              //   asset: asset,
+              //   width: 300,
+              //   height: 300,
+              // ),
+
+              Container(
+                child: Image.file(file),
                 width: 300,
                 height: 300,
               ),
-              // IconButton(
-              //   iconSize: 25,
-              //     color: Colors.white,
-              //     icon: Icon(Icons.circle),
-              //     onPressed: () {
-              //     }
-              // ),
+       
               IconButton(
                 iconSize: 20,
                   icon: Icon(Icons.delete),
@@ -122,15 +121,27 @@ class _CreatePostPageState extends State<CreatePostPage>{
     } on Exception catch (e) {
       error = e.toString();
     }
-
+    
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
+    List<File> imageFilesTemp = List<File>();
+    for (Asset imageAsset in resultList) {
+      final filePath = await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
+
+      File imageFile = File(filePath);
+      if (imageFile.existsSync()) {
+        print(imageAsset.toString() + " --- converted image asset to file --- " + imageFile.toString());
+      }
+      imageFilesTemp.add(imageFile);
+    }
+    
     setState(() {
       if (resultList.length != 0) {
         imageAssets = resultList;
+        imageFiles = imageFilesTemp;
       }
       _error = error;
     });
