@@ -1,7 +1,9 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +15,7 @@ import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:universal_html/prefer_universal/html.dart' as universal_html;
 
 class CreatePostPage extends StatefulWidget{
 
@@ -28,7 +31,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
   var content = "";
 
   List<Asset> imageAssets = List<Asset>();
-  List<File> imageFiles = List<File>();
+  List<dynamic> imageUint8Lists = List<dynamic>();
   String _error = 'No Error Detected';
 
   @override
@@ -37,8 +40,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
   }
 
   Widget buildGridView() {
-    var loopTimes = imageFiles.length + 1;
-    if (imageFiles.length == 9) {
+    var loopTimes = imageUint8Lists.length + 1;
+    if (imageUint8Lists.length == 9) {
       loopTimes = 9;
     }
     return GridView.count(
@@ -48,21 +51,48 @@ class _CreatePostPageState extends State<CreatePostPage>{
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       children: List.generate(loopTimes, (index) {
-        if (index == imageFiles.length) {
+        if (index == imageUint8Lists.length) {
           // loop again after all images, add a icon button in the end
           return
             IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () async {
-
+                  // hide keyboard when pick images
                   FocusScope.of(context).requestFocus(new FocusNode()); // do not show keyboard
-
                   if(kIsWeb) {
                     print("web");
                     // final image = await FlutterWebImagePicker.getImage;
                     // setState(() {
                     //   // add image to list
                     // });
+
+                    FilePickerResult result = await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowMultiple: true,
+                        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']);
+
+                    if (result != null) {
+                      // cannot use path, does not support on web https://github.com/miguelpruivo/flutter_file_picker/issues/591
+                      // List<File> files = result.paths.map((path) => File(path)).toList();
+                      // File file = File(result.paths.first);
+
+                      print(result.files.first);
+                      Uint8List imageValue = result.files.first.bytes;
+                      // File imageFile = File.fromRawPath(imageValue); // uses dart.io, not supported on web
+
+                      List<Uint8List> imageUint8ListsTemp = result.files.map((file) => file.bytes).toList();
+
+                      setState(() {
+                        // imageFiles = files;
+                        imageUint8Lists = imageUint8ListsTemp;
+                      });
+
+                    } else {
+                      // User canceled the picker
+                    }
+
+                    print(imageUint8Lists);
+
                   } else {
                     print("app");
                     loadAssets();
@@ -72,7 +102,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
             );
         } else {
           // Asset asset = imageAssets[index];
-          File file = imageFiles[index];
+           Uint8List imageValue = imageUint8Lists[index];
           return Stack(
             children: [
               // AssetThumb(
@@ -80,19 +110,17 @@ class _CreatePostPageState extends State<CreatePostPage>{
               //   width: 300,
               //   height: 300,
               // ),
-
               Container(
-                child: Image.file(file),
+                child: Image.memory(imageValue),
                 width: 300,
                 height: 300,
               ),
-       
               IconButton(
                 iconSize: 20,
                   icon: Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
-                      imageAssets.removeAt(index);
+                      imageUint8Lists.removeAt(index);
                     });
                   }
               )
@@ -130,7 +158,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    List<File> imageFilesTemp = List<File>();
+    List<Uint8List> imageUint8ListsTemp = List<Uint8List>();
     for (Asset imageAsset in resultList) {
       final filePath = await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
 
@@ -138,13 +166,14 @@ class _CreatePostPageState extends State<CreatePostPage>{
       if (imageFile.existsSync()) {
         print(imageAsset.toString() + " --- converted image asset to file --- " + imageFile.toString());
       }
-      imageFilesTemp.add(imageFile);
+      Uint8List bytes = imageFile.readAsBytesSync();
+      imageUint8ListsTemp.add(bytes);
     }
     
     setState(() {
       if (resultList.length != 0) {
         imageAssets = resultList;
-        imageFiles = imageFilesTemp;
+        imageUint8Lists = imageUint8ListsTemp;
       }
       _error = error;
     });
@@ -246,7 +275,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   content: content,
                                   author: FirebaseAuth.instance.currentUser.email,
                                   createdTime: DateTime.now().toString(),
-                                  imageFiles: imageFiles,
+                                  imageFiles: imageUint8Lists,
                                 );
                                 post.printOut();
                                 post.create();
