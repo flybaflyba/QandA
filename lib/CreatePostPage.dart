@@ -93,6 +93,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   onPressed: () {
                     setState(() {
                       imageUint8Lists.removeAt(index);
+                      imageAssets.removeAt(index);
                     });
                   }
               )
