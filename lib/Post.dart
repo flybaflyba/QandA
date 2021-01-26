@@ -14,6 +14,7 @@ class Post {
   var author = "";
   var createdTime = "";
   var topic = "";
+  var course = "";
   List<Uint8List> imageUint8Lists = [];
 
   List<String> imageUrls = [];
@@ -25,12 +26,14 @@ class Post {
     var createdTime,
     var imageUint8Lists,
     var topic,
+    var course,
   }){
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
     if(author != null){ this.author = author; }
     if(createdTime != null){ this.createdTime = createdTime; }
     if(topic != null){ this.topic = topic; }
+    if(course != null){ this.course = course; }
     if(imageUint8Lists != null){ this.imageUint8Lists = imageUint8Lists; }
   }
 
@@ -41,6 +44,7 @@ class Post {
     createdTime = postDocumentSnapshot["created time"];
     imageUrls = postDocumentSnapshot["image urls"];
     topic = postDocumentSnapshot["topic"];
+    course = postDocumentSnapshot["course"];
   }
 
   // upload images, and get their urls to store in the post doc
@@ -95,7 +99,8 @@ class Post {
           print(urls.length);
           imageUrls = urls;
           // url list is where the images are saved
-          FirebaseFirestore.instance.collection('posts')
+          var topicLowerCase = topic.toLowerCase();
+          FirebaseFirestore.instance.collection('$topicLowerCase posts')
               .doc(createdTime)
               .set({
             "title": title,
@@ -103,7 +108,9 @@ class Post {
             "author": author,
             "created time": createdTime,
             "topic" : topic,
+            "course" : course,
             "image urls": imageUrls,
+
           })
               .then((value) => print("Post Created"))
               .catchError((error) => print("Failed to create Post: $error"));
@@ -118,8 +125,9 @@ class Post {
       author,
       createdTime,
       topic,
-      imageUint8Lists.length,
+      course,
       imageUrls,
+      imageUint8Lists.length,
     ]);
   }
 }

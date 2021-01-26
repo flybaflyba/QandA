@@ -27,7 +27,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   TextEditingController titleTextEditingController = new TextEditingController();
   TextEditingController contentTextEditingController = new TextEditingController();
+  TextEditingController courseTextEditingController = new TextEditingController();
 
+  var course = "";
   var title = "";
   var content = "";
   var topic = "What are Your Posting for?";
@@ -48,6 +50,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
    setState(() {
      titleTextEditingController.text = "";
      contentTextEditingController.text = "";
+     courseTextEditingController.text = "";
      title = "";
      content = "";
      topic = "What are Your Posting for?";
@@ -203,6 +206,34 @@ class _CreatePostPageState extends State<CreatePostPage>{
     }
   }
 
+  void savePost() {
+    Post post = new Post(
+      title: title,
+      content: content,
+      author: FirebaseAuth.instance.currentUser.email,
+      createdTime: DateTime.now().toString(),
+      topic: topic,
+      course: course,
+      imageUint8Lists: imageUint8Lists,
+    );
+    post.printOut();
+
+    print("start saving post to database");
+    setState(() {
+      workInProgress = true;
+    });
+    post.create()
+        .then((value) {
+      print("finish saving post");
+      setState(() {
+        workInProgress = false;
+      });
+      resetCreatePostPageFields();
+      // push to a new page
+      Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage(),));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -259,6 +290,41 @@ class _CreatePostPageState extends State<CreatePostPage>{
                           isSelected: topicSelectionList,
                         ),
                       ),
+
+                      topic == "Academic" ?
+
+                      Container(
+                          margin: EdgeInsets.all(20),
+                          constraints: BoxConstraints(minWidth: 10, maxWidth: 10),
+                          child:
+                          Column(
+                            children: [
+                              TextField(
+                                controller: courseTextEditingController,
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center,
+                                onChanged: (value){
+                                  setState(() {
+                                     course = value;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Course",
+                                  alignLabelWithHint: true,
+                                  // focusedBorder: OutlineInputBorder(
+                                  //   borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                  // ),
+                                  // enabledBorder: OutlineInputBorder(
+                                  //   borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                  // ),
+                                ),
+                              ),
+                            ],
+                          )
+                      )
+                      :
+                      SizedBox(height: 0,),
+
 
 
                       Container(
@@ -359,30 +425,19 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   print(titleTextEditingController.text);
                                   print(titleTextEditingController.value);
                                   if (title != "" && content != "" && topic != "What are Your Posting for?") {
-                                    Post post = new Post(
-                                      title: title,
-                                      content: content,
-                                      author: FirebaseAuth.instance.currentUser.email,
-                                      createdTime: DateTime.now().toString(),
-                                      topic: topic,
-                                      imageUint8Lists: imageUint8Lists,
-                                    );
-                                    post.printOut();
 
-                                    print("start saving post to database");
-                                    setState(() {
-                                      workInProgress = true;
-                                    });
-                                    post.create()
-                                        .then((value) {
-                                      print("finish saving post");
-                                      setState(() {
-                                        workInProgress = false;
-                                      });
-                                      resetCreatePostPageFields();
-                                      // push to a new page
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage(),));
-                                    });
+                                    if(topic == "Academic") {
+                                      if (course == "") {
+                                        UniversalFunctions.showToast("What's the course?", UniversalValues.toastMessageTypeWarningColor);
+                                      } else {
+                                        // save post
+                                        savePost();
+                                      }
+                                    } else {
+                                      //save post
+                                      savePost();
+                                    }
+
 
                                   } else {
                                     if (title == "") {
