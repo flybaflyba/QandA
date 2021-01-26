@@ -13,6 +13,7 @@ class Post {
   var content = "";
   var author = "";
   var createdTime = "";
+  var topic = "";
   List<Uint8List> imageUint8Lists = [];
 
   List<String> imageUrls = [];
@@ -23,11 +24,13 @@ class Post {
     var author,
     var createdTime,
     var imageUint8Lists,
+    var topic,
   }){
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
     if(author != null){ this.author = author; }
     if(createdTime != null){ this.createdTime = createdTime; }
+    if(topic != null){ this.topic = topic; }
     if(imageUint8Lists != null){ this.imageUint8Lists = imageUint8Lists; }
   }
 
@@ -37,6 +40,7 @@ class Post {
     author = postDocumentSnapshot["author"];
     createdTime = postDocumentSnapshot["created time"];
     imageUrls = postDocumentSnapshot["image urls"];
+    topic = postDocumentSnapshot["topic"];
   }
 
   // upload images, and get their urls to store in the post doc
@@ -53,7 +57,8 @@ class Post {
       // image name is created time plus a number, created time is also the post name
       // images are under the created time named folder for each post
       String name = createdTime + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
-      Reference ref = FirebaseStorage.instance.ref('post Images/$createdTime/$name');
+      var topicLowerCase = topic.toLowerCase();
+      Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$createdTime/$name');
       // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
       SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
       try {
@@ -97,6 +102,7 @@ class Post {
             "content": content,
             "author": author,
             "created time": createdTime,
+            "topic" : topic,
             "image urls": imageUrls,
           })
               .then((value) => print("Post Created"))
@@ -111,6 +117,7 @@ class Post {
       content,
       author,
       createdTime,
+      topic,
       imageUint8Lists.length,
       imageUrls,
     ]);

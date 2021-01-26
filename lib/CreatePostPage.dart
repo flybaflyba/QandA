@@ -29,7 +29,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   var title = "";
   var content = "";
+  var topic = "What are Your Posting for?";
 
+  List<bool> topicSelectionList = [false, false];
   var workInProgress = false;
 
   List<Asset> imageAssets = List<Asset>();
@@ -178,6 +180,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,6 +196,51 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   ListView(
                     children: [
                       SizedBox(height: 20,),
+
+                      Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Center(
+                            child: Text(
+                              topic,
+                              style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+                            ),
+                          )
+                      ),
+
+                      Center(
+                        child: ToggleButtons(
+                          children: <Widget>[
+                            Icon(Icons.nightlife),
+                            Icon(Icons.school),
+                          ],
+                          onPressed: (int index) {
+                            setState(() {
+                              for (int buttonIndex = 0; buttonIndex < topicSelectionList.length; buttonIndex++) {
+                                if (buttonIndex == index) {
+                                  topicSelectionList[buttonIndex] = !topicSelectionList[buttonIndex];
+                                } else {
+                                  topicSelectionList[buttonIndex] = false;
+                                }
+                              }
+
+                              if(index == 0) {
+                                setState(() {
+                                  topic = "Campus Life";
+                                });
+                              } else {
+                                setState(() {
+                                  topic = "Academic";
+                                });
+                              }
+
+                              print(index);
+
+                            });
+                          },
+                          isSelected: topicSelectionList,
+                        ),
+                      ),
+
                       Container(
                         margin: EdgeInsets.all(20),
                         child:
@@ -272,12 +320,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 background: UniversalValues.buttonColor,
                                 onPressed: () {
                                   // print(images);
-                                  if (title != "" && content != "") {
+                                  if (title != "" && content != "" && topic != "What are Your Posting for?") {
                                     Post post = new Post(
                                       title: title,
                                       content: content,
                                       author: FirebaseAuth.instance.currentUser.email,
                                       createdTime: DateTime.now().toString(),
+                                      topic: topic,
                                       imageUint8Lists: imageUint8Lists,
                                     );
                                     post.printOut();
@@ -295,7 +344,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                     });
 
                                   } else {
-                                    UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
+                                    UniversalFunctions.showToast("Please complete all fields", UniversalValues.toastMessageTypeWarningColor);
                                   }
                                 },
                               ),
