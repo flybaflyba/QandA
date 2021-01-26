@@ -241,49 +241,64 @@ class _CreatePostPageState extends State<CreatePostPage>{
                         ),
                       ),
 
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child:
-                        TextField(
-                          style: TextStyle(fontSize: 25),
-                          textAlign: TextAlign.center,
-                          onChanged: (value){
-                            title = value;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "Title",
-                            alignLabelWithHint: true,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                            ),
-                          ),
-                        ),
-                      ),
 
                       Container(
                         margin: EdgeInsets.all(20),
                         child:
-                        TextField(
-                          minLines: 1,
-                          maxLines: 100,
-                          textAlign: TextAlign.left,
-                          onChanged: (value){
-                            content = value;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "Content",
-                            alignLabelWithHint: true,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                        Column(
+                          children: [
+                            title != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Title",),),) : SizedBox(height: 0,),
+                            TextField(
+                              style: TextStyle(fontSize: 25),
+                              textAlign: TextAlign.center,
+                              onChanged: (value){
+                                setState(() {
+                                  title = value;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Title",
+                                alignLabelWithHint: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                ),
+                              ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          ],
+                        )
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            content != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Content",),),) : SizedBox(height: 0,),
+                            TextField(
+                              minLines: 1,
+                              maxLines: 100,
+                              textAlign: TextAlign.left,
+                              onChanged: (value){
+                                setState(() {
+                                  content = value;
+                                });
+
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Content",
+                                alignLabelWithHint: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                          ],
+                        )
                       ),
 
                       // Container(
