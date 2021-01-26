@@ -356,6 +356,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 background: UniversalValues.buttonColor,
                                 onPressed: () {
                                   // print(images);
+                                  print(titleTextEditingController.text);
+                                  print(titleTextEditingController.value);
                                   if (title != "" && content != "" && topic != "What are Your Posting for?") {
                                     Post post = new Post(
                                       title: title,
@@ -378,6 +380,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                         workInProgress = false;
                                       });
                                       resetCreatePostPageFields();
+                                      // push to a new page
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage(),));
                                     });
 
