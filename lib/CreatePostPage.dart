@@ -12,13 +12,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
+import 'package:qanda/BlankPage.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class CreatePostPage extends StatefulWidget{
-
   @override
   _CreatePostPageState createState() => _CreatePostPageState();
 }
@@ -26,6 +26,7 @@ class CreatePostPage extends StatefulWidget{
 class _CreatePostPageState extends State<CreatePostPage>{
 
   TextEditingController titleTextEditingController = new TextEditingController();
+  TextEditingController contentTextEditingController = new TextEditingController();
 
   var title = "";
   var content = "";
@@ -41,6 +42,20 @@ class _CreatePostPageState extends State<CreatePostPage>{
   @override
   void initState() {
     super.initState();
+  }
+
+  void resetCreatePostPageFields() {
+   setState(() {
+     titleTextEditingController.text = "";
+     contentTextEditingController.text = "";
+     title = "";
+     content = "";
+     topic = "What are Your Posting for?";
+     topicSelectionList = [false, false];
+     workInProgress = false;
+     imageAssets.clear();
+     imageUint8Lists.clear();
+   });
   }
 
   Widget buildGridView() {
@@ -98,7 +113,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   onPressed: () {
                     setState(() {
                       imageUint8Lists.removeAt(index);
-                      // imageAssets is only use on phones 
+                      // imageAssets is only use on phones
                       if(!kIsWeb){
                         imageAssets.removeAt(index);
                       }
@@ -161,7 +176,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
     });
   }
 
-
   Future<void> loadImagesOnWeb() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -188,8 +202,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
       // User canceled the picker
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +244,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   topicSelectionList[buttonIndex] = false;
                                 }
                               }
-
                               if(index == 0) {
                                 setState(() {
                                   topic = "Campus Life";
@@ -242,9 +253,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   topic = "Academic";
                                 });
                               }
-
                               print(index);
-
                             });
                           },
                           isSelected: topicSelectionList,
@@ -259,6 +268,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                           children: [
                             title != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Title",),),) : SizedBox(height: 0,),
                             TextField(
+                              controller: titleTextEditingController,
                               style: TextStyle(fontSize: 25),
                               textAlign: TextAlign.center,
                               onChanged: (value){
@@ -287,6 +297,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                           children: [
                             content != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Content",),),) : SizedBox(height: 0,),
                             TextField(
+                              controller: contentTextEditingController,
                               minLines: 1,
                               maxLines: 100,
                               textAlign: TextAlign.left,
@@ -366,6 +377,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                       setState(() {
                                         workInProgress = false;
                                       });
+                                      resetCreatePostPageFields();
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage(),));
                                     });
 
                                   } else {
