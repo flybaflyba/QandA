@@ -182,136 +182,157 @@ class _CreatePostPageState extends State<CreatePostPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       body:
+      // disable screen touch and show progress indicator when work in progress
       AbsorbPointer(
         absorbing: workInProgress,
-        child:
-        Center(
-            child:
-            Stack(
-              children: [
-                Container(
-                    constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
-                    child: ListView(
-                      children: [
-                        SizedBox(height: 20,),
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          child:
-                          TextField(
-                            style: TextStyle(fontSize: 25),
-                            textAlign: TextAlign.center,
-                            onChanged: (value){
-                              title = value;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Title",
-                              alignLabelWithHint: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                              ),
+        child: Center(
+          child: Container(
+              constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
+              child: Stack(
+                children: [
+                  ListView(
+                    children: [
+                      SizedBox(height: 20,),
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child:
+                        TextField(
+                          style: TextStyle(fontSize: 25),
+                          textAlign: TextAlign.center,
+                          onChanged: (value){
+                            title = value;
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Title",
+                            alignLabelWithHint: true,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey, width: 1.0),
                             ),
                           ),
                         ),
+                      ),
 
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          child:
-                          TextField(
-                            minLines: 1,
-                            maxLines: 100,
-                            textAlign: TextAlign.left,
-                            onChanged: (value){
-                              content = value;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Content",
-                              alignLabelWithHint: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                              ),
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child:
+                        TextField(
+                          minLines: 1,
+                          maxLines: 100,
+                          textAlign: TextAlign.left,
+                          onChanged: (value){
+                            content = value;
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Content",
+                            alignLabelWithHint: true,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey, width: 1.0),
                             ),
                           ),
                         ),
+                      ),
 
-                        // Container(
-                        //   margin: EdgeInsets.all(20),
-                        //   child:
-                        //   Column(
-                        //     children: <Widget>[
-                        //       Center(child: Text('Error: $_error')),
-                        //       RaisedButton(
-                        //         child: Text("Pick images"),
-                        //         onPressed: loadAssets,
-                        //       ),
-                        //
-                        //     ],
-                        //   ),
-                        // ),
+                      // Container(
+                      //   margin: EdgeInsets.all(20),
+                      //   child:
+                      //   Column(
+                      //     children: <Widget>[
+                      //       Center(child: Text('Error: $_error')),
+                      //       RaisedButton(
+                      //         child: Text("Pick images"),
+                      //         onPressed: loadAssets,
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      // ),
 
-                        Container(
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child: buildGridView(),
+                      ),
+
+
+                      Container(
                           margin: EdgeInsets.all(20),
-                          child: buildGridView(),
-                        ),
+                          child:   Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              NiceButton(
+                                width: 255,
+                                elevation: 8.0,
+                                radius: 52.0,
+                                text: "Post",
+                                background: UniversalValues.buttonColor,
+                                onPressed: () {
+                                  // print(images);
+                                  if (title != "" && content != "") {
+                                    Post post = new Post(
+                                      title: title,
+                                      content: content,
+                                      author: FirebaseAuth.instance.currentUser.email,
+                                      createdTime: DateTime.now().toString(),
+                                      imageUint8Lists: imageUint8Lists,
+                                    );
+                                    post.printOut();
 
-
-                        Container(
-                            margin: EdgeInsets.all(20),
-                            child:   Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                NiceButton(
-                                  width: 255,
-                                  elevation: 8.0,
-                                  radius: 52.0,
-                                  text: "Post",
-                                  background: UniversalValues.buttonColor,
-                                  onPressed: () {
-                                    // print(images);
-                                    if (title != "" && content != "") {
-                                      Post post = new Post(
-                                        title: title,
-                                        content: content,
-                                        author: FirebaseAuth.instance.currentUser.email,
-                                        createdTime: DateTime.now().toString(),
-                                        imageUint8Lists: imageUint8Lists,
-                                      );
-                                      post.printOut();
-
-                                      print("start saving post to database");
+                                    print("start saving post to database");
+                                    setState(() {
+                                      workInProgress = true;
+                                    });
+                                    post.create()
+                                        .then((value) {
+                                      print("finish saving post");
                                       setState(() {
-                                        workInProgress = true;
+                                        workInProgress = false;
                                       });
-                                      post.create()
-                                          .then((value) {
-                                        print("finish saving post");
-                                        setState(() {
-                                          workInProgress = false;
-                                        });
-                                      });
+                                    });
 
-                                    } else {
-                                      UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
-                                    }
-                                  },
-                                ),
-                              ],
-                            )
+                                  } else {
+                                    UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
+                                  }
+                                },
+                              ),
+                            ],
+                          )
+                      ),
+
+                    ],
+                  ),
+                  Center(
+                    child: workInProgress
+                        ?
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          backgroundColor: UniversalValues.primaryColor,
+                          valueColor: AlwaysStoppedAnimation(Colors.green),
+                          strokeWidth: 10,
                         ),
-
+                        SizedBox(height: 15,),
+                        LinearProgressIndicator(
+                          backgroundColor: UniversalValues.primaryColor,
+                          valueColor: AlwaysStoppedAnimation(Colors.green),
+                          minHeight: 10,
+                        )
                       ],
                     )
-                ),
-                Center(child: workInProgress ? CircularProgressIndicator() : SizedBox(height: 0,),)
-              ],
-            )
-        ),
+                        :
+                    SizedBox(height: 0,),)
+                ],
+              )
+          ),
+        )
+
       )
+
 
 
     );
