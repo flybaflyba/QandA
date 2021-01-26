@@ -43,6 +43,8 @@ class Post {
   Future<List<String>> uploadImages(List<Uint8List> imageUint8Lists) async {
     List<String> urls = List<String>();
 
+    // TODO optimize the solution of this bug
+    // this is to add an element in the end of the image list, so that we miss this url instead of a real image url, not a good way to solve the problem though
     imageUint8Lists.add(Uint8List(1));
     for (Uint8List imageUint8List in imageUint8Lists) {
       // image name is created time plus a number, created time is also the post name
