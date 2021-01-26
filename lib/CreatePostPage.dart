@@ -70,7 +70,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         UniversalFunctions.showToast("Maximum 9 Images", UniversalValues.toastMessageTypeWarningColor);
       }
     }
-    print(imageUint8Lists.length);
+    // print(imageUint8Lists.length);
     return GridView.count(
       physics: ScrollPhysics(), // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
       shrinkWrap: true,
@@ -234,6 +234,60 @@ class _CreatePostPageState extends State<CreatePostPage>{
     });
   }
 
+
+  Widget listMatchedCourses(String enteredString)
+  {
+
+    print(enteredString);
+    List<dynamic> filteredCourses = new List<dynamic>();
+    setState(() {
+      for(var i = UniversalValues.courses.length - 1; i > -1; i--){
+        if (UniversalValues.courses[i].contains(enteredString.toUpperCase())) {
+          if(course != UniversalValues.courses[i]) {
+            filteredCourses.add(UniversalValues.courses[i]);
+          }
+
+        }
+      }
+    });
+
+    // print(filteredCourses.length);
+
+    List<Widget> list = new List<Widget>();
+    if (enteredString != "") {
+      for(var i = filteredCourses.length - 1; i > -1; i--){
+        //list.add(new Text(strings[i]));
+        String temp = filteredCourses[i];
+        list.add(
+          Container(
+            margin: EdgeInsets.all(5),
+            child: Center(
+              child: FlatButton(
+                textColor: Colors.blueAccent,
+                onPressed: () {
+                  setState(() {
+                    course = temp;
+                    courseTextEditingController.text = temp;
+                  });
+                  },
+                child: Text(
+                  temp,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+
+    return new ListView(
+      shrinkWrap: true,
+      children: list,
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,7 +338,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   topic = "Academic";
                                 });
                               }
-                              print(index);
+                              // print(index);
                             });
                           },
                           isSelected: topicSelectionList,
@@ -295,7 +349,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
                       Container(
                           margin: EdgeInsets.all(20),
-                          constraints: BoxConstraints(minWidth: 10, maxWidth: 10),
                           child:
                           Column(
                             children: [
@@ -319,9 +372,15 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   // ),
                                 ),
                               ),
+                              Container(
+                                constraints: BoxConstraints(minHeight: 0, maxHeight: 200),
+                                child: listMatchedCourses(course),
+                              )
                             ],
                           )
                       )
+
+
                       :
                       SizedBox(height: 0,),
 
@@ -422,13 +481,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 background: UniversalValues.buttonColor,
                                 onPressed: () {
                                   // print(images);
-                                  print(titleTextEditingController.text);
-                                  print(titleTextEditingController.value);
+                                  // print(titleTextEditingController.text);
+                                  // print(titleTextEditingController.value);
                                   if (title != "" && content != "" && topic != "What are Your Posting for?") {
 
                                     if(topic == "Academic") {
-                                      if (course == "") {
-                                        UniversalFunctions.showToast("What's the course?", UniversalValues.toastMessageTypeWarningColor);
+                                      if (!UniversalValues.courses.contains(course)) {
+                                        UniversalFunctions.showToast("Please search/select a course.", UniversalValues.toastMessageTypeWarningColor);
                                       } else {
                                         // save post
                                         savePost();
