@@ -251,34 +251,45 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   child: buildGridView(),
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NiceButton(
-                      width: 255,
-                      elevation: 8.0,
-                      radius: 52.0,
-                      text: "Post",
-                      background: UniversalValues.buttonColor,
-                      onPressed: () {
-                        // print(images);
-                        if (title != "" && content != "") {
-                          Post post = new Post(
-                            title: title,
-                            content: content,
-                            author: FirebaseAuth.instance.currentUser.email,
-                            createdTime: DateTime.now().toString(),
-                            imageUint8Lists: imageUint8Lists,
-                          );
-                          post.printOut();
-                          post.create();
-                        } else {
-                          UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
-                        }
-                      },
-                    ),
-                  ],
-                )
+
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child:   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      NiceButton(
+                        width: 255,
+                        elevation: 8.0,
+                        radius: 52.0,
+                        text: "Post",
+                        background: UniversalValues.buttonColor,
+                        onPressed: () {
+                          // print(images);
+                          if (title != "" && content != "") {
+                            Post post = new Post(
+                              title: title,
+                              content: content,
+                              author: FirebaseAuth.instance.currentUser.email,
+                              createdTime: DateTime.now().toString(),
+                              imageUint8Lists: imageUint8Lists,
+                            );
+                            post.printOut();
+
+                            print("start saving post to database");
+                            post.create()
+                                .then((value) {
+                              print("finish saving post");
+                            });
+
+                          } else {
+                            UniversalFunctions.showToast("Please complete both title and content.", UniversalValues.toastMessageTypeWarningColor);
+                          }
+                        },
+                      ),
+                    ],
+                  )
+                ),
+
               ],
             )
         ),
