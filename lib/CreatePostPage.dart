@@ -45,9 +45,14 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   Widget buildGridView() {
     var loopTimes = imageUint8Lists.length + 1;
-    if (imageUint8Lists.length == 9) {
+    if (imageUint8Lists.length >= 9) {
       loopTimes = 9;
+      if(imageUint8Lists.length > 9) {
+        imageUint8Lists.removeRange(9, imageUint8Lists.length);
+        UniversalFunctions.showToast("Maximum 9 Images", UniversalValues.toastMessageTypeWarningColor);
+      }
     }
+    print(imageUint8Lists.length);
     return GridView.count(
       physics: ScrollPhysics(), // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
       shrinkWrap: true,
@@ -93,7 +98,11 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   onPressed: () {
                     setState(() {
                       imageUint8Lists.removeAt(index);
-                      imageAssets.removeAt(index);
+                      // imageAssets is only use on phones 
+                      if(!kIsWeb){
+                        imageAssets.removeAt(index);
+                      }
+
                     });
                   }
               )
