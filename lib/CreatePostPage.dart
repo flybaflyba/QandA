@@ -385,7 +385,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                     });
 
                                   } else {
-                                    UniversalFunctions.showToast("Please complete all fields", UniversalValues.toastMessageTypeWarningColor);
+                                    if (title == "") {
+                                      UniversalFunctions.showToast("What's the title?", UniversalValues.toastMessageTypeWarningColor);
+                                    } else if (content == "") {
+                                      UniversalFunctions.showToast("Please provide some content.", UniversalValues.toastMessageTypeWarningColor);
+                                    } else {
+                                      UniversalFunctions.showToast("What are you posting for?", UniversalValues.toastMessageTypeWarningColor);
+                                    }
                                   }
                                 },
                               ),
