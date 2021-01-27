@@ -207,11 +207,18 @@ class _CreatePostPageState extends State<CreatePostPage>{
   }
 
   void savePost() {
+
+    var currentUserEmail = FirebaseAuth.instance.currentUser.email;
+    var currentTimeInUtc = DateTime.now().toUtc();
+    var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
+    var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
+    print(postDocName);
+
     Post post = new Post(
       title: title,
       content: content,
-      author: FirebaseAuth.instance.currentUser.email,
-      createdTime: DateTime.now().toString(),
+      author: currentUserEmail,
+      postDocName: postDocName,
       topic: topic,
       course: course,
       imageUint8Lists: imageUint8Lists,

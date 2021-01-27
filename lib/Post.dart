@@ -12,7 +12,7 @@ class Post {
   var title = "";
   var content = "";
   var author = "";
-  var createdTime = "";
+  var postDocName = ""; // post document name is the created time utc in string + creator's email so that the collection is sorted automatically and no duplicates
   var topic = "";
   var course = "";
   List<Uint8List> imageUint8Lists = [];
@@ -23,7 +23,7 @@ class Post {
     var title,
     var content,
     var author,
-    var createdTime,
+    var postDocName,
     var imageUint8Lists,
     var topic,
     var course,
@@ -31,7 +31,7 @@ class Post {
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
     if(author != null){ this.author = author; }
-    if(createdTime != null){ this.createdTime = createdTime; }
+    if(postDocName != null){ this.postDocName = postDocName; }
     if(topic != null){ this.topic = topic; }
     if(course != null){ this.course = course; }
     if(imageUint8Lists != null){ this.imageUint8Lists = imageUint8Lists; }
@@ -41,7 +41,7 @@ class Post {
     title = postDocumentSnapshot["title"];
     content = postDocumentSnapshot["content"];
     author = postDocumentSnapshot["author"];
-    createdTime = postDocumentSnapshot["created time"];
+    postDocName = postDocumentSnapshot["post doc name"];
     imageUrls = postDocumentSnapshot["image urls"];
     topic = postDocumentSnapshot["topic"];
     course = postDocumentSnapshot["course"];
@@ -60,9 +60,9 @@ class Post {
     for (Uint8List imageUint8List in imageUint8Lists) {
       // image name is created time plus a number, created time is also the post name
       // images are under the created time named folder for each post
-      String name = createdTime + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
+      String name = postDocName + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
       var topicLowerCase = topic.toLowerCase();
-      Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$createdTime/$name');
+      Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
       // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
       SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
       try {
@@ -101,12 +101,12 @@ class Post {
           // url list is where the images are saved
           var topicLowerCase = topic.toLowerCase();
           FirebaseFirestore.instance.collection('$topicLowerCase posts')
-              .doc(createdTime)
+              .doc(postDocName)
               .set({
             "title": title,
             "content": content,
             "author": author,
-            "created time": createdTime,
+            "post doc name": postDocName,
             "topic" : topic,
             "course" : course,
             "image urls": imageUrls,
@@ -123,7 +123,7 @@ class Post {
       title,
       content,
       author,
-      createdTime,
+      postDocName,
       topic,
       course,
       imageUrls,
