@@ -221,6 +221,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
       postDocName: postDocName,
       topic: topic,
       course: course,
+      createdTime: currentTimeInUtc, // with timezone info
       imageUint8Lists: imageUint8Lists,
     );
     post.printOut();

@@ -15,6 +15,7 @@ class Post {
   var postDocName = ""; // post document name is the created time utc in string + creator's email so that the collection is sorted automatically and no duplicates
   var topic = "";
   var course = "";
+  var createdTime; // DateTime type, has timezone info
   List<Uint8List> imageUint8Lists = [];
 
   List<String> imageUrls = [];
@@ -27,6 +28,7 @@ class Post {
     var imageUint8Lists,
     var topic,
     var course,
+    var createdTime,
   }){
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
@@ -34,6 +36,7 @@ class Post {
     if(postDocName != null){ this.postDocName = postDocName; }
     if(topic != null){ this.topic = topic; }
     if(course != null){ this.course = course; }
+    if(createdTime != null){ this.createdTime = createdTime; }
     if(imageUint8Lists != null){ this.imageUint8Lists = imageUint8Lists; }
   }
 
@@ -45,6 +48,7 @@ class Post {
     imageUrls = postDocumentSnapshot["image urls"];
     topic = postDocumentSnapshot["topic"];
     course = postDocumentSnapshot["course"];
+    createdTime = postDocumentSnapshot["created time"];
   }
 
   // upload images, and get their urls to store in the post doc
@@ -109,8 +113,8 @@ class Post {
             "post doc name": postDocName,
             "topic" : topic,
             "course" : course,
+            "created time": createdTime,
             "image urls": imageUrls,
-
           })
               .then((value) => print("Post Created"))
               .catchError((error) => print("Failed to create Post: $error"));
@@ -126,6 +130,7 @@ class Post {
       postDocName,
       topic,
       course,
+      createdTime,
       imageUrls,
       imageUint8Lists.length,
     ]);
