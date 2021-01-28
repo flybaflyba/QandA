@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:qanda/MenuPage.dart';
@@ -12,6 +13,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+
+  var isUserLoggedIn = FirebaseAuth.instance.currentUser != null;
 
   // This widget is the root of your application.
   @override
@@ -32,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: MenuPage(),
-      home: SignInUpPage(),
+      home: isUserLoggedIn ? MenuPage() : SignInUpPage(),
 
     );
   }

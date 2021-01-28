@@ -12,7 +12,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
-import 'package:qanda/BlankPage.dart';
+import 'package:qanda/BlankPages.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
@@ -217,7 +217,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
     Post post = new Post(
       title: title,
       content: content,
-      author: currentUserEmail,
+      authorEmail: currentUserEmail,
       postDocName: postDocName,
       topic: topic,
       course: course,
@@ -238,7 +238,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
       });
       resetCreatePostPageFields();
       // push to a new page
-      Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage(),));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage1(),));
     });
   }
 
@@ -254,13 +254,14 @@ class _CreatePostPageState extends State<CreatePostPage>{
           if(course != UniversalValues.courses[i]) {
             filteredCourses.add(UniversalValues.courses[i]);
           }
-
         }
+      }
+      if(filteredCourses.length == 0) {
+        filteredCourses.add("No Course Found");
       }
     });
 
     // print(filteredCourses.length);
-
     List<Widget> list = new List<Widget>();
     if (enteredString != "") {
       for(var i = filteredCourses.length - 1; i > -1; i--){
@@ -273,10 +274,12 @@ class _CreatePostPageState extends State<CreatePostPage>{
               child: FlatButton(
                 textColor: Colors.blueAccent,
                 onPressed: () {
-                  setState(() {
-                    course = temp;
-                    courseTextEditingController.text = temp;
-                  });
+                  if (temp != "No Course Found") {
+                    setState(() {
+                      course = temp;
+                      courseTextEditingController.text = temp;
+                    });
+                  }
                   },
                 child: Text(
                   temp,

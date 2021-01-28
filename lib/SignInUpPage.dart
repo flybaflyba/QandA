@@ -4,6 +4,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:qanda/MenuPage.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInUpPage extends StatefulWidget{
 
@@ -14,6 +15,19 @@ class SignInUpPage extends StatefulWidget{
 class _SignInUpPageState extends State<SignInUpPage> {
 
   Duration get animationTime => Duration(milliseconds: 2000);
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(FirebaseAuth.instance.currentUser != null) {
+      // Navigator.pop(context);
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),));
+      print("user is logged in");
+    }
+
+  }
 
   Future<String> signIn(LoginData data) {
     print('Name: ${data.name}, Password: ${data.password}');
@@ -28,6 +42,8 @@ class _SignInUpPageState extends State<SignInUpPage> {
         print(userCredential);
         if(userCredential != null) {
           print("I'm signing in!!!");
+          // UserInformation userInformation = new UserInformation(email: userCredential.user.email);
+          // userInformation.get(); // save user info to shared preference
         }
 
       } on FirebaseAuthException catch (e) {
