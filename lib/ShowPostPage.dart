@@ -19,6 +19,8 @@ class ShowPostPage extends StatefulWidget{
 
 class _ShowPostPageState extends State<ShowPostPage>{
 
+  int _current = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +40,49 @@ class _ShowPostPageState extends State<ShowPostPage>{
                     print(snapshot.data.data());
                     Post post = new Post();
                     post.setPostWithDocumentSnapshot(snapshot.data);
+
+                    var imgList = post.imageUrls;
+
+                    final List<Widget> imageSliders = imgList.map((item) => Container(
+                      child: Container(
+                        margin: EdgeInsets.all(5.0),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            child: Stack(
+                              children: <Widget>[
+                                Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                                // Positioned(
+                                //   bottom: 0.0,
+                                //   left: 0.0,
+                                //   right: 0.0,
+                                //   child: Container(
+                                //     decoration: BoxDecoration(
+                                //       gradient: LinearGradient(
+                                //         colors: [
+                                //           Color.fromARGB(200, 0, 0, 0),
+                                //           Color.fromARGB(0, 0, 0, 0)
+                                //         ],
+                                //         begin: Alignment.bottomCenter,
+                                //         end: Alignment.topCenter,
+                                //       ),
+                                //     ),
+                                //     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                                //     child: Text(
+                                //       '${imgList.indexOf(item)}',
+                                //       style: TextStyle(
+                                //         color: Colors.white,
+                                //         fontSize: 20.0,
+                                //         fontWeight: FontWeight.bold,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            )
+                        ),
+                      ),
+                    )).toList();
+
                     final contentToDisplay =
                     Column(
                       children: [
@@ -59,24 +104,40 @@ class _ShowPostPageState extends State<ShowPostPage>{
                         // Center(child: Text(DateFormat.yMEd().add_jms().format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
                         // Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
 
-                        CarouselSlider(
-                          options: CarouselOptions(height: 300.0),
-                          items: post.imageUrls.map((i) {
-                            return Builder(
-                              builder: (BuildContext context) {
-                                return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300]
-                                  ),
-                                  child: Image.network(i),
-                                );
-                              },
-                            );
-                          }).toList(),
+                        Column(
+                            children: [
+                              CarouselSlider(
+                                items: imageSliders,
+                                options: CarouselOptions(
+                                    autoPlay: true,
+                                    enlargeCenterPage: true,
+                                    aspectRatio: 2.0,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _current = index;
+                                      });
+                                    }
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: imgList.map((url) {
+                                  int index = imgList.indexOf(url);
+                                  return Container(
+                                    width: 8.0,
+                                    height: 8.0,
+                                    margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: _current == index
+                                          ? Color.fromRGBO(0, 0, 0, 0.9)
+                                          : Color.fromRGBO(0, 0, 0, 0.4),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ]
                         ),
-
                         SizedBox(height: 20, child: Container(color: Colors.white,),),
 
                         Container(
