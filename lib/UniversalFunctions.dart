@@ -113,10 +113,18 @@ class UniversalFunctions{
                                       gradientColors: [Color(0xff5b86e5), Color(0xff36d1dc)],
                                       text: "Ok",
                                       onPressed: () async {
-                                        UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
-                                        userInformation.name = userName;
-                                        userInformation.update();
-                                        prefs.setString("userName", userName);
+
+                                        if (userName == "") {
+                                          print("user name not set");
+                                          UniversalFunctions.showToast("Username is not set", UniversalValues.toastMessageTypeWarningColor);
+                                        } else {
+                                          UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
+                                          userInformation.name = userName;
+                                          userInformation.update();
+                                          prefs.setString("userName", userName);
+                                          UniversalFunctions.showToast("Username updated", UniversalValues.toastMessageTypeGoodColor);
+                                        }
+
                                         Navigator.of(context, rootNavigator: true).pop();
                                       },
                                     ),

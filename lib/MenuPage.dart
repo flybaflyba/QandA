@@ -67,6 +67,7 @@ class _MenuPageState extends State<MenuPage>{
     //
     // });
 
+    // check if we have user name locally if not get from database 
     UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
     userInformation.get()
         .then((value) async {
@@ -74,6 +75,8 @@ class _MenuPageState extends State<MenuPage>{
           var userName = prefs.getString("userName");
           if(userName == null || userName == "") {
             print("missing user name from database");
+          } else {
+            print("user name is not saved locally but get from database");
           }
     });
 
