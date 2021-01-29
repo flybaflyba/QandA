@@ -255,7 +255,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         });
         resetCreatePostPageFields();
         // push to a new page
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
       });
 
     }

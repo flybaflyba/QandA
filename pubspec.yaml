@@ -33,11 +33,13 @@ dependencies:
   multi_image_picker: ^4.7.14 # ios and android only
   flutter_absolute_path: ^1.0.6 # ios and android only
 #  flutter_web_image_picker: ^0.0.2 # web
-  file_picker: ^2.1.5+1 # pick images ob web
+  file_picker: ^2.1.5+1 # pick images on web
   fluttertoast: ^7.1.6
   nice_button: ^0.1.7
   shared_preferences: ^0.5.12+4
   modal_bottom_sheet: ^1.0.0+1
+#  intl: ^0.16.1
+  timeago: ^2.0.29
 
 
 

@@ -1,9 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
+import 'package:qanda/UniversalWidgets.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ShowPostPage extends StatefulWidget{
+
+  ShowPostPage({Key key, this.postDocTypePath, this.postDocName}) : super(key: key);
+  var postDocTypePath;
+  var postDocName;
 
   @override
   _ShowPostPageState createState() => _ShowPostPageState();
@@ -19,37 +26,78 @@ class _ShowPostPageState extends State<ShowPostPage>{
               constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('academic posts')
-                    .doc("2021-01-29 04:06:20 by 1@1.com")
+                    .collection(widget.postDocTypePath)
+                    .doc(widget.postDocName)
                     .snapshots(),
                 builder: (context, snapshot){
                   List<Widget> postWidget = [];
 
                   if(snapshot.hasData){
                     final content = snapshot.data;
+                    print(snapshot.data.data());
                     Post post = new Post();
                     post.setPostWithDocumentSnapshot(snapshot.data);
                     final contentToDisplay =
                     Column(
                       children: [
+
+                        post.imageUrls.length >= 1 ? Image.network(post.imageUrls[0]) : SizedBox(height: 0,),
+
+                        UniversalWidgets.titleWidget(post.title),
+
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child:
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Center(child: Text(post.topic + " " + post.course),),
+                              Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
+                            ],
+                          ),
+                        ),
+
+                        // Center(child: Text(DateFormat.yMEd().add_jms().format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
+                        // Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
+
+                        Container(
+                          color: Colors.grey[300],
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 50, right: 50, bottom: 20, top: 20),
+                            child:
+                            Container(
+                              child: Center(
+                                child: Text(
+                                  post.content,
+                                  maxLines: 100,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
                         FlatButton(
                           color: Colors.blueAccent,
                           textColor: Colors.white,
                           onPressed: () {
                             print(content);
                             post.printOut();
-
                           },
                           child: Center(child: Text("something here")),
                         ),
-                        SizedBox(height: 10,),
+
+                        SizedBox(height: 20,),
                       ],
                     );
 
                     postWidget.add(contentToDisplay);
 
                   }
-                  return Column(
+                  return ListView(
                       children: postWidget
                   );
                 },
