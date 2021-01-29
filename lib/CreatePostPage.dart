@@ -17,6 +17,7 @@ import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePostPage extends StatefulWidget{
   @override
@@ -206,40 +207,58 @@ class _CreatePostPageState extends State<CreatePostPage>{
     }
   }
 
-  void savePost() {
+  Future<void> savePost() async {
 
-    var currentUserEmail = FirebaseAuth.instance.currentUser.email;
-    var currentTimeInUtc = DateTime.now().toUtc();
-    var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
-    var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
-    print(postDocName);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Post post = new Post(
-      title: title,
-      content: content,
-      authorEmail: currentUserEmail,
-      postDocName: postDocName,
-      topic: topic,
-      course: course,
-      createdTime: currentTimeInUtc, // with timezone info
-      imageUint8Lists: imageUint8Lists,
-    );
-    post.printOut();
+    // prefs.setString("userName", "");
 
-    print("start saving post to database");
-    setState(() {
-      workInProgress = true;
-    });
-    post.create()
-        .then((value) {
-      print("finish saving post");
+    var userName = prefs.get("userName");
+
+    print(userName);
+
+    if(userName == "" || userName == null) {
+      print("missing user name");
+      UniversalFunctions.askForUserMissingInfo(context, true, "Tell us who is posting?");
+    } else {
+      print("saving post now");
+      var currentUserEmail = FirebaseAuth.instance.currentUser.email;
+      var currentTimeInUtc = DateTime.now().toUtc();
+      var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
+      var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
+      print(postDocName);
+
+      Post post = new Post(
+        title: title,
+        content: content,
+        authorEmail: currentUserEmail,
+        author: userName,
+        postDocName: postDocName,
+        topic: topic,
+        course: course,
+        createdTime: currentTimeInUtc, // with timezone info
+        imageUint8Lists: imageUint8Lists,
+      );
+      post.printOut();
+
+      print("start saving post to database");
       setState(() {
-        workInProgress = false;
+        workInProgress = true;
       });
-      resetCreatePostPageFields();
-      // push to a new page
-      Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage1(),));
-    });
+      post.create()
+          .then((value) {
+        print("finish saving post");
+        setState(() {
+          workInProgress = false;
+        });
+        resetCreatePostPageFields();
+        // push to a new page
+        Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage1(),));
+      });
+
+    }
+
+
   }
 
 

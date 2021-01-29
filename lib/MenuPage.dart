@@ -67,6 +67,16 @@ class _MenuPageState extends State<MenuPage>{
     //
     // });
 
+    UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
+    userInformation.get()
+        .then((value) async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var userName = prefs.getString("userName");
+          if(userName == null || userName == "") {
+            print("missing user name from database");
+          }
+    });
+
   }
 
 

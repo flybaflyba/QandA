@@ -12,6 +12,7 @@ class Post {
   var title = "";
   var content = "";
   var authorEmail = "";
+  var author = "";
   var postDocName = ""; // post document name is the created time utc in string + creator's email so that the collection is sorted automatically and no duplicates
   var topic = "";
   var course = "";
@@ -24,6 +25,7 @@ class Post {
     var title,
     var content,
     var authorEmail,
+    var author,
     var postDocName,
     var imageUint8Lists,
     var topic,
@@ -33,6 +35,7 @@ class Post {
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
     if(authorEmail != null){ this.authorEmail = authorEmail; }
+    if(author != null){ this.author = author; }
     if(postDocName != null){ this.postDocName = postDocName; }
     if(topic != null){ this.topic = topic; }
     if(course != null){ this.course = course; }
@@ -43,7 +46,8 @@ class Post {
   void setPostWithDocumentSnapshot(DocumentSnapshot postDocumentSnapshot) {
     title = postDocumentSnapshot["title"];
     content = postDocumentSnapshot["content"];
-    authorEmail = postDocumentSnapshot["author"];
+    authorEmail = postDocumentSnapshot["author email"];
+    author = postDocumentSnapshot["author"];
     postDocName = postDocumentSnapshot["post doc name"];
     imageUrls = postDocumentSnapshot["image urls"];
     topic = postDocumentSnapshot["topic"];
@@ -109,7 +113,8 @@ class Post {
               .set({
             "title": title,
             "content": content,
-            "author": authorEmail,
+            "author email": authorEmail,
+            "author": author,
             "post doc name": postDocName,
             "topic" : topic,
             "course" : course,
@@ -127,6 +132,7 @@ class Post {
       title,
       content,
       authorEmail,
+      author,
       postDocName,
       topic,
       course,
