@@ -45,6 +45,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                         SizedBox(height: 10,),
                       ],
                     );
+
                     postWidget.add(contentToDisplay);
 
                   }

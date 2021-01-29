@@ -18,6 +18,7 @@ import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:qanda/UniversalWidgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePostPage extends StatefulWidget{
@@ -334,21 +335,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   ListView(
                     children: [
 
-                      Column(
-                        children: [
-                          SizedBox(height: 20,),
-                          Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Center(
-                                child: Text(
-                                  topic,
-                                  style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-                                ),
-                              )
-                          ),
-                        ],
-                      ),
-
+                      UniversalWidgets.titleWidget(topic),
 
                       Center(
                         child: ToggleButtons(
