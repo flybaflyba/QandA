@@ -90,6 +90,7 @@ class _MenuPageState extends State<MenuPage>{
       appBar: AppBar(
         // backgroundColor: UniversalValues.primaryColor,
         title: Text("Q&A"),
+        leading: BackButton(),
       ),
       body: PersistentTabView(
         context,

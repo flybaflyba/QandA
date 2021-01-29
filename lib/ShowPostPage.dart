@@ -147,6 +147,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                         // ),
 
 
+                        post.imageUrls.length == 0 ?
+                            SizedBox(height: 0,) : 
                         Column(
                             children: [
                               CarouselSlider(
@@ -183,7 +185,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               ),
                             ]
                         ),
-                        
+
                         // SizedBox(height: 20, child: Container(color: Colors.white,),),
 
                         Container(
