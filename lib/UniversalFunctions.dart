@@ -118,6 +118,11 @@ class UniversalFunctions{
                                           gradientColors: [Color(0xff5b86e5), Color(0xff36d1dc)],
                                           text: "Ok",
                                           onPressed: () async {
+
+                                            userInformation.name = userName;
+                                            userInformation.update();
+                                            prefs.setString("userName", userName);
+
                                             Navigator.of(context, rootNavigator: true).pop();
                                           },
                                         ),
