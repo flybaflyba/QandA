@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,8 +42,6 @@ class _ShowPostPageState extends State<ShowPostPage>{
                     Column(
                       children: [
 
-                        post.imageUrls.length >= 1 ? Image.network(post.imageUrls[0]) : SizedBox(height: 0,),
-
                         UniversalWidgets.titleWidget(post.title),
 
                         Padding(
@@ -52,13 +51,33 @@ class _ShowPostPageState extends State<ShowPostPage>{
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Center(child: Text(post.topic + " " + post.course),),
-                              Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
+                              Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
                             ],
                           ),
                         ),
 
                         // Center(child: Text(DateFormat.yMEd().add_jms().format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
                         // Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
+
+                        CarouselSlider(
+                          options: CarouselOptions(height: 300.0),
+                          items: post.imageUrls.map((i) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[300]
+                                  ),
+                                  child: Image.network(i),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
+
+                        SizedBox(height: 20, child: Container(color: Colors.white,),),
 
                         Container(
                           color: Colors.grey[300],
