@@ -14,6 +14,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:qanda/BlankPages.dart';
 import 'package:qanda/Post.dart';
+import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -253,7 +254,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         });
         resetCreatePostPageFields();
         // push to a new page
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BlankPage1(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(),));
       });
 
     }
@@ -332,17 +333,22 @@ class _CreatePostPageState extends State<CreatePostPage>{
                 children: [
                   ListView(
                     children: [
-                      SizedBox(height: 20,),
 
-                      Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Center(
-                            child: Text(
-                              topic,
-                              style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-                            ),
-                          )
+                      Column(
+                        children: [
+                          SizedBox(height: 20,),
+                          Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Center(
+                                child: Text(
+                                  topic,
+                                  style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+                                ),
+                              )
+                          ),
+                        ],
                       ),
+
 
                       Center(
                         child: ToggleButtons(

@@ -19,7 +19,7 @@ class Post {
   var createdTime; // DateTime type, has timezone info
   List<Uint8List> imageUint8Lists = [];
 
-  List<String> imageUrls = [];
+  List<dynamic> imageUrls = [];
 
   Post({
     var title,
@@ -128,18 +128,16 @@ class Post {
   }
 
   void printOut() {
-    print([
-      title,
-      content,
-      authorEmail,
-      author,
-      postDocName,
-      topic,
-      course,
-      createdTime,
-      imageUrls,
-      imageUint8Lists.length,
-    ]);
+    print("title: " + title);
+    print("content: " + content);
+    print("authorEmail: " + authorEmail);
+    print("author: " + author);
+    print("postDocName: " + postDocName);
+    print("topic: " + topic);
+    print("course: " + course);
+    print("createdTime: " + createdTime.toString());
+    print("imageUrls： " + imageUrls.toString());
+    print("imageUint8Lists.length： " + imageUint8Lists.length.toString());
   }
 }
 
