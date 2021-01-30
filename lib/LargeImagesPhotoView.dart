@@ -53,7 +53,7 @@ class _LargeImagesPhotoViewState extends State<LargeImagesPhotoView> {
                         );
                       },
                       backgroundDecoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey[300],
                       ),
                       pageController: widget.pageController,
                       onPageChanged: (i) {

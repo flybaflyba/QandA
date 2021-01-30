@@ -30,6 +30,16 @@ class _ShowPostPageState extends State<ShowPostPage>{
 
   var appBarText = "";
 
+
+  @override
+  void initState() {
+    super.initState();
+    // this might be changed due to view images outside of show post page
+    UniversalValues.currentViewingImageIndex = 0;
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

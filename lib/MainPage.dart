@@ -7,8 +7,11 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
+import 'package:qanda/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class MainPage extends StatefulWidget{
@@ -43,10 +46,13 @@ class _MainPageState extends State<MainPage>{
                         loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Center(
-                            child: SpinKitDoubleBounce(
-                              color: Colors.blue,
-                              size: 50.0,
-                            ),
+                            child: Container(
+                              color: Colors.grey[300],
+                              child: SpinKitDoubleBounce(
+                                color: Colors.blue,
+                                size: 50.0,
+                              ),
+                            )
                             // CircularProgressIndicator(
                             //   value: loadingProgress.expectedTotalBytes != null ?
                             //   loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
@@ -63,6 +69,88 @@ class _MainPageState extends State<MainPage>{
     }
     print("end of get top images");
     return topImageUrls;
+  }
+
+
+  Widget gridView(List<dynamic> urls) {
+
+    if(urls.length == 0) {
+      // no image
+      return SizedBox(height: 0,);
+    } else {
+      int crossAxisCount = 3;
+      var numOfImages = urls.length;
+      // lots of code, but easy to understand
+      if(numOfImages == 1) {
+        crossAxisCount = 1;
+      } else if (numOfImages == 2) {
+        crossAxisCount = 2;
+      } else if (numOfImages == 3) {
+        crossAxisCount = 3;
+      } else if (numOfImages == 4) {
+        crossAxisCount = 2;
+      } else if (numOfImages == 5) {
+        crossAxisCount = 3;
+      } else if (numOfImages == 6) {
+        crossAxisCount = 3;
+      } else if (numOfImages == 7) {
+        crossAxisCount = 3;
+      } else if (numOfImages == 8) {
+        crossAxisCount = 3;
+      } else if (numOfImages == 9) {
+        crossAxisCount = 3;
+      }
+
+      return GridView.count(
+        physics: ScrollPhysics(), // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
+        shrinkWrap: true,
+        crossAxisCount: crossAxisCount,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        children: List.generate(urls.length, (index) {
+          return InkWell(
+            onTap: () {
+              print("tapped image index " + index.toString() + " with url " + urls[index]);
+
+              var pageController = PageController(initialPage: index);
+              Future<void> future = showCupertinoModalBottomSheet(
+                // expand: false,
+                // bounce: true,
+                  useRootNavigator: true,
+                  context: context,
+                  duration: Duration(milliseconds: 700),
+                  builder: (context) =>
+                      LargeImagesPhotoView(pageController: pageController, imageUrls: urls)
+              );
+              future.then((void value) {
+                print("bottom sheet closed");
+                UniversalValues.currentViewingImageIndex = 0; // try not to change it because we are not in show post page
+                print(UniversalValues.currentViewingImageIndex);
+              });
+
+            },
+            child: Image.network(
+              urls[index],
+              fit: BoxFit.cover,
+              loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: Container(
+                    color: Colors.grey[300],
+                    child: SpinKitRipple(
+                      color: Colors.blue,
+                      size: 50.0,
+                    ),
+                  )
+                );
+              },
+            ),
+          );
+        }
+        ),
+      );
+    }
+
 
   }
 
@@ -124,7 +212,7 @@ class _MainPageState extends State<MainPage>{
                                 items: topImageSliders,
                                 options: CarouselOptions(
                                     height: MediaQuery.of(context).size.height * 0.2,
-                                    autoPlay: false,
+                                    autoPlay: true,
                                     enlargeCenterPage: true,
                                     aspectRatio: 2,
                                     onPageChanged: (index, reason) {
@@ -295,10 +383,12 @@ class _MainPageState extends State<MainPage>{
                                       ),
                                   ),
 
-
-
                                   // images
 
+                                  Padding(
+                                      padding: EdgeInsets.only(bottom: 10),
+                                      child: gridView(post.imageUrls),
+                                  ),
 
                                   SizedBox(
                                     height: 10,
@@ -319,6 +409,7 @@ class _MainPageState extends State<MainPage>{
                     ),
                   ),
 
+                  SizedBox(height: 50,),
                 ],
               )
           )
