@@ -109,7 +109,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
               //   height: 300,
               // ),
               Container(
-                child: Image.memory(imageValue),
+                child: Image.memory(imageValue, fit: BoxFit.cover,),
                 width: 300,
                 height: 300,
               ),

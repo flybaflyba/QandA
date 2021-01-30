@@ -110,7 +110,6 @@ class _MainPageState extends State<MainPage>{
                     child: FutureBuilder(
                         future: getTopImages(),
                         builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
-
                           if (snapshot.connectionState == ConnectionState.done) {
                             var topImageSliders;
                             if(snapshot.data.length != 0 ) {
@@ -264,7 +263,6 @@ class _MainPageState extends State<MainPage>{
                                                 ),
                                               ),
                                             ),
-
                                             // Align(
                                             //   alignment: Alignment.centerLeft,
                                             //   child: Text(
@@ -296,6 +294,12 @@ class _MainPageState extends State<MainPage>{
                                         ),
                                       ),
                                   ),
+
+
+
+                                  // images
+
+
                                   SizedBox(
                                     height: 10,
                                     child: Container(
