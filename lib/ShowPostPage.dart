@@ -22,7 +22,7 @@ class ShowPostPage extends StatefulWidget{
 
 class _ShowPostPageState extends State<ShowPostPage>{
 
-  int currentImageIndex = 0;
+  // int currentImageIndex = 0;
   // double imageSize = 0.3;
 
   var carouselController = new CarouselController();
@@ -61,8 +61,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                       child: InkWell(
                         onTap: () {
                           print("tapped an image");
-                          print(currentImageIndex);
-                          var pageController = PageController(initialPage: currentImageIndex);
+                          print(UniversalValues.currentViewingImageIndex);
+                          var pageController = PageController(initialPage: UniversalValues.currentViewingImageIndex);
                           Future<void> future = showCupertinoModalBottomSheet(
                             // expand: false,
                             // bounce: true,
@@ -70,7 +70,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               context: context,
                               duration: Duration(milliseconds: 700),
                               builder: (context) =>
-                                  LargeImagesPhotoView(pageController: pageController, imageUrls: post.imageUrls, currentIndex: currentImageIndex,)
+                                  LargeImagesPhotoView(pageController: pageController, imageUrls: post.imageUrls)
                           );
                           future.then((void value) {
                             print("bottom sheet closed");
@@ -147,9 +147,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     aspectRatio: 2,
                                     onPageChanged: (index, reason) {
                                       // print(index);
-                                      UniversalValues.currentViewingImageIndex = index;
                                       setState(() {
-                                        currentImageIndex = index;
+                                        UniversalValues.currentViewingImageIndex = index;
                                       });
                                     }
                                 ),
@@ -165,7 +164,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: currentImageIndex == index
+                                      color: UniversalValues.currentViewingImageIndex == index
                                           ? Color.fromRGBO(0, 0, 0, 0.9)
                                           : Color.fromRGBO(0, 0, 0, 0.4),
                                     ),
