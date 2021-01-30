@@ -277,7 +277,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
           }
         }
       }
-      if(filteredCourses.length == 0) {
+      if(filteredCourses.length == 0 && !UniversalValues.courses.contains(enteredString.toUpperCase())) {
         filteredCourses.add("No Course Found");
       }
     });
@@ -399,6 +399,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 ),
                               ),
                               Container(
+                                color: Colors.grey[300g],
                                 constraints: BoxConstraints(minHeight: 0, maxHeight: 200),
                                 child: listMatchedCourses(course),
                               )
