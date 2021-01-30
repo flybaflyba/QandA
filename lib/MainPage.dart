@@ -24,15 +24,36 @@ class _MainPageState extends State<MainPage>{
 
 
   Future<List<Widget>> getTopImages() async {
-    List<Widget> topImageUrls = List<Widget>();
+    List<Widget> topImageWidgets = List<Widget>();
+    List<String> topImageUrls = List<String>();
     firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("top images").listAll();
     for(firebase_storage.Reference ref in result.items){
       var url = await ref.getDownloadURL();
       print(url);
-      topImageUrls.add(
+      topImageUrls.add(url);
+      topImageWidgets.add(
           Container(
             child: InkWell(
                 onTap: () {
+                  print("tapped top image " + url);
+                  // make sure top image urls are all collected
+                  if(topImageWidgets.length == result.items.length) {
+                    var pageController = PageController(initialPage: topImageUrls.indexOf(url));
+                    Future<void> future = showCupertinoModalBottomSheet(
+                      // expand: false,
+                      // bounce: true,
+                        useRootNavigator: true,
+                        context: context,
+                        duration: Duration(milliseconds: 700),
+                        builder: (context) =>
+                            LargeImagesPhotoView(pageController: pageController, imageUrls: topImageUrls)
+                    );
+                    future.then((void value) {
+                      print("bottom sheet closed");
+                      UniversalValues.currentViewingImageIndex = 0; // try not to change it because we are not in show post page
+                      print(UniversalValues.currentViewingImageIndex);
+                    });
+                  }
                 },
                 child:
                 ClipRRect(
@@ -68,7 +89,7 @@ class _MainPageState extends State<MainPage>{
       );
     }
     print("end of get top images");
-    return topImageUrls;
+    return topImageWidgets;
   }
 
 
@@ -211,7 +232,7 @@ class _MainPageState extends State<MainPage>{
                               CarouselSlider(
                                 items: topImageSliders,
                                 options: CarouselOptions(
-                                    height: MediaQuery.of(context).size.height * 0.2,
+                                    height: MediaQuery.of(context).size.height * 0.25,
                                     autoPlay: true,
                                     enlargeCenterPage: true,
                                     aspectRatio: 2,

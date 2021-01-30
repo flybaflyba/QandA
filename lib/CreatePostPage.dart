@@ -84,19 +84,22 @@ class _CreatePostPageState extends State<CreatePostPage>{
         if (index == imageUint8Lists.length) {
           // loop again after all images, add a icon button in the end
           return
-            IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  // hide keyboard when pick images
-                  FocusScope.of(context).requestFocus(new FocusNode()); // do not show keyboard
-                  if(kIsWeb) {
-                    print("web");
-                    loadImagesOnWeb();
-                  } else {
-                    print("app");
-                    loadImagesOnDevices();
+            Container(
+              color: Colors.grey[200],
+              child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    // hide keyboard when pick images
+                    FocusScope.of(context).requestFocus(new FocusNode()); // do not show keyboard
+                    if(kIsWeb) {
+                      print("web");
+                      loadImagesOnWeb();
+                    } else {
+                      print("app");
+                      loadImagesOnDevices();
+                    }
                   }
-                }
+              ),
             );
         } else {
           // Asset asset = imageAssets[index];
