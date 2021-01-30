@@ -25,6 +25,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+        ),
       body:  Center(
           child: Container(
               constraints: BoxConstraints(minWidth: 150, maxWidth: 800),

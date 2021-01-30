@@ -87,11 +87,11 @@ class _MenuPageState extends State<MenuPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: UniversalValues.primaryColor,
-        title: Text("Q&A"),
-        leading: BackButton(),
-      ),
+      // appBar: AppBar(
+      //   // backgroundColor: UniversalValues.primaryColor,
+      //   title: Text("Q&A"),
+      //   leading: BackButton(),
+      // ),
       body: PersistentTabView(
         context,
         controller: controller,

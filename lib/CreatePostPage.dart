@@ -323,6 +323,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text("Create Post"),),
+      ),
       body:
       // disable screen touch and show progress indicator when work in progress
       AbsorbPointer(
