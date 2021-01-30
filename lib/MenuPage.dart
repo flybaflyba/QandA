@@ -11,6 +11,7 @@ import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/BlankPages.dart';
 import 'package:qanda/CreatePostPage.dart';
+import 'package:qanda/MainPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
@@ -30,7 +31,7 @@ class _MenuPageState extends State<MenuPage>{
   bool hideNavBar;
 
   List<Widget> buildScreens = [
-    BlankPage1(),
+    MainPage(),
     CreatePostPage(),
     BlankPage2(),
   ];

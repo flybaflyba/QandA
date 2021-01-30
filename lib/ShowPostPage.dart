@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
@@ -26,6 +27,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
 
   var carouselController = new CarouselController();
   var pageController = new PageController();
+
+  var appBarText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,9 @@ class _ShowPostPageState extends State<ShowPostPage>{
 
                     var imgList = post.imageUrls;
 
+                      appBarText = post.title;
+
+
                     final List<Widget> imageSliders = imgList.map((item) => Container(
                       child: InkWell(
                         onTap: () {
@@ -64,11 +70,11 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               context: context,
                               duration: Duration(milliseconds: 700),
                               builder: (context) =>
-                                  UniversalWidgets.largeImagesPhotoView(context, pageController, post.imageUrls)
+                                  LargeImagesPhotoView(pageController: pageController, imageUrls: post.imageUrls, currentIndex: currentImageIndex,)
                           );
                           future.then((void value) {
                             print("bottom sheet closed");
-                            carouselController.jumpToPage(UniversalValues.largeImagesPhotoViewCurrentIndex);
+                            carouselController.animateToPage(UniversalValues.largeImagesPhotoViewCurrentIndex);
 
                           });
                         },
