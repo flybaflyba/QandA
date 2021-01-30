@@ -39,11 +39,15 @@ class _MainPageState extends State<MainPage>{
                         loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null ?
-                              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                                  : null,
+                            child: SpinKitDoubleBounce(
+                              color: Colors.blue,
+                              size: 50.0,
                             ),
+                            // CircularProgressIndicator(
+                            //   value: loadingProgress.expectedTotalBytes != null ?
+                            //   loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                            //       : null,
+                            // ),
                           );
                         },
                       )
@@ -127,7 +131,7 @@ class _MainPageState extends State<MainPage>{
                               );
                           } else {
                             return Container(
-                              color: Colors.greenAccent,
+                              color: Colors.grey,
                               child: SizedBox(
                                 height: MediaQuery.of(context).size.height * 0.2,
                                 child: SpinKitWave(
