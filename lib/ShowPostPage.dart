@@ -74,8 +74,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                           );
                           future.then((void value) {
                             print("bottom sheet closed");
-                            carouselController.animateToPage(UniversalValues.largeImagesPhotoViewCurrentIndex);
-
+                            print(UniversalValues.currentViewingImageIndex);
+                            carouselController.animateToPage(UniversalValues.currentViewingImageIndex);
                           });
                         },
                         child:
@@ -146,7 +146,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     enlargeCenterPage: true,
                                     aspectRatio: 2,
                                     onPageChanged: (index, reason) {
-                                      print(index);
+                                      // print(index);
+                                      UniversalValues.currentViewingImageIndex = index;
                                       setState(() {
                                         currentImageIndex = index;
                                       });

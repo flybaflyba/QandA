@@ -81,7 +81,7 @@ class UniversalWidgets {
                       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: UniversalValues.largeImagesPhotoViewCurrentIndex == index
+                        color: UniversalValues.currentViewingImageIndex == index
                             ? Color.fromRGBO(0, 0, 0, 0.9)
                             : Color.fromRGBO(0, 0, 0, 0.4),
                       ),

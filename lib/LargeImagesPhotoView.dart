@@ -59,7 +59,7 @@ class _LargeImagesPhotoViewState extends State<LargeImagesPhotoView> {
                   pageController: widget.pageController,
                   onPageChanged: (i) {
                     print(i);
-                    UniversalValues.largeImagesPhotoViewCurrentIndex = i;
+                    UniversalValues.currentViewingImageIndex = i;
                     setState(() {
                       widget.currentIndex = i;
                     });
