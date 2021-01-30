@@ -8,7 +8,7 @@ import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UniversalWidgets.dart';
-import 'package:timeago/timeago.dart' as timeago;
+import 'package:timeago/timeago.dart' as timeAgo;
 
 class ShowPostPage extends StatefulWidget{
 
@@ -106,7 +106,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                      children: [
                                        Center(child: Text(post.topic + " " + post.course),),
-                                       Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
+                                       Center(child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
                                      ],
                                    ),
                                  ),
