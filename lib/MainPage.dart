@@ -36,6 +36,16 @@ class _MainPageState extends State<MainPage>{
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.9,
+                        loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null ?
+                              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          );
+                        },
                       )
                   ),
                 )
@@ -86,6 +96,7 @@ class _MainPageState extends State<MainPage>{
                   //     ]
                   // ),
 
+                  // forgot to commit, add main page and top images
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: FutureBuilder(
