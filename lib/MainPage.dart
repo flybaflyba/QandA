@@ -3,6 +3,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -410,6 +411,60 @@ class _MainPageState extends State<MainPage>{
                                       padding: EdgeInsets.only(bottom: 10),
                                       child: gridView(post.imageUrls),
                                   ),
+
+
+
+
+
+
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 50, right: 50),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                                icon: Icon(
+                                                  Icons.thumb_up_alt_outlined,
+                                                  color: post.likedBy.contains(FirebaseAuth.instance.currentUser.email) ? Colors.blueAccent : Colors.black,
+                                                ),
+                                                onPressed: () {
+                                                  if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+                                                    post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                                                  } else {
+                                                    post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                                                  }
+
+                                                }
+                                            ),
+                                            Text(post.likedBy.length.toString()),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                                icon: Icon(Icons.comment_bank_outlined),
+                                                onPressed: () {
+                                                }
+                                            ),
+                                            Text("15"),
+                                          ],
+                                        ),
+
+
+                                      ],
+                                    ),
+                                  ),
+
+                                  // Padding(
+                                  //   padding: EdgeInsets.only(left: 5, right: 5),
+                                  //   child: Divider(
+                                  //     color: Colors.grey,
+                                  //     thickness: 1,
+                                  //   ),
+                                  // ),
+
 
                                   SizedBox(
                                     height: 10,

@@ -18,8 +18,10 @@ class Post {
   var course = "";
   var createdTime; // DateTime type, has timezone info
   List<Uint8List> imageUint8Lists = [];
-
   List<dynamic> imageUrls = [];
+
+  // no need to set when create post
+  List<dynamic> likedBy = [];
 
   Post({
     var title,
@@ -53,6 +55,7 @@ class Post {
     topic = postDocumentSnapshot["topic"];
     course = postDocumentSnapshot["course"];
     createdTime = postDocumentSnapshot["created time"];
+    likedBy = postDocumentSnapshot["liked by"];
   }
 
   // upload images, and get their urls to store in the post doc
@@ -125,6 +128,27 @@ class Post {
               .catchError((error) => print("Failed to create Post: $error"));
         });
 
+  }
+
+  void likedByUpdate(String actionUserEmail, String action) {
+
+    if(action == "+") {
+      print("likedBy add one " + actionUserEmail);
+      likedBy.add(actionUserEmail);
+    } else if(action == "-"){
+      print("likedBy minus one " + actionUserEmail);
+      likedBy.remove(actionUserEmail);
+    } else{
+      print("invalid action");
+    }
+    var topicLowerCase = topic.toLowerCase();
+    FirebaseFirestore.instance.collection('$topicLowerCase posts')
+        .doc(postDocName)
+        .update({
+      "liked by": likedBy,
+    })
+        .then((value) => print("likedBy updated"))
+        .catchError((error) => print("Failed to update likedBy: $error"));
   }
 
   void printOut() {

@@ -126,7 +126,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
                       if(!kIsWeb){
                         imageAssets.removeAt(index);
                       }
-
                     });
                   }
               )
