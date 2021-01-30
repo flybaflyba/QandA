@@ -31,6 +31,7 @@ class _LargeImagesPhotoViewState extends State<LargeImagesPhotoView> {
                       scrollPhysics: const BouncingScrollPhysics(),
                       builder: (BuildContext context, int index) {
                         return PhotoViewGalleryPageOptions(
+                          filterQuality: FilterQuality.high,
                           imageProvider: NetworkImage(widget.imageUrls[index]),
                           initialScale: PhotoViewComputedScale.contained * 0.8,
                           heroAttributes: PhotoViewHeroAttributes(

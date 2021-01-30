@@ -261,7 +261,7 @@ class _MainPageState extends State<MainPage>{
                             Column(
                                 children: [
                                   Padding(
-                                      padding: EdgeInsets.only(top: 20, bottom: 5, left: 20, right: 20), // on the bottom there is often a ... or images, 20 feels a too large padding for bottom
+                                      padding: EdgeInsets.only(top: 20, bottom: 15, left: 20, right: 20), // on the bottom there is often a ... or images, 20 feels a too large padding for bottom
                                       child: InkWell(
                                         onTap: () {
                                           print("tapped on Post: " + post.postDocName);
