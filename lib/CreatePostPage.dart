@@ -399,7 +399,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 ),
                               ),
                               Container(
-                                color: Colors.grey[300g],
+                                color: Colors.grey[300],
                                 constraints: BoxConstraints(minHeight: 0, maxHeight: 200),
                                 child: listMatchedCourses(course),
                               )

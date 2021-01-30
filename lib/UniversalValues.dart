@@ -20,4 +20,5 @@ class UniversalValues {
     "ENTR180", "ENTR283", "ENTR275", "ENTR285", "ENTR373", "ENTR380", "ENTR383", "ENTR375R", "ENTR390R", "ENTR401R", "ENTR483", "ENTR485", "ENTR499"
   ];
 
+  static var largeImagesPhotoViewCurrentIndex = 0;
 }

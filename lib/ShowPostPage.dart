@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
+import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UniversalWidgets.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -20,7 +22,10 @@ class ShowPostPage extends StatefulWidget{
 class _ShowPostPageState extends State<ShowPostPage>{
 
   int currentImageIndex = 0;
-  double imageSize = 0.3;
+  // double imageSize = 0.3;
+
+  var carouselController = new CarouselController();
+  var pageController = new PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,58 +52,33 @@ class _ShowPostPageState extends State<ShowPostPage>{
                     var imgList = post.imageUrls;
 
                     final List<Widget> imageSliders = imgList.map((item) => Container(
-                      height:  MediaQuery.of(context).size.height,
-                      child: Container(
-                        margin: EdgeInsets.all(5.0),
-                        child: InkWell(
-                          onTap: () {
-                            print("tapped an image");
-                            // setState(() {
-                            //   if (imageSize == 0.3) {
-                            //     imageSize = 0.6;
-                            //   } else {
-                            //     imageSize = 0.3;
-                            //   }
-                            // });
-                          },
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                              child: Stack(
-                                children: <Widget>[
-                                  // if the image quality is too high, might not load because of time out error, we can also set scale to 0.1 for example
-                                  Center(child: Image.network(item, filterQuality: FilterQuality.low, fit: BoxFit.cover, width: MediaQuery.of(context).size.width * 0.9),)
-                                  // indicator on image
-                                  // Positioned(
-                                  //   bottom: 0.0,
-                                  //   left: 0.0,
-                                  //   right: 0.0,
-                                  //   child: Container(
-                                  //     decoration: BoxDecoration(
-                                  //       gradient: LinearGradient(
-                                  //         colors: [
-                                  //           Color.fromARGB(200, 0, 0, 0),
-                                  //           Color.fromARGB(0, 0, 0, 0)
-                                  //         ],
-                                  //         begin: Alignment.bottomCenter,
-                                  //         end: Alignment.topCenter,
-                                  //       ),
-                                  //     ),
-                                  //     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                                  //     child: Text(
-                                  //       '${imgList.indexOf(item)}',
-                                  //       style: TextStyle(
-                                  //         color: Colors.white,
-                                  //         fontSize: 20.0,
-                                  //         fontWeight: FontWeight.bold,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ],
-                              )
-                          ),
-                        ),
-                        ),
+                      child: InkWell(
+                        onTap: () {
+                          print("tapped an image");
+                          print(currentImageIndex);
+                          var pageController = PageController(initialPage: currentImageIndex);
+                          Future<void> future = showCupertinoModalBottomSheet(
+                            // expand: false,
+                            // bounce: true,
+                              useRootNavigator: true,
+                              context: context,
+                              duration: Duration(milliseconds: 700),
+                              builder: (context) =>
+                                  UniversalWidgets.largeImagesPhotoView(context, pageController, post.imageUrls)
+                          );
+                          future.then((void value) {
+                            print("bottom sheet closed");
+                            carouselController.jumpToPage(UniversalValues.largeImagesPhotoViewCurrentIndex);
+
+                          });
+                        },
+                        child:
+                        ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          child: Center(child: Image.network(item, filterQuality: FilterQuality.low, fit: BoxFit.cover, width: MediaQuery.of(context).size.width * 0.9),),
+                        )
+
+                      ),
                     )).toList();
 
                     final contentToDisplay =
@@ -135,8 +115,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
 
 
                         // CarouselSlider(
-                        //   options: CarouselOptions(
-                        //     height: MediaQuery.of(context).size.height,
+                        //   options: CarouselOptions              //     height: MediaQuery.of(context).size.height,
                         //     viewportFraction: 1.0,
                         //     enlargeCenterPage: false,
                         //     // autoPlay: false,
@@ -148,19 +127,20 @@ class _ShowPostPageState extends State<ShowPostPage>{
                         //   )).toList(),
                         // ),
 
-
                         post.imageUrls.length == 0 ?
                             SizedBox(height: 0,) : 
                         Column(
                             children: [
                               CarouselSlider(
                                 items: imageSliders,
+                                carouselController: carouselController,
                                 options: CarouselOptions(
-                                    height: MediaQuery.of(context).size.height * imageSize,
+                                    height: MediaQuery.of(context).size.height * 0.3,
                                     autoPlay: false,
                                     enlargeCenterPage: true,
                                     aspectRatio: 2,
                                     onPageChanged: (index, reason) {
+                                      print(index);
                                       setState(() {
                                         currentImageIndex = index;
                                       });
@@ -210,15 +190,15 @@ class _ShowPostPageState extends State<ShowPostPage>{
                           ),
                         ),
 
-                        FlatButton(
-                          color: Colors.blueAccent,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            print(content);
-                            post.printOut();
-                          },
-                          child: Center(child: Text("something here")),
-                        ),
+                        // FlatButton(
+                        //   color: Colors.blueAccent,
+                        //   textColor: Colors.white,
+                        //   onPressed: () {
+                        //     print(content);
+                        //     post.printOut();
+                        //   },
+                        //   child: Center(child: Text("something here")),
+                        // ),
 
                         SizedBox(height: 20,),
                       ],
@@ -227,7 +207,9 @@ class _ShowPostPageState extends State<ShowPostPage>{
                     postWidget.add(contentToDisplay);
 
                   }
-                  return ListView(
+                  return
+
+                    ListView(
                       children: postWidget
                   );
                 },
