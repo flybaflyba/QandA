@@ -198,7 +198,6 @@ class _MainPageState extends State<MainPage>{
               constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
               child: ListView(
                 children: [
-
                   // Column(
                   //     children: [
                   //       CarouselSlider(

@@ -73,11 +73,6 @@ class Post {
     // comments = postDocumentSnapshot.data().keys.contains("comments") ? postDocumentSnapshot["comments"] : [];
   }
 
-  void getPostComments(){
-
-
-  }
-
   // upload images, and get their urls to store in the post doc
   Future<List<String>> uploadImages(List<Uint8List> imageUint8Lists) async {
     List<String> urls = List<String>();
