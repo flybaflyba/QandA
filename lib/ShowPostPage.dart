@@ -248,9 +248,9 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     print(snapshot.data.docs.length);
                                     for (DocumentSnapshot d in snapshot.data.docs) {
                                       print(d["content"]);
-
                                       var commentContent = d["content"];
                                       var commentTime = d["time"];
+                                      var commentByEmail = d["by email"];
                                       var commentBy = d["by"];
                                       Widget oneComment =
                                       Padding(
@@ -284,7 +284,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                                       Container(
                                                         child: Align(
                                                             alignment: Alignment.centerRight,
-                                                            child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)))
+                                                            child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(commentTime.microsecondsSinceEpoch)))
 
                                                         ),
                                                       ),

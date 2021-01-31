@@ -181,30 +181,29 @@ class UniversalFunctions{
                             // color: Colors.redAccent,
                               child: IconButton(
                                 icon: Icon(Icons.airplanemode_active),
-                                onPressed: () {
+                                onPressed: () async {
                                   print(currentComment);
                                   // save comment
                                   if(currentComment == "") {
                                     UniversalFunctions.showToast("Please enter your comments", UniversalValues.toastMessageTypeWarningColor);
                                   } else {
-
                                     // save comment
+                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    var userName = prefs.get("userName");
+                                    print(userName);
+                                    // prefs.setString("userName", "");
+                                    if(userName == "" || userName == null) {
+                                      print("missing user name");
+                                      UniversalFunctions.askForUserMissingInfo(context, true, "Tell us who is commenting");
+                                    } else {
+                                      var currentTimeInUtc = DateTime.now().toUtc();
+                                      Comment comment = new Comment(content: currentComment, time: currentTimeInUtc, by: userName, byEmail: FirebaseAuth.instance.currentUser.email);
+                                      // comment.printOut();
+                                      comment.create(post);
+                                      Navigator.pop(context);
+                                    }
 
-                                    var currentTimeInUtc = DateTime.now().toUtc();
-                                    var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
 
-                                    Comment comment = new Comment(content: currentComment, time: currentTimeInUtcString, by: FirebaseAuth.instance.currentUser.email);
-
-                                    comment.printOut();
-
-                                    comment.create(post);
-
-                                    Navigator.pop(context);
-
-                                    // var m = {'zero': 0, 'I': 'one', 10: 'X', "replies": ["asdc", "Adcas"]};
-                                    // print(m["zero"]);
-                                    // print(m[10]);
-                                    // print(m["replies"]);
 
 
                                   }

@@ -138,7 +138,7 @@ class _MainPageState extends State<MainPage>{
             onTap: () {
               print("tapped image index " + index.toString() + " with url " + urls[index]);
 
-              UniversalValues.currentViewingImageIndex = index; // we need this so that indicator in large view is at the right position 
+              UniversalValues.currentViewingImageIndex = index; // we need this so that indicator in large view is at the right position
               var pageController = PageController(initialPage: index);
               Future<void> future = showCupertinoModalBottomSheet(
                 // expand: false,
@@ -336,7 +336,7 @@ class _MainPageState extends State<MainPage>{
                                                     child: Text(
                                                       post.author,
                                                       style: TextStyle(
-                                                          fontSize: 17,
+                                                          fontSize: 15,
                                                           fontWeight: FontWeight.bold,
                                                       ),
                                                     ),
@@ -418,53 +418,6 @@ class _MainPageState extends State<MainPage>{
 
                                   UniversalWidgets.likeAndCommentBar(context, post, true),
 
-                                  // Padding(
-                                  //   padding: EdgeInsets.only(left: 50, right: 50),
-                                  //   child: Row(
-                                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  //     children: [
-                                  //       Row(
-                                  //         children: [
-                                  //           IconButton(
-                                  //               icon: Icon(
-                                  //                 Icons.thumb_up_alt_outlined,
-                                  //                 color: post.likedBy.contains(FirebaseAuth.instance.currentUser.email) ? Colors.blueAccent : Colors.black,
-                                  //               ),
-                                  //               onPressed: () {
-                                  //                 if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
-                                  //                   post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
-                                  //                 } else {
-                                  //                   post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
-                                  //                 }
-                                  //
-                                  //               }
-                                  //           ),
-                                  //           Text(post.likedBy.length.toString()),
-                                  //         ],
-                                  //       ),
-                                  //       Row(
-                                  //         children: [
-                                  //           IconButton(
-                                  //               icon: Icon(Icons.comment_bank_outlined),
-                                  //               onPressed: () {
-                                  //                 Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-                                  //                 UniversalFunctions.showCommentInput(context, post);
-                                  //               }
-                                  //           ),
-                                  //           Text("15"),
-                                  //         ],
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-
-                                  // Padding(
-                                  //   padding: EdgeInsets.only(left: 5, right: 5),
-                                  //   child: Divider(
-                                  //     color: Colors.grey,
-                                  //     thickness: 1,
-                                  //   ),
-                                  // ),
 
 
                                   SizedBox(
