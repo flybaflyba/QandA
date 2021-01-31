@@ -1,6 +1,7 @@
 
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -118,26 +119,46 @@ class UniversalWidgets {
                     } else {
                       post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
                     }
-
                   }
               ),
               Text(post.likedBy.length.toString()),
             ],
           ),
-          Row(
-            children: [
-              IconButton(
-                  icon: Icon(Icons.comment_bank_outlined),
-                  onPressed: () {
-                    if(pushToNewPage) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-                    }
-                    UniversalFunctions.showCommentInput(context, post, null, post.author, post.authorEmail);
-                  }
-              ),
-              Text("15"),
-            ],
+
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('${post.topic.toLowerCase()} posts')
+                  .doc(post.postDocName)
+                  .collection("comments")
+                  .snapshots(),
+              builder: (context, snapshot){
+                var numOfMainComment = 0;
+                if(snapshot.hasData) {
+                  print("numOfMainComment is " + snapshot.data.docs.length.toString());
+                  numOfMainComment = numOfMainComment + snapshot.data.docs.length;
+                  snapshot.data.docs.forEach((doc) {
+                    // print(doc["replies"].length.toString());
+                    numOfMainComment = numOfMainComment + doc["replies"].length;
+                  });
+                }
+
+                return Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(Icons.comment_bank_outlined),
+                        onPressed: () {
+                          if(pushToNewPage) {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+                          }
+                          UniversalFunctions.showCommentInput(context, post, null, post.author, post.authorEmail);
+                        }
+                    ),
+                    Text(numOfMainComment.toString()),
+                  ],
+                );
+              }
           ),
+
         ],
       ),
     );

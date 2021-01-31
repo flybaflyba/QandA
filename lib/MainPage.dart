@@ -186,8 +186,6 @@ class _MainPageState extends State<MainPage>{
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -201,24 +199,8 @@ class _MainPageState extends State<MainPage>{
               constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
               child: ListView(
                 children: [
-                  // Column(
-                  //     children: [
-                  //       CarouselSlider(
-                  //         items: topImageSliders,
-                  //         options: CarouselOptions(
-                  //             height: MediaQuery.of(context).size.height * 0.3,
-                  //             autoPlay: false,
-                  //             enlargeCenterPage: true,
-                  //             aspectRatio: 2,
-                  //             onPageChanged: (index, reason) {
-                  //               // print(index);
-                  //             }
-                  //         ),
-                  //       ),
-                  //     ]
-                  // ),
 
-                  // forgot to commit, add main page and top images
+                  // main page top images
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: FutureBuilder(
@@ -270,6 +252,7 @@ class _MainPageState extends State<MainPage>{
                     ),
                   ),
 
+                  // posts list
                   Padding(
                     padding: EdgeInsets.all(0),
                     child: StreamBuilder<QuerySnapshot>(
@@ -280,9 +263,11 @@ class _MainPageState extends State<MainPage>{
                         List<Widget> postsList = [];
                         if(snapshot.hasData){
                           final content = snapshot.data.docs;
+
                           for(var postDocumentSnapshot in content){
                             Post post = new Post();
                             post.setPostWithDocumentSnapshot(postDocumentSnapshot);
+
                             final contentToDisplay =
                             Column(
                                 children: [
@@ -292,12 +277,10 @@ class _MainPageState extends State<MainPage>{
                                         onTap: () {
                                           print("tapped on Post: " + post.postDocName);
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-
                                         },
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-
                                             post.course != ""
                                                 ?
                                             Align(
@@ -417,8 +400,6 @@ class _MainPageState extends State<MainPage>{
                                   ),
 
                                   UniversalWidgets.likeAndCommentBar(context, post, true),
-
-
 
                                   SizedBox(
                                     height: 10,

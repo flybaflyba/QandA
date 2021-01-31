@@ -221,6 +221,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                             // ),
 
 
+                            // comments area
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection(widget.postDocTypePath)
@@ -258,7 +259,6 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                       Comment comment = new Comment(content: commentContent, time: commentTime, byEmail: commentByEmail, by: commentBy);
                                       comment.commentDocName = d.id;
                                       comment.replies = d["replies"];
-
 
                                       List<Widget> replyWidgets = [];
 

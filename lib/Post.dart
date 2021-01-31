@@ -167,8 +167,6 @@ class Post {
         .catchError((error) => print("Failed to update likedBy: $error"));
   }
 
-
-
   void printOut() {
     print("title: " + title);
     print("content: " + content);
