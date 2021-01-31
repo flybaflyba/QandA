@@ -8,6 +8,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:qanda/Comment.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -186,6 +187,21 @@ class UniversalFunctions{
                                     UniversalFunctions.showToast("Please enter your comments", UniversalValues.toastMessageTypeWarningColor);
                                   } else {
 
+                                    // save comment
+
+                                    var currentTimeInUtc = DateTime.now().toUtc();
+                                    var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
+
+                                    Comment comment = new Comment(content: currentComment, time: currentTimeInUtcString, by: FirebaseAuth.instance.currentUser.email);
+
+                                    comment.printOut();
+
+                                    // var m = {'zero': 0, 'I': 'one', 10: 'X', "replies": ["asdc", "Adcas"]};
+                                    // print(m["zero"]);
+                                    // print(m[10]);
+                                    // print(m["replies"]);
+
+
                                   }
                                 },
                               )
@@ -201,7 +217,7 @@ class UniversalFunctions{
                               // style: TextStyle(fontSize: 25),
                               textAlign: TextAlign.left,
                               onChanged: (value){
-                                print(value);
+                                // print(value);
                                 currentComment = value;
                               },
                               decoration: InputDecoration(

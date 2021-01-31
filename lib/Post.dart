@@ -20,8 +20,9 @@ class Post {
   List<Uint8List> imageUint8Lists = [];
   List<dynamic> imageUrls = [];
 
-  // no need to set when create post
+  // no need to set when create post locally, but do need when save to database
   List<dynamic> likedBy = [];
+  List<dynamic> comments = [];
 
   Post({
     var title,
@@ -46,16 +47,30 @@ class Post {
   }
 
   void setPostWithDocumentSnapshot(DocumentSnapshot postDocumentSnapshot) {
-    title = postDocumentSnapshot["title"];
-    content = postDocumentSnapshot["content"];
-    authorEmail = postDocumentSnapshot["author email"];
-    author = postDocumentSnapshot["author"];
-    postDocName = postDocumentSnapshot["post doc name"];
-    imageUrls = postDocumentSnapshot["image urls"];
-    topic = postDocumentSnapshot["topic"];
-    course = postDocumentSnapshot["course"];
-    createdTime = postDocumentSnapshot["created time"];
-    likedBy = postDocumentSnapshot["liked by"];
+    // title = postDocumentSnapshot["title"];
+    // content = postDocumentSnapshot["content"];
+    // authorEmail = postDocumentSnapshot["author email"];
+    // author = postDocumentSnapshot["author"];
+    // postDocName = postDocumentSnapshot["post doc name"];
+    // imageUrls = postDocumentSnapshot["image urls"];
+    // topic = postDocumentSnapshot["topic"];
+    // course = postDocumentSnapshot["course"];
+    // createdTime = postDocumentSnapshot["created time"];
+    // likedBy = postDocumentSnapshot["liked by"];
+    // comments = postDocumentSnapshot["comments"];
+
+    title = postDocumentSnapshot.data().keys.contains("title") ? postDocumentSnapshot["title"] : "";
+    content = postDocumentSnapshot.data().keys.contains("content") ? postDocumentSnapshot["content"] : "";
+    authorEmail = postDocumentSnapshot.data().keys.contains("author email") ? postDocumentSnapshot["author email"] : "";
+    author = postDocumentSnapshot.data().keys.contains("author") ? postDocumentSnapshot["author"] : "";
+    postDocName = postDocumentSnapshot.data().keys.contains("port doc name") ? postDocumentSnapshot["post doc name"] : "";
+    imageUrls = postDocumentSnapshot.data().keys.contains("image urls") ? postDocumentSnapshot["image urls"] : [];
+    topic = postDocumentSnapshot.data().keys.contains("topic") ? postDocumentSnapshot["topic"] : "";
+    course = postDocumentSnapshot.data().keys.contains("course") ? postDocumentSnapshot["course"] : "";
+    createdTime = postDocumentSnapshot.data().keys.contains("created time") ? postDocumentSnapshot["created time"] : "";
+    likedBy = postDocumentSnapshot.data().keys.contains("liked by") ? postDocumentSnapshot["liked by"] : "";
+    comments = postDocumentSnapshot.data().keys.contains("comments") ? postDocumentSnapshot["comments"] : [];
+
   }
 
   // upload images, and get their urls to store in the post doc
@@ -123,6 +138,8 @@ class Post {
             "course" : course,
             "created time": createdTime,
             "image urls": imageUrls,
+            "liked by": likedBy,
+            "comments": comments,
           })
               .then((value) => print("Post Created"))
               .catchError((error) => print("Failed to create Post: $error"));
@@ -161,6 +178,7 @@ class Post {
     print("createdTime: " + createdTime.toString());
     print("imageUrls： " + imageUrls.toString());
     print("imageUint8Lists.length： " + imageUint8Lists.length.toString());
+    print("comments: " + comments.toString());
   }
 }
 
