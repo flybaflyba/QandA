@@ -189,245 +189,110 @@ class _MainPageState extends State<MainPage>{
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("BYU Hawaii"),),
-      ),
-      body:
-      Center(
-          child: Container(
-              constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
-              child: ListView(
-                children: [
-
-                  // main page top images
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: FutureBuilder(
-                        future: getTopImages(),
-                        builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
-                          if (snapshot.connectionState == ConnectionState.done) {
-                            var topImageSliders;
-                            if(snapshot.data.length != 0 ) {
-                              topImageSliders = snapshot.data;
-                            } else {
-                              topImageSliders = [];
-                            }
-                            print("got data below");
-                            print(topImageSliders);
-                            return
-                              CarouselSlider(
-                                items: topImageSliders,
-                                options: CarouselOptions(
-                                    height: MediaQuery.of(context).size.height * 0.25,
-                                    autoPlay: true,
-                                    enlargeCenterPage: true,
-                                    aspectRatio: 2,
-                                    onPageChanged: (index, reason) {
-                                      // print(index);
-                                    }
-                                ),
-                              );
-                          } else {
-                            return Container(
-                              color: Colors.grey,
-                              child: SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.2,
-                                child: SpinKitWave(
-                                  color: Colors.white,
-                                  size: 50.0,
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                    ),
-                  ),
-
-
-                  SizedBox(
-                    height: 10,
-                    child: Container(
-                      color: Colors.grey[300],
-                    ),
-                  ),
-
-                  // posts list
-                  // Padding(
-                  //   padding: EdgeInsets.all(0),
-                  //   child: StreamBuilder<QuerySnapshot>(
-                  //     stream: FirebaseFirestore.instance
-                  //         .collection('campus life posts')
-                  //         .snapshots(),
-                  //     builder: (context, snapshot){
-                  //       List<Widget> postsList = [];
-                  //       if(snapshot.hasData){
-                  //         final content = snapshot.data.docs;
-                  //
-                  //         for(var postDocumentSnapshot in content){
-                  //           Post post = new Post();
-                  //           post.setPostWithDocumentSnapshot(postDocumentSnapshot);
-                  //
-                  //           final contentToDisplay =
-                  //           Column(
-                  //               children: [
-                  //                 Padding(
-                  //                     padding: EdgeInsets.only(top: 20, bottom: 15, left: 20, right: 20), // on the bottom there is often a ... or images, 20 feels a too large padding for bottom
-                  //                     child: InkWell(
-                  //                       onTap: () {
-                  //                         print("tapped on Post: " + post.postDocName);
-                  //                         Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-                  //                       },
-                  //                       child: Column(
-                  //                         mainAxisAlignment: MainAxisAlignment.center,
-                  //                         children: [
-                  //                           post.course != ""
-                  //                               ?
-                  //                           Align(
-                  //                             alignment: Alignment.centerLeft,
-                  //                             child: Text(
-                  //                               post.course,
-                  //                               style: TextStyle(
-                  //                                   fontSize: 13,
-                  //                                   fontWeight: FontWeight.bold,
-                  //                                   color: Colors.black54
-                  //                               ),
-                  //                             ),
-                  //                           )
-                  //                               :
-                  //                           SizedBox(height: 0,),
-                  //
-                  //                           Align(
-                  //                             alignment: Alignment.centerLeft,
-                  //                             child: Text(
-                  //                               post.title,
-                  //                               maxLines: 100,
-                  //                               style: TextStyle(
-                  //                                   fontSize: 20,
-                  //                                   fontWeight: FontWeight.bold
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //
-                  //                           Row(
-                  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //                             children: [
-                  //                               Padding(
-                  //                                 padding: EdgeInsets.all(3),
-                  //                                 child: Align(
-                  //                                   alignment: Alignment.centerLeft,
-                  //                                   child: Text(
-                  //                                     post.author,
-                  //                                     style: TextStyle(
-                  //                                         fontSize: 15,
-                  //                                         fontWeight: FontWeight.bold,
-                  //                                     ),
-                  //                                   ),
-                  //                                 ),
-                  //                               ),
-                  //                               Padding(
-                  //                                 padding: EdgeInsets.all(3),
-                  //                                 child: Align(
-                  //                                   alignment: Alignment.centerRight,
-                  //                                   child:Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),
-                  //                                 ),
-                  //                               ),
-                  //                             ],
-                  //                           ),
-                  //
-                  //                           // this handles what if text is more than three lines
-                  //                           Align(
-                  //                             alignment: Alignment.centerLeft,
-                  //                             child: AutoSizeText(
-                  //                               post.content,
-                  //                               maxLines: 3,
-                  //                               style: TextStyle(fontSize: 20),
-                  //                               minFontSize: 15,
-                  //                               maxFontSize: 15,
-                  //                               overflowReplacement: Column( // This widget will be replaced.
-                  //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                  //                                 children: <Widget>[
-                  //                                   Text(
-                  //                                     post.content,
-                  //                                     maxLines: 3,
-                  //                                     overflow: TextOverflow.ellipsis,
-                  //                                   ),
-                  //                                   Text(
-                  //                                     "......",
-                  //                                     // style: TextStyle(color: Colors.red),
-                  //                                   )
-                  //                                 ],
-                  //                               ),
-                  //                             ),
-                  //                           ),
-                  //                           // Align(
-                  //                           //   alignment: Alignment.centerLeft,
-                  //                           //   child: Text(
-                  //                           //     post.content,
-                  //                           //     maxLines: 3, // only display three lines
-                  //                           //     overflow: TextOverflow.ellipsis,
-                  //                           //   ),
-                  //                           // ),
-                  //
-                  //                           // Align(
-                  //                           //   alignment: Alignment.centerLeft,
-                  //                           //   child: Text(
-                  //                           //     ('\n'.allMatches(post.content).length + 1).toString(),
-                  //                           //   ),
-                  //                           // ),
-                  //                           //
-                  //                           // // if more content has more than 3 lines, we display ... in the end
-                  //                           // ('\n'.allMatches(post.content).length + 1) > 3
-                  //                           //     ?
-                  //                           // Align(
-                  //                           //   alignment: Alignment.centerLeft,
-                  //                           //   child: Text(
-                  //                           //     "...",
-                  //                           //   ),
-                  //                           // )
-                  //                           //     :
-                  //                           // SizedBox(height: 0,),
-                  //                         ],
-                  //                       ),
-                  //                     ),
-                  //                 ),
-                  //
-                  //                 // images
-                  //
-                  //                 Padding(
-                  //                     padding: EdgeInsets.only(bottom: 10),
-                  //                     child: gridView(post.imageUrls),
-                  //                 ),
-                  //
-                  //                 UniversalWidgets.likeAndCommentBar(context, post, true),
-                  //
-                  //                 SizedBox(
-                  //                   height: 10,
-                  //                   child: Container(
-                  //                     color: Colors.grey[300],
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //             );
-                  //           postsList.add(contentToDisplay);
-                  //         }
-                  //       }
-                  //       return Column(
-                  //           children: postsList
-                  //       );
-                  //     },
-                  //
-                  //   ),
-                  // ),
-
-                  UniversalWidgets.mainPostList("campus life posts"),
-
-                  SizedBox(height: 50,),
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              title: Center(child: Text("BYU Hawaii"),),
+              bottom:  TabBar(
+                tabs: [
+                  Tab(icon: Icon(Icons.nightlife)),
+                  Tab(icon: Icon(Icons.school)),
                 ],
-              )
-          )
-      )
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                Center(
+                    child: Container(
+                        constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
+                        child: ListView(
+                          children: [
 
+                            // main page top images
+                            Padding(
+                              padding: EdgeInsets.all(20),
+                              child: FutureBuilder(
+                                  future: getTopImages(),
+                                  builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      var topImageSliders;
+                                      if(snapshot.data.length != 0 ) {
+                                        topImageSliders = snapshot.data;
+                                      } else {
+                                        topImageSliders = [];
+                                      }
+                                      print("got data below");
+                                      print(topImageSliders);
+                                      return
+                                        CarouselSlider(
+                                          items: topImageSliders,
+                                          options: CarouselOptions(
+                                              height: MediaQuery.of(context).size.height * 0.25,
+                                              autoPlay: true,
+                                              enlargeCenterPage: true,
+                                              aspectRatio: 2,
+                                              onPageChanged: (index, reason) {
+                                                // print(index);
+                                              }
+                                          ),
+                                        );
+                                    } else {
+                                      return Container(
+                                        color: Colors.grey,
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context).size.height * 0.2,
+                                          child: SpinKitWave(
+                                            color: Colors.white,
+                                            size: 50.0,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                              ),
+                            ),
+
+                            SizedBox(
+                              height: 10,
+                              child: Container(
+                                color: Colors.grey[300],
+                              ),
+                            ),
+
+                            UniversalWidgets.mainPostList("campus life posts"),
+
+                            SizedBox(height: 50,),
+                          ],
+                        )
+                    )
+                ),
+
+                Center(
+                    child: Container(
+                        constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
+                        child: ListView(
+                          children: [
+                            SizedBox(
+                              height: 10,
+                              child: Container(
+                                color: Colors.grey[300],
+                              ),
+                            ),
+
+                            UniversalWidgets.mainPostList("academic posts"),
+
+                            SizedBox(height: 50,),
+                          ],
+                        )
+                    )
+                ),
+              ],
+            )
+
+        ),
+      )
     );
   }
 }

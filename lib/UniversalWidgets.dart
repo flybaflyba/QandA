@@ -259,7 +259,7 @@ class UniversalWidgets {
       padding: EdgeInsets.all(0),
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('campus life posts')
+            .collection(postType)
             .snapshots(),
         builder: (context, snapshot){
           List<Widget> postsList = [];
