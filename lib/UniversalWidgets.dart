@@ -98,7 +98,7 @@ class UniversalWidgets {
     }
   }
 
-  static Widget likeAndCommentBar(BuildContext context, Post post) {
+  static Widget likeAndCommentBar(BuildContext context, Post post, bool pushToNewPage) {
 
     return  Padding(
       padding: EdgeInsets.only(left: 50, right: 50),
@@ -129,7 +129,9 @@ class UniversalWidgets {
               IconButton(
                   icon: Icon(Icons.comment_bank_outlined),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+                    if(pushToNewPage) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+                    }
                     UniversalFunctions.showCommentInput(context, post);
                   }
               ),

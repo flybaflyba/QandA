@@ -186,6 +186,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                 ]
                             ),
 
+                            UniversalWidgets.likeAndCommentBar(context, post, false),
                             // SizedBox(height: 20, child: Container(color: Colors.white,),),
 
                             Container(
@@ -287,7 +288,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                                   ],
                                                 ),
                                               ),
-                                              
+
                                               Container(
                                                 child: Align(
                                                   alignment: Alignment.centerLeft,

@@ -413,7 +413,7 @@ class _MainPageState extends State<MainPage>{
                                       child: gridView(post.imageUrls),
                                   ),
 
-                                  UniversalWidgets.likeAndCommentBar(context, post),
+                                  UniversalWidgets.likeAndCommentBar(context, post, true),
 
                                   // Padding(
                                   //   padding: EdgeInsets.only(left: 50, right: 50),
