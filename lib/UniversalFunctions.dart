@@ -148,7 +148,7 @@ class UniversalFunctions{
   }
 
 
-  static void showCommentInput(BuildContext context, Post post, Comment comment) {
+  static void showCommentInput(BuildContext context, Post post, Comment comment, String to, String toEmail) {
 
     var currentComment = "";
     var focused = false;
@@ -205,8 +205,8 @@ class UniversalFunctions{
                                           commentTemp.create(post);
                                       } else {
                                         // update, add a reply to existing comment
-                                        commentTemp.to = post.author;
-                                        commentTemp.toEmail = post.authorEmail;
+                                        commentTemp.to = to;
+                                        commentTemp.toEmail = toEmail;
                                         comment.replies.add(commentTemp.toMap());
                                         comment.update(post);
 

@@ -132,7 +132,7 @@ class UniversalWidgets {
                     if(pushToNewPage) {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
                     }
-                    UniversalFunctions.showCommentInput(context, post, null);
+                    UniversalFunctions.showCommentInput(context, post, null, post.author, post.authorEmail);
                   }
               ),
               Text("15"),

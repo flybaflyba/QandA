@@ -280,6 +280,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                               child: InkWell(
                                                 onTap: () {
                                                   print("tapped a reply");
+                                                  UniversalFunctions.showCommentInput(context, post, comment, reply.by, reply.byEmail);
                                                 },
                                                 child: Column(
                                                   children: [
@@ -292,7 +293,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                                             child: Align(
                                                               alignment: Alignment.centerLeft,
                                                               child: Text(
-                                                                reply.by,
+                                                                reply.by + " @ " + reply.to,
                                                                 style: TextStyle(
                                                                   // fontSize: 20,
                                                                     fontWeight: FontWeight.bold
@@ -345,7 +346,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                             child: InkWell(
                                               onTap: () {
                                                 print("tapped comment id: " + d.id);
-                                                UniversalFunctions.showCommentInput(context, post, comment);
+                                                UniversalFunctions.showCommentInput(context, post, comment, comment.by, comment.byEmail);
                                               },
                                               child: Column(
                                                 children: [
