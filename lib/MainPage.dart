@@ -14,6 +14,7 @@ import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
+import 'package:qanda/UniversalWidgets.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class MainPage extends StatefulWidget{
@@ -413,53 +414,47 @@ class _MainPageState extends State<MainPage>{
                                       child: gridView(post.imageUrls),
                                   ),
 
+                                  UniversalWidgets.likeAndCommentBar(context, post),
 
-
-
-
-
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 50, right: 50),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                                icon: Icon(
-                                                  Icons.thumb_up_alt_outlined,
-                                                  color: post.likedBy.contains(FirebaseAuth.instance.currentUser.email) ? Colors.blueAccent : Colors.black,
-                                                ),
-                                                onPressed: () {
-                                                  if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
-                                                    post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
-                                                  } else {
-                                                    post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
-                                                  }
-
-                                                }
-                                            ),
-                                            Text(post.likedBy.length.toString()),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                                icon: Icon(Icons.comment_bank_outlined),
-                                                onPressed: () {
-                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-                                                  UniversalFunctions.showCommentInput(context, post);
-
-                                                }
-                                            ),
-                                            Text("15"),
-                                          ],
-                                        ),
-
-
-                                      ],
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: EdgeInsets.only(left: 50, right: 50),
+                                  //   child: Row(
+                                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  //     children: [
+                                  //       Row(
+                                  //         children: [
+                                  //           IconButton(
+                                  //               icon: Icon(
+                                  //                 Icons.thumb_up_alt_outlined,
+                                  //                 color: post.likedBy.contains(FirebaseAuth.instance.currentUser.email) ? Colors.blueAccent : Colors.black,
+                                  //               ),
+                                  //               onPressed: () {
+                                  //                 if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+                                  //                   post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                                  //                 } else {
+                                  //                   post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                                  //                 }
+                                  //
+                                  //               }
+                                  //           ),
+                                  //           Text(post.likedBy.length.toString()),
+                                  //         ],
+                                  //       ),
+                                  //       Row(
+                                  //         children: [
+                                  //           IconButton(
+                                  //               icon: Icon(Icons.comment_bank_outlined),
+                                  //               onPressed: () {
+                                  //                 Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+                                  //                 UniversalFunctions.showCommentInput(context, post);
+                                  //               }
+                                  //           ),
+                                  //           Text("15"),
+                                  //         ],
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
 
                                   // Padding(
                                   //   padding: EdgeInsets.only(left: 5, right: 5),

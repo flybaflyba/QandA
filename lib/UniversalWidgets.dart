@@ -1,10 +1,14 @@
 
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:qanda/Post.dart';
+import 'package:qanda/ShowPostPage.dart';
+import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 
 class UniversalWidgets {
@@ -25,7 +29,6 @@ class UniversalWidgets {
       ],
     );
   }
-
 
   static Widget largeImagesPhotoView(BuildContext context, PageController pageController, List<dynamic> imageUrls) {
 
@@ -95,6 +98,48 @@ class UniversalWidgets {
     }
   }
 
+  static Widget likeAndCommentBar(BuildContext context, Post post) {
+
+    return  Padding(
+      padding: EdgeInsets.only(left: 50, right: 50),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              IconButton(
+                  icon: Icon(
+                    Icons.thumb_up_alt_outlined,
+                    color: post.likedBy.contains(FirebaseAuth.instance.currentUser.email) ? Colors.blueAccent : Colors.black,
+                  ),
+                  onPressed: () {
+                    if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+                      post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                    } else {
+                      post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                    }
+
+                  }
+              ),
+              Text(post.likedBy.length.toString()),
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.comment_bank_outlined),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+                    UniversalFunctions.showCommentInput(context, post);
+                  }
+              ),
+              Text("15"),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
 
 
