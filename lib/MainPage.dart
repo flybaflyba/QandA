@@ -448,10 +448,7 @@ class _MainPageState extends State<MainPage>{
                                                 icon: Icon(Icons.comment_bank_outlined),
                                                 onPressed: () {
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-
-                                                  UniversalFunctions.showCommentInput(context);
-
-
+                                                  UniversalFunctions.showCommentInput(context, post);
 
                                                 }
                                             ),

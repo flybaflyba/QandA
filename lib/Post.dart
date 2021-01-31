@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:qanda/Comment.dart';
 
 class Post {
   var title = "";
@@ -63,13 +64,17 @@ class Post {
     content = postDocumentSnapshot.data().keys.contains("content") ? postDocumentSnapshot["content"] : "";
     authorEmail = postDocumentSnapshot.data().keys.contains("author email") ? postDocumentSnapshot["author email"] : "";
     author = postDocumentSnapshot.data().keys.contains("author") ? postDocumentSnapshot["author"] : "";
-    postDocName = postDocumentSnapshot.data().keys.contains("port doc name") ? postDocumentSnapshot["post doc name"] : "";
+    postDocName = postDocumentSnapshot.data().keys.contains("post doc name") ? postDocumentSnapshot["post doc name"] : "";
     imageUrls = postDocumentSnapshot.data().keys.contains("image urls") ? postDocumentSnapshot["image urls"] : [];
     topic = postDocumentSnapshot.data().keys.contains("topic") ? postDocumentSnapshot["topic"] : "";
     course = postDocumentSnapshot.data().keys.contains("course") ? postDocumentSnapshot["course"] : "";
     createdTime = postDocumentSnapshot.data().keys.contains("created time") ? postDocumentSnapshot["created time"] : "";
     likedBy = postDocumentSnapshot.data().keys.contains("liked by") ? postDocumentSnapshot["liked by"] : "";
-    comments = postDocumentSnapshot.data().keys.contains("comments") ? postDocumentSnapshot["comments"] : [];
+    // comments = postDocumentSnapshot.data().keys.contains("comments") ? postDocumentSnapshot["comments"] : [];
+  }
+
+  void getPostComments(){
+
 
   }
 
@@ -166,6 +171,8 @@ class Post {
         .then((value) => print("likedBy updated"))
         .catchError((error) => print("Failed to update likedBy: $error"));
   }
+
+
 
   void printOut() {
     print("title: " + title);

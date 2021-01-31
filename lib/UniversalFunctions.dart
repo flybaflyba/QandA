@@ -9,6 +9,7 @@ import 'package:nice_button/nice_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:qanda/Comment.dart';
+import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -147,7 +148,7 @@ class UniversalFunctions{
   }
 
 
-  static void showCommentInput(BuildContext context) {
+  static void showCommentInput(BuildContext context, Post post) {
 
     var currentComment = "";
     var focused = false;
@@ -195,6 +196,10 @@ class UniversalFunctions{
                                     Comment comment = new Comment(content: currentComment, time: currentTimeInUtcString, by: FirebaseAuth.instance.currentUser.email);
 
                                     comment.printOut();
+
+                                    comment.create(post);
+
+                                    Navigator.pop(context);
 
                                     // var m = {'zero': 0, 'I': 'one', 10: 'X', "replies": ["asdc", "Adcas"]};
                                     // print(m["zero"]);
