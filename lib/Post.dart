@@ -131,7 +131,6 @@ class Post {
   }
 
   void likedByUpdate(String actionUserEmail, String action) {
-
     if(action == "+") {
       print("likedBy add one " + actionUserEmail);
       likedBy.add(actionUserEmail);

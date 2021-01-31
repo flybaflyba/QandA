@@ -21,4 +21,6 @@ class UniversalValues {
   ];
 
   static var currentViewingImageIndex = 0;
+
+  static var currentComment = "";
 }

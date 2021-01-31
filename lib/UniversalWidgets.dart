@@ -89,16 +89,13 @@ class UniversalWidgets {
                   }).toList(),
                 ),
               ),
-
-
-
             ],
-
           )
       );
     }
-
   }
+
+
 
 
 }
