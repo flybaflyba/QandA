@@ -40,7 +40,9 @@ class _MainPageState extends State<MainPage>{
                 onTap: () {
                   print("tapped top image " + url);
                   // make sure top image urls are all collected
+                  UniversalValues.currentViewingImageIndex = topImageUrls.indexOf(url);
                   if(topImageWidgets.length == result.items.length) {
+                    UniversalValues.currentViewingImageIndex = topImageUrls.indexOf(url); // we need this so that indicator in large view is at the right position
                     var pageController = PageController(initialPage: topImageUrls.indexOf(url));
                     Future<void> future = showCupertinoModalBottomSheet(
                       // expand: false,
@@ -136,6 +138,7 @@ class _MainPageState extends State<MainPage>{
             onTap: () {
               print("tapped image index " + index.toString() + " with url " + urls[index]);
 
+              UniversalValues.currentViewingImageIndex = index; // we need this so that indicator in large view is at the right position 
               var pageController = PageController(initialPage: index);
               Future<void> future = showCupertinoModalBottomSheet(
                 // expand: false,
