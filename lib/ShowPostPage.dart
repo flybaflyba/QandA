@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:qanda/Comment.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalFunctions.dart';
@@ -247,11 +248,90 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     commentWidgets.clear();
                                     print(snapshot.data.docs.length);
                                     for (DocumentSnapshot d in snapshot.data.docs) {
-                                      print(d["content"]);
+                                      // print(d["content"]);
+
                                       var commentContent = d["content"];
                                       var commentTime = d["time"];
                                       var commentByEmail = d["by email"];
                                       var commentBy = d["by"];
+
+                                      Comment comment = new Comment(content: commentContent, time: commentTime, byEmail: commentByEmail, by: commentBy);
+                                      comment.commentDocName = d.id;
+                                      comment.replies = d["replies"];
+
+
+                                      List<Widget> replyWidgets = [];
+
+                                      for(Map r in comment.replies) {
+                                        Comment reply = new Comment(content: r["content"], time: r["time"], byEmail: r["by email"], by: r["by"]);
+                                        reply.to = r["to"];
+                                        reply.toEmail = r["to email"];
+
+                                        Widget oneReplyWidget =
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 20, right: 5, top: 5),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: Colors.grey[300],
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(5),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  print("tapped a reply");
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(bottom: 5),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            child: Align(
+                                                              alignment: Alignment.centerLeft,
+                                                              child: Text(
+                                                                reply.by,
+                                                                style: TextStyle(
+                                                                  // fontSize: 20,
+                                                                    fontWeight: FontWeight.bold
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Align(
+                                                                alignment: Alignment.centerRight,
+                                                                child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(reply.time.microsecondsSinceEpoch)))
+
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: Text(
+                                                          reply.content,
+                                                          maxLines: 100,
+                                                          style: TextStyle(
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+
+                                        replyWidgets.add(oneReplyWidget);
+
+                                      }
+
                                       Widget oneComment =
                                       Padding(
                                         padding: EdgeInsets.all(10),
@@ -262,49 +342,60 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                           ),
                                           child: Padding(
                                             padding: EdgeInsets.all(10),
-                                            child:  Column(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(bottom: 5),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        child: Align(
-                                                          alignment: Alignment.centerLeft,
-                                                          child: Text(
-                                                            commentBy,
-                                                            style: TextStyle(
-                                                              // fontSize: 20,
-                                                                fontWeight: FontWeight.bold
+                                            child: InkWell(
+                                              onTap: () {
+                                                print("tapped comment id: " + d.id);
+                                                UniversalFunctions.showCommentInput(context, post, comment);
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(bottom: 5),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          child: Align(
+                                                            alignment: Alignment.centerLeft,
+                                                            child: Text(
+                                                              comment.by,
+                                                              style: TextStyle(
+                                                                // fontSize: 20,
+                                                                  fontWeight: FontWeight.bold
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Container(
-                                                        child: Align(
-                                                            alignment: Alignment.centerRight,
-                                                            child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(commentTime.microsecondsSinceEpoch)))
+                                                        Container(
+                                                          child: Align(
+                                                              alignment: Alignment.centerRight,
+                                                              child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(comment.time.microsecondsSinceEpoch)))
 
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                Container(
-                                                  child: Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: Text(
-                                                      commentContent,
-                                                      maxLines: 100,
-                                                      style: TextStyle(
+                                                  Container(
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text(
+                                                        comment.content,
+                                                        maxLines: 100,
+                                                        style: TextStyle(
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
+
+                                                  Column(
+                                                    children: replyWidgets,
+                                                  )
 
 
-                                              ],
+
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),

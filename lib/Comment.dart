@@ -8,7 +8,10 @@ class Comment {
   var time;
   var byEmail = "";
   var by = "";
-  var replies = List<Map>();
+  var commentDocName = "";
+  var replies = List<dynamic>();
+  var to = "";
+  var toEmail = "";
 
   Comment({
     var content,
@@ -22,10 +25,8 @@ class Comment {
     if(byEmail != null){ this.byEmail = byEmail; }
   }
 
-
   void create(Post post) {
     var topicLowerCase = post.topic.toLowerCase();
-
     FirebaseFirestore.instance.collection('$topicLowerCase posts')
         .doc(post.postDocName)
         .collection("comments")
@@ -34,10 +35,32 @@ class Comment {
       "content": content,
       "time": time,
       "by": by,
-      "by email": byEmail
+      "by email": byEmail,
+      "replies": replies,
     })
         .then((value) => print("Comment created"))
         .catchError((error) => print("Failed to create Comments: $error"));
+  }
+
+  void update(Post post) {
+    var topicLowerCase = post.topic.toLowerCase();
+    FirebaseFirestore.instance.collection('$topicLowerCase posts')
+        .doc(post.postDocName)
+        .collection("comments")
+        .doc(commentDocName)
+        .update({
+      "content": content,
+      "time": time,
+      "by": by,
+      "by email": byEmail,
+      "replies": replies,
+    })
+        .then((value) => print("Comment created"))
+        .catchError((error) => print("Failed to create Comments: $error"));
+  }
+
+  Map toMap() {
+    return {"content": content, "time": time, "by": by, "by email": byEmail, "to": to, "to email": toEmail};
   }
 
 
@@ -46,6 +69,7 @@ class Comment {
     print("time: " + time.toString());
     print("by: " + by);
     print("by email: " + byEmail);
+    print("to: " + to);
     print("replies: " + replies.toString());
   }
 

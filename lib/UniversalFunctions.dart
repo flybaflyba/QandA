@@ -148,7 +148,7 @@ class UniversalFunctions{
   }
 
 
-  static void showCommentInput(BuildContext context, Post post) {
+  static void showCommentInput(BuildContext context, Post post, Comment comment) {
 
     var currentComment = "";
     var focused = false;
@@ -180,7 +180,7 @@ class UniversalFunctions{
                           Container(
                             // color: Colors.redAccent,
                               child: IconButton(
-                                icon: Icon(Icons.airplanemode_active),
+                                icon: Icon(Icons.send_rounded),
                                 onPressed: () async {
                                   print(currentComment);
                                   // save comment
@@ -197,18 +197,48 @@ class UniversalFunctions{
                                       UniversalFunctions.askForUserMissingInfo(context, true, "Tell us who is commenting");
                                     } else {
                                       var currentTimeInUtc = DateTime.now().toUtc();
-                                      Comment comment = new Comment(content: currentComment, time: currentTimeInUtc, by: userName, byEmail: FirebaseAuth.instance.currentUser.email);
-                                      // comment.printOut();
-                                      comment.create(post);
+                                      Comment commentTemp = new Comment(content: currentComment, time: currentTimeInUtc, by: userName, byEmail: FirebaseAuth.instance.currentUser.email);
+
+                                      // check if we are creating a new comment, or we are replying a comment.
+                                      if(comment == null) {
+                                        // comment we just created
+                                          commentTemp.create(post);
+                                      } else {
+                                        // update, add a reply to existing comment
+                                        commentTemp.to = post.author;
+                                        commentTemp.toEmail = post.authorEmail;
+                                        comment.replies.add(commentTemp.toMap());
+                                        comment.update(post);
+
+                                      }
+
+
                                       Navigator.pop(context);
                                     }
-
-
-
-
                                   }
                                 },
                               )
+                          ),
+
+                          // indicating who we are replying to if we are replying
+                          comment == null
+                              ?
+                          SizedBox(height: 0,)
+                              :
+                          Container(
+                            margin: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+                            child: Row(
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Replying "),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(comment.by, style: TextStyle(fontWeight: FontWeight.bold),),
+                                ),
+                              ],
+                            )
                           ),
 
                           Container(
