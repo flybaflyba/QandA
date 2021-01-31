@@ -254,56 +254,60 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                       var commentBy = d["by"];
                                       Widget oneComment =
                                       Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child:Column(
-                                            children: [
+                                        padding: EdgeInsets.all(10),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.grey[200],
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child:  Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(bottom: 5),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        child: Align(
+                                                          alignment: Alignment.centerLeft,
+                                                          child: Text(
+                                                            commentBy,
+                                                            style: TextStyle(
+                                                              // fontSize: 20,
+                                                                fontWeight: FontWeight.bold
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        child: Align(
+                                                            alignment: Alignment.centerRight,
+                                                            child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)))
 
-                                              Padding(
-                                                padding: EdgeInsets.only(bottom: 5),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      child: Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: Text(
-                                                          commentBy,
-                                                          style: TextStyle(
-                                                            // fontSize: 20,
-                                                              fontWeight: FontWeight.bold
-                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      child: Align(
-                                                        alignment: Alignment.centerRight,
-                                                        child: Text(
-                                                          commentTime,
-                                                          style: TextStyle(
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-
-                                              Container(
-                                                child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    commentContent,
-                                                    maxLines: 100,
-                                                    style: TextStyle(
+                                                Container(
+                                                  child: Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text(
+                                                      commentContent,
+                                                      maxLines: 100,
+                                                      style: TextStyle(
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
 
 
-                                            ],
+                                              ],
+                                            ),
                                           ),
+                                        ),
                                       );
 
 
