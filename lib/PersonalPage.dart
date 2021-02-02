@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/SignInUpPage.dart';
+import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +32,7 @@ class _PersonalPageState extends State<PersonalPage>{
                   await prefs.setString('userName', "");
                   await prefs.setString('userEmail', "");
                   await prefs.setString('userMajor',  "");
+                  UniversalFunctions.showToast("Your are logged out", UniversalValues.toastMessageTypeGoodColor);
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => SignInUpPage(),));
                   // pushNewScreen(
                   //   context,

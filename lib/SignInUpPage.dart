@@ -127,6 +127,9 @@ class _SignInUpPageState extends State<SignInUpPage> {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),
+        actions: [
+          Icon(Icons.logout, color: UniversalValues.primaryColor,), //  to make the title center
+        ],
         title: Center(
           child: Text(
             "Welcome to BYUH",
