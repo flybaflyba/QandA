@@ -3,16 +3,19 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:qanda/Comment.dart';
+import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UniversalFunctions{
 
@@ -285,6 +288,77 @@ class UniversalFunctions{
     );
 
 
+  }
+
+  static Future<List<Widget>> getTopImages(BuildContext context) async {
+    List<Widget> topImageWidgets = List<Widget>();
+    List<String> topImageUrls = List<String>();
+    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("top images").listAll();
+    for(firebase_storage.Reference ref in result.items){
+      var url = await ref.getDownloadURL();
+      print(url);
+      topImageUrls.add(url);
+      topImageWidgets.add(
+          Container(
+            child: InkWell(
+                onTap: () {
+                  print("tapped top image " + url);
+                  // make sure top image urls are all collected
+                  UniversalValues.currentViewingImageIndex = topImageUrls.indexOf(url);
+                  if(topImageWidgets.length == result.items.length) {
+                    UniversalValues.currentViewingImageIndex = topImageUrls.indexOf(url); // we need this so that indicator in large view is at the right position
+                    var pageController = PageController(initialPage: topImageUrls.indexOf(url));
+                    Future<void> future = showCupertinoModalBottomSheet(
+                      // expand: false,
+                      // bounce: true,
+                        useRootNavigator: true,
+                        context: context,
+                        duration: Duration(milliseconds: 700),
+                        builder: (context) =>
+                            LargeImagesPhotoView(pageController: pageController, imageUrls: topImageUrls)
+                    );
+                    future.then((void value) {
+                      print("bottom sheet closed");
+                      UniversalValues.currentViewingImageIndex = 0; // try not to change it because we are not in show post page
+                      print(UniversalValues.currentViewingImageIndex);
+                    });
+                  }
+                },
+                child:
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: Center(
+                      child: Image.network(
+                        url,
+                        filterQuality: FilterQuality.low,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                              child: Container(
+                                color: Colors.grey[300],
+                                child: SpinKitDoubleBounce(
+                                  color: Colors.blue,
+                                  size: 50.0,
+                                ),
+                              )
+                            // CircularProgressIndicator(
+                            //   value: loadingProgress.expectedTotalBytes != null ?
+                            //   loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                            //       : null,
+                            // ),
+                          );
+                        },
+                      )
+                  ),
+                )
+            ),
+          )
+      );
+    }
+    print("end of get top images");
+    return topImageWidgets;
   }
 
 }
