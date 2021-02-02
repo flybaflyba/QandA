@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/SignInUpPage.dart';
 import 'package:qanda/UniversalValues.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class PersonalPage extends StatefulWidget{
@@ -23,9 +24,13 @@ class _PersonalPageState extends State<PersonalPage>{
           actions: [
             IconButton(
                 icon: Icon(Icons.logout),
-                onPressed: () {
+                onPressed: () async {
                   print("sign out button pressed");
                   FirebaseAuth.instance.signOut();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('userName', "");
+                  await prefs.setString('userEmail', "");
+                  await prefs.setString('userMajor',  "");
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => SignInUpPage(),));
                   // pushNewScreen(
                   //   context,

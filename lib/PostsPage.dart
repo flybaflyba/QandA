@@ -54,8 +54,8 @@ class _PostsPageState extends State<PostsPage>{
                           future: UniversalFunctions.getTopImages(context),
                           builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
                             if (snapshot.connectionState == ConnectionState.done) {
-                              var topImageSliders;
-                              if(snapshot.data.length != 0 ) {
+                              var topImageSliders = new List<Widget>();
+                              if(snapshot.data != null ) {
                                 topImageSliders = snapshot.data;
                               } else {
                                 topImageSliders = [];

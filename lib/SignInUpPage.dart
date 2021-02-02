@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:qanda/MenuPage.dart';
+import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -139,7 +140,8 @@ class _SignInUpPageState extends State<SignInUpPage> {
         onSignup: signUp,
         onSubmitAnimationCompleted: () {
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),));
+          UniversalFunctions.askForUserMissingInfo(context, true, "A couple more things");
         },
         onRecoverPassword: recoverPassword,
         // showDebugButtons: true,

@@ -8,11 +8,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
+import 'package:qanda/SignInUpPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -117,14 +119,37 @@ class UniversalWidgets {
               IconButton(
                   icon: Icon(
                     Icons.thumb_up_alt_outlined,
-                    color: post.likedBy.contains(FirebaseAuth.instance.currentUser.email) ? Colors.blueAccent : Colors.black,
+                    // if user is not logged in, no email can be accessed
+                    color:
+                    FirebaseAuth.instance.currentUser == null
+                        ?
+                    Colors.black
+                        :
+                    post.likedBy.contains(FirebaseAuth.instance.currentUser.email)
+                        ?
+                    Colors.blueAccent
+                        :
+                    Colors.black,
                   ),
                   onPressed: () {
-                    if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
-                      post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                    // if user want to like a post, check if logged in
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+                        post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                      } else {
+                        post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                      }
                     } else {
-                      post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                      // ask for login
+                      print("ask for login");
+                      pushNewScreen(
+                        context,
+                        screen: SignInUpPage(),
+                        withNavBar: false, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      );
                     }
+
                   }
               ),
               Text(post.likedBy.length.toString()),
