@@ -143,7 +143,8 @@ class _SignInUpPageState extends State<SignInUpPage> {
         onSignup: signUp,
         onSubmitAnimationCompleted: () {
           Navigator.pop(context);
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),))
+          UniversalFunctions.showToast("Your are logged in", UniversalValues.toastMessageTypeGoodColor);
           UniversalFunctions.askForUserMissingInfo(context, true, "A couple more things");
         },
         onRecoverPassword: recoverPassword,

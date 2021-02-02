@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -206,8 +207,6 @@ class UniversalFunctions{
                                   if(currentComment == "") {
                                     UniversalFunctions.showToast("Please enter your comments", UniversalValues.toastMessageTypeWarningColor);
                                   } else {
-
-
                                     // check if user is logged in, if not, ask to login
                                     if (FirebaseAuth.instance.currentUser != null) {
                                       // save comment
@@ -239,6 +238,10 @@ class UniversalFunctions{
                                     } else {
                                       // check if user is logged in, if not, ask to login
                                       print("ask for login");
+                                      // hide keyboard
+                                      // FocusScope.of(context).requestFocus(FocusNode()); // cannot user, for some reason there is a red error after i enter text, does not cause any crashing but i think that is why i cannot use this to close keyborad
+                                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+
                                       pushNewScreen(
                                         context,
                                         screen: SignInUpPage(),
