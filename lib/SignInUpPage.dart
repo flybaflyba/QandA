@@ -125,6 +125,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(),
         title: Center(
           child: Text(
             "Welcome to BYUH",

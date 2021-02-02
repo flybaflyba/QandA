@@ -14,7 +14,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
 
-  var isUserLoggedIn = FirebaseAuth.instance.currentUser != null;
 
   // This widget is the root of your application.
   @override
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: MenuPage(),
-      home: isUserLoggedIn ? MenuPage() : SignInUpPage(),
+      home: MenuPage(),
 
     );
   }
