@@ -11,7 +11,8 @@ import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/BlankPages.dart';
 import 'package:qanda/CreatePostPage.dart';
-import 'package:qanda/MainPage.dart';
+import 'package:qanda/PersonalPage.dart';
+import 'package:qanda/PostsPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UserInformation.dart';
@@ -31,33 +32,33 @@ class _MenuPageState extends State<MenuPage>{
   bool hideNavBar;
 
   List<Widget> buildScreens = [
-    MainPage(),
-    CreatePostPage(),
-    BlankPage2(),
+    PostsPage(postType: "academic posts"),
+    PostsPage(postType: "campus life posts"),
+    PersonalPage(),
+    // BlankPage2(),
   ];
 
   List<PersistentBottomNavBarItem> navBarsItems =
     [
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.home),
-        title: ("World"),
+        icon: Icon(Icons.school),
+        title: ("School"),
         activeColor: UniversalValues.primaryColor, // Color.fromRGBO(158, 27, 52, 100),
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.create),
-        title: ("Create"),
+        icon: Icon(Icons.nightlife),
+        title: ("Life"),
         activeColor: UniversalValues.primaryColor,
         inactiveColor: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.person),
-        title: ("Home"),
+        title: ("You"),
         activeColor: UniversalValues.primaryColor,
         inactiveColor: CupertinoColors.systemGrey,
       ),
     ];
-
 
   @override
   void initState() {
@@ -93,6 +94,16 @@ class _MenuPageState extends State<MenuPage>{
       //   title: Text("Q&A"),
       //   leading: BackButton(),
       // ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            print("float action button pressed");
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePostPage(),));
+          },
+        ),
+      ),
       body: PersistentTabView(
         context,
         controller: controller,
