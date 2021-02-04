@@ -66,7 +66,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                         Post post = new Post();
                         post.setPostWithDocumentSnapshot(snapshot.data);
 
-                        var imgList = post.imageUrls;
+                        var imgList = post.thumbnailAndImageUrls.keys.toList();
 
                         appBarText = post.title;
 
@@ -83,7 +83,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     context: context,
                                     duration: Duration(milliseconds: 700),
                                     builder: (context) =>
-                                        LargeImagesPhotoView(pageController: pageController, imageUrls: post.imageUrls)
+                                        LargeImagesPhotoView(pageController: pageController,)
                                 );
                                 future.then((void value) {
                                   print("bottom sheet closed");
@@ -94,7 +94,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               child:
                               ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                child: UniversalWidgets.myNetworkImage(item),
+                                child: UniversalWidgets.myNetworkImage(item, MediaQuery.of(context).size.width * 0.9),
 
 
                                 // Container(
@@ -170,7 +170,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                             //   )).toList(),
                             // ),
 
-                            post.imageUrls.length == 0 ?
+                            post.thumbnailAndImageUrls.length == 0 ?
                             SizedBox(height: 0,) :
                             Column(
                                 children: [

@@ -39,95 +39,27 @@ class UniversalWidgets {
     );
   }
 
-  static Widget myNetworkImage(String url) {
+  static Widget myNetworkImage(String url, double width) {
     return Container(
         color: Colors.grey[300],
-        child: Center(
-          child: Image.network(
-            url,
-            fit: BoxFit.cover,
-            loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-              if (loadingProgress == null) return child;
-              return SpinKitRipple(
-                color: Colors.blue,
-                size: 50.0,
-              );
-            },
-            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-              print("error loading network image");
-              return Icon(Icons.image_not_supported);
-            },
-          ),
-        )
+        child: Image.network(
+          url,
+          fit: BoxFit.cover,
+          width: width,
+          filterQuality: FilterQuality.high,
+          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+            if (loadingProgress == null) return child;
+            return SpinKitRipple(
+              color: Colors.blue,
+              size: 50.0,
+            );
+          },
+          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+            print("error loading network image");
+            return Icon(Icons.image_not_supported);
+          },
+        ),
     );
-  }
-
-  static Widget largeImagesPhotoView(BuildContext context, PageController pageController, List<dynamic> imageUrls) {
-
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-          body: Stack(
-            children: [
-              Container(
-                  child: PhotoViewGallery.builder(
-                    scrollPhysics: const BouncingScrollPhysics(),
-                    builder: (BuildContext context, int index) {
-                      return PhotoViewGalleryPageOptions(
-                        imageProvider: NetworkImage(imageUrls[index]),
-                        initialScale: PhotoViewComputedScale.contained * 0.8,
-                        heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
-                      );
-                    },
-                    itemCount: imageUrls.length,
-                    loadingBuilder: (context, event) => Center(
-                      child: Container(
-                        width: 20.0,
-                        height: 20.0,
-                        child: CircularProgressIndicator(
-                          value: event == null
-                              ? 0
-                              : event.cumulativeBytesLoaded / event.expectedTotalBytes,
-                        ),
-                      ),
-                    ),
-                    backgroundDecoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    pageController: pageController,
-                    onPageChanged: (i) {
-                      print(i);
-
-                    },
-                  )
-              ),
-
-              Positioned(
-                top: 10,
-                left: 0.0,
-                right: 0.0,
-                child:   Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: imageUrls.map((url) {
-                    int index = imageUrls.indexOf(url);
-                    return Container(
-                      width: 8.0,
-                      height: 8.0,
-                      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: UniversalValues.currentViewingImageIndex == index
-                            ? Color.fromRGBO(0, 0, 0, 0.9)
-                            : Color.fromRGBO(0, 0, 0, 0.4),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          )
-      );
-    }
   }
 
   static Widget likeAndCommentBar(BuildContext context, Post post, bool pushToNewPage) {
@@ -218,7 +150,9 @@ class UniversalWidgets {
     );
   }
 
-  static Widget gridView(List<dynamic> urls, BuildContext context) {
+  static Widget gridView(Map<dynamic, dynamic> thumbnailAndImageUrls, BuildContext context) {
+
+    var urls = thumbnailAndImageUrls.keys.toList();
 
     if(urls.length == 0) {
       // no image
@@ -266,7 +200,7 @@ class UniversalWidgets {
                   context: context,
                   duration: Duration(milliseconds: 700),
                   builder: (context) =>
-                      LargeImagesPhotoView(pageController: pageController, imageUrls: urls)
+                      LargeImagesPhotoView(pageController: pageController, thumbnailAndImageUrls: thumbnailAndImageUrls,)
               );
               future.then((void value) {
                 print("bottom sheet closed");
@@ -275,7 +209,9 @@ class UniversalWidgets {
               });
 
             },
-            child: myNetworkImage(urls[index]),
+            child: Container(
+              child: myNetworkImage(urls[index], null),
+            )
           );
         }
         ),
@@ -430,7 +366,7 @@ class UniversalWidgets {
 
                   Padding(
                     padding: EdgeInsets.only(bottom: 10),
-                    child: gridView(post.imageUrls, context),
+                    child: gridView(post.thumbnailAndImageUrls, context),
                   ),
 
                   UniversalWidgets.likeAndCommentBar(context, post, true),

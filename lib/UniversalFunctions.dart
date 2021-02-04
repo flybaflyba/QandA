@@ -325,9 +325,9 @@ class UniversalFunctions{
   static Future<List<Widget>> getTopImages(BuildContext context) async {
     List<Widget> topImageWidgets = List<Widget>();
     List<String> topImageUrls = List<String>();
-    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("top images").listAll().timeout(Duration(seconds: 3));
+    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("top images").listAll();
     for(firebase_storage.Reference ref in result.items){
-      var url = await ref.getDownloadURL().timeout(Duration(seconds: 3));
+      var url = await ref.getDownloadURL();
       print(url);
       topImageUrls.add(url);
       topImageWidgets.add(
@@ -347,7 +347,7 @@ class UniversalFunctions{
                         context: context,
                         duration: Duration(milliseconds: 700),
                         builder: (context) =>
-                            LargeImagesPhotoView(pageController: pageController, imageUrls: topImageUrls)
+                            LargeImagesPhotoView(pageController: pageController,) // TODO fix the parameter being passed in
                     );
                     future.then((void value) {
                       print("bottom sheet closed");
@@ -359,7 +359,7 @@ class UniversalFunctions{
                 child:
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: UniversalWidgets.myNetworkImage(url),
+                  child: UniversalWidgets.myNetworkImage(url, MediaQuery.of(context).size.width * 0.9),
 
 
                   // Container(

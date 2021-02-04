@@ -7,10 +7,11 @@ import 'package:qanda/UniversalValues.dart';
 
 class LargeImagesPhotoView extends StatefulWidget{
 
-  LargeImagesPhotoView({Key key, this.pageController, this.imageUrls}) : super(key: key);
+  LargeImagesPhotoView({Key key, this.pageController, this.thumbnailAndImageUrls}) : super(key: key);
 
   PageController pageController;
-  List<dynamic> imageUrls;
+  // List<dynamic> imageUrls;
+  Map<dynamic, dynamic> thumbnailAndImageUrls;
 
   @override
   _LargeImagesPhotoViewState createState() => _LargeImagesPhotoViewState();
@@ -32,13 +33,13 @@ class _LargeImagesPhotoViewState extends State<LargeImagesPhotoView> {
                       builder: (BuildContext context, int index) {
                         return PhotoViewGalleryPageOptions(
                           filterQuality: FilterQuality.high,
-                          imageProvider: NetworkImage(widget.imageUrls[index]),
+                          imageProvider: NetworkImage(widget.thumbnailAndImageUrls.values.toList()[index]),
                           initialScale: PhotoViewComputedScale.contained * 0.8,
                           heroAttributes: PhotoViewHeroAttributes(
-                              tag: widget.imageUrls[index]),
+                              tag: widget.thumbnailAndImageUrls.values.toList()[index]),
                         );
                       },
-                      itemCount: widget.imageUrls.length,
+                      itemCount: widget.thumbnailAndImageUrls.values.toList().length,
                       loadingBuilder: (context, event) {
                         return Center(
                           child: Container(
@@ -72,8 +73,8 @@ class _LargeImagesPhotoViewState extends State<LargeImagesPhotoView> {
                   right: 0.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: widget.imageUrls.map((url) {
-                      int index = widget.imageUrls.indexOf(url);
+                    children: widget.thumbnailAndImageUrls.values.toList().map((url) {
+                      int index = widget.thumbnailAndImageUrls.values.toList().indexOf(url);
                       return Container(
                         width: 8.0,
                         height: 8.0,
