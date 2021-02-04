@@ -347,7 +347,7 @@ class UniversalFunctions{
                         context: context,
                         duration: Duration(milliseconds: 700),
                         builder: (context) =>
-                            LargeImagesPhotoView(pageController: pageController,) // TODO fix the parameter being passed in
+                            LargeImagesPhotoView(pageController: pageController, imageUrls: topImageUrls,)
                     );
                     future.then((void value) {
                       print("bottom sheet closed");

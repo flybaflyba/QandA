@@ -83,7 +83,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     context: context,
                                     duration: Duration(milliseconds: 700),
                                     builder: (context) =>
-                                        LargeImagesPhotoView(pageController: pageController,)
+                                        LargeImagesPhotoView(pageController: pageController, imageUrls: post.thumbnailAndImageUrls.values.toList(),)
                                 );
                                 future.then((void value) {
                                   print("bottom sheet closed");

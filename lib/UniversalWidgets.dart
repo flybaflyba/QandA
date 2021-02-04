@@ -200,7 +200,7 @@ class UniversalWidgets {
                   context: context,
                   duration: Duration(milliseconds: 700),
                   builder: (context) =>
-                      LargeImagesPhotoView(pageController: pageController, thumbnailAndImageUrls: thumbnailAndImageUrls,)
+                      LargeImagesPhotoView(pageController: pageController, imageUrls: thumbnailAndImageUrls.values.toList(),)
               );
               future.then((void value) {
                 print("bottom sheet closed");
