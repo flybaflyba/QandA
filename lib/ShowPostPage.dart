@@ -94,28 +94,31 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               child:
                               ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                child: Container(
-                                  color: Colors.grey[300],
-                                  child: Center(
-                                    child: Image.network(
-                                      item,
-                                      filterQuality: FilterQuality.low,
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width * 0.9,
-                                      loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return SpinKitRipple(
-                                          color: Colors.blue,
-                                          size: 50.0,
-                                        );
-                                      },
-                                      errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                                        print("error loading network image");
-                                        return Icon(Icons.image_not_supported);
-                                      },
-                                    ),
-                                  )
-                                ),
+                                child: UniversalWidgets.myNetworkImage(item),
+
+
+                                // Container(
+                                //   color: Colors.grey[300],
+                                //   child: Center(
+                                //     child: Image.network(
+                                //       item,
+                                //       filterQuality: FilterQuality.low,
+                                //       fit: BoxFit.cover,
+                                //       width: MediaQuery.of(context).size.width * 0.9,
+                                //       loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                                //         if (loadingProgress == null) return child;
+                                //         return SpinKitRipple(
+                                //           color: Colors.blue,
+                                //           size: 50.0,
+                                //         );
+                                //       },
+                                //       errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                //         print("error loading network image");
+                                //         return Icon(Icons.image_not_supported);
+                                //       },
+                                //     ),
+                                //   )
+                                // ),
                               )
 
                           ),

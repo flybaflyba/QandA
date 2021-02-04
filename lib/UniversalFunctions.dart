@@ -16,6 +16,7 @@ import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/SignInUpPage.dart';
 import 'package:qanda/UniversalValues.dart';
+import 'package:qanda/UniversalWidgets.dart';
 import 'package:qanda/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -358,28 +359,31 @@ class UniversalFunctions{
                 child:
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: Container(
-                      color: Colors.grey[300],
-                      child: Center(
-                        child: Image.network(
-                          url,
-                          filterQuality: FilterQuality.low,
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return SpinKitRipple(
-                              color: Colors.blue,
-                              size: 50.0,
-                            );
-                          },
-                          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                            print("error loading network image");
-                            return Icon(Icons.image_not_supported);
-                          },
-                        ),
-                      ),
-                  ),
+                  child: UniversalWidgets.myNetworkImage(url),
+
+
+                  // Container(
+                  //     color: Colors.grey[300],
+                  //     child: Center(
+                  //       child: Image.network(
+                  //         url,
+                  //         filterQuality: FilterQuality.low,
+                  //         fit: BoxFit.cover,
+                  //         width: MediaQuery.of(context).size.width * 0.9,
+                  //         loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                  //           if (loadingProgress == null) return child;
+                  //           return SpinKitRipple(
+                  //             color: Colors.blue,
+                  //             size: 50.0,
+                  //           );
+                  //         },
+                  //         errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                  //           print("error loading network image");
+                  //           return Icon(Icons.image_not_supported);
+                  //         },
+                  //       ),
+                  //     ),
+                  // ),
                 )
             ),
           )

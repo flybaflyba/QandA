@@ -39,6 +39,29 @@ class UniversalWidgets {
     );
   }
 
+  static Widget myNetworkImage(String url) {
+    return Container(
+        color: Colors.grey[300],
+        child: Center(
+          child: Image.network(
+            url,
+            fit: BoxFit.cover,
+            loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+              if (loadingProgress == null) return child;
+              return SpinKitRipple(
+                color: Colors.blue,
+                size: 50.0,
+              );
+            },
+            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+              print("error loading network image");
+              return Icon(Icons.image_not_supported);
+            },
+          ),
+        )
+    );
+  }
+
   static Widget largeImagesPhotoView(BuildContext context, PageController pageController, List<dynamic> imageUrls) {
 
     @override
@@ -234,7 +257,6 @@ class UniversalWidgets {
           return InkWell(
             onTap: () {
               print("tapped image index " + index.toString() + " with url " + urls[index]);
-
               UniversalValues.currentViewingImageIndex = index; // we need this so that indicator in large view is at the right position
               var pageController = PageController(initialPage: index);
               Future<void> future = showCupertinoModalBottomSheet(
@@ -253,27 +275,7 @@ class UniversalWidgets {
               });
 
             },
-            child:
-            Container(
-                color: Colors.grey[300],
-                child: Center(
-                  child: Image.network(
-                    urls[index],
-                    fit: BoxFit.cover,
-                    loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return SpinKitRipple(
-                        color: Colors.blue,
-                        size: 50.0,
-                      );
-                    },
-                    errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                      print("error loading network image");
-                      return Icon(Icons.image_not_supported);
-                    },
-                  ),
-                )
-            ),
+            child: myNetworkImage(urls[index]),
           );
         }
         ),
