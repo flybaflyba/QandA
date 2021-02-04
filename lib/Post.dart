@@ -96,7 +96,6 @@ class Post {
       try {
         // Upload raw data.
         await ref.putData(imageUint8List, settableMetadata)
-            .timeout(Duration(seconds: 3))
             .catchError((e){
               print("image upload failed due to error $e");
             }
@@ -109,8 +108,7 @@ class Post {
             //     print(urls.length);
             //   });
             // });
-        String url = await ref.getDownloadURL()
-            .timeout(Duration(seconds: 3));
+        String url = await ref.getDownloadURL();
         print(url);
         urls.add(url);
         print(urls.length);

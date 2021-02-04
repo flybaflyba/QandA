@@ -294,7 +294,7 @@ class UniversalWidgets {
         builder: (context, snapshot){
           List<Widget> postsList = [];
           if(snapshot.hasData){
-            final content = snapshot.data.docs;
+            final content = snapshot.data.docs.reversed;
 
             for(var postDocumentSnapshot in content){
               Post post = new Post();
