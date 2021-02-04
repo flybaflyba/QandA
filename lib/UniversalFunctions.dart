@@ -324,9 +324,9 @@ class UniversalFunctions{
   static Future<List<Widget>> getTopImages(BuildContext context) async {
     List<Widget> topImageWidgets = List<Widget>();
     List<String> topImageUrls = List<String>();
-    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("top images").listAll();
+    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("top images").listAll().timeout(Duration(seconds: 3));
     for(firebase_storage.Reference ref in result.items){
-      var url = await ref.getDownloadURL();
+      var url = await ref.getDownloadURL().timeout(Duration(seconds: 3));
       print(url);
       topImageUrls.add(url);
       topImageWidgets.add(
@@ -358,30 +358,27 @@ class UniversalFunctions{
                 child:
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: Center(
-                      child: Image.network(
-                        url,
-                        filterQuality: FilterQuality.low,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                              child: Container(
-                                color: Colors.grey[300],
-                                child: SpinKitDoubleBounce(
-                                  color: Colors.blue,
-                                  size: 50.0,
-                                ),
-                              )
-                            // CircularProgressIndicator(
-                            //   value: loadingProgress.expectedTotalBytes != null ?
-                            //   loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                            //       : null,
-                            // ),
-                          );
-                        },
-                      )
+                  child: Container(
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: Image.network(
+                          url,
+                          filterQuality: FilterQuality.low,
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return SpinKitRipple(
+                              color: Colors.blue,
+                              size: 50.0,
+                            );
+                          },
+                          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                            print("error loading network image");
+                            return Icon(Icons.image_not_supported);
+                          },
+                        ),
+                      ),
                   ),
                 )
             ),
@@ -390,6 +387,7 @@ class UniversalFunctions{
     }
     print("end of get top images");
     return topImageWidgets;
+
   }
 
 }

@@ -58,7 +58,14 @@ class _PostsPageState extends State<PostsPage>{
                               if(snapshot.data != null ) {
                                 topImageSliders = snapshot.data;
                               } else {
-                                topImageSliders = [];
+                                topImageSliders = [
+                                  Container(
+                                      color: Colors.grey[300],
+                                      child: Center(
+                                          child: Icon(Icons.image_not_supported)
+                                      )
+                                  )
+                                ];
                               }
                               print("got data below");
                               print(topImageSliders);

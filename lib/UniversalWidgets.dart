@@ -253,21 +253,26 @@ class UniversalWidgets {
               });
 
             },
-            child: Image.network(
-              urls[index],
-              fit: BoxFit.cover,
-              loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(
-                    child: Container(
-                      color: Colors.grey[300],
-                      child: SpinKitRipple(
+            child:
+            Container(
+                color: Colors.grey[300],
+                child: Center(
+                  child: Image.network(
+                    urls[index],
+                    fit: BoxFit.cover,
+                    loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return SpinKitRipple(
                         color: Colors.blue,
                         size: 50.0,
-                      ),
-                    )
-                );
-              },
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                      print("error loading network image");
+                      return Icon(Icons.image_not_supported);
+                    },
+                  ),
+                )
             ),
           );
         }
