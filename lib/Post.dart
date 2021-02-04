@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:qanda/Comment.dart';
+import 'package:qanda/UniversalFunctions.dart';
+import 'package:qanda/UniversalValues.dart';
 
 class Post {
   var title = "";
@@ -93,7 +95,12 @@ class Post {
       SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
       try {
         // Upload raw data.
-        await ref.putData(imageUint8List, settableMetadata);
+        await ref.putData(imageUint8List, settableMetadata)
+            .timeout(Duration(seconds: 3))
+            .catchError((e){
+              print("image upload failed due to error $e");
+            }
+        );
             // .whenComplete(() {
             //   ref.getDownloadURL().then((value) {
             //     String imageUrl = value;
@@ -102,20 +109,19 @@ class Post {
             //     print(urls.length);
             //   });
             // });
-        String url = await ref.getDownloadURL();
+        String url = await ref.getDownloadURL()
+            .timeout(Duration(seconds: 3));
         print(url);
         urls.add(url);
         print(urls.length);
       } on FirebaseException catch (e) {
-        // e.g, e.code == 'canceled'
+        print("image upload failed due to error $e");
       }
     }
 
     print("end of the uploading images");
     return urls;
-    
   }
-
 
   Future<void> create() async {
 
@@ -124,6 +130,9 @@ class Post {
           print("after upload images function is done, we create post doc with url list ready");
           print(urls.length);
           imageUrls = urls;
+          if(imageUrls.length != imageUint8Lists.length) {
+            UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
+          }
           // url list is where the images are saved
           var topicLowerCase = topic.toLowerCase();
           FirebaseFirestore.instance.collection('$topicLowerCase posts')
