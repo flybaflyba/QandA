@@ -12,9 +12,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/BlankPages.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
+import 'package:qanda/SignInUpPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -515,18 +517,31 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   // print(titleTextEditingController.value);
                                   if (title != "" && content != "" && topic != "What are Your Posting for?") {
 
-                                    if(topic == "Academic") {
-                                      if (!UniversalValues.courses.contains(course)) {
-                                        UniversalFunctions.showToast("Please search/select a course.", UniversalValues.toastMessageTypeWarningColor);
+                                    if (FirebaseAuth.instance.currentUser != null) {
+
+                                      if(topic == "Academic") {
+                                        if (!UniversalValues.courses.contains(course)) {
+                                          UniversalFunctions.showToast("Please search/select a course.", UniversalValues.toastMessageTypeWarningColor);
+                                        } else {
+                                          // save post
+                                          savePost();
+                                        }
                                       } else {
-                                        // save post
+                                        //save post
                                         savePost();
                                       }
-                                    } else {
-                                      //save post
-                                      savePost();
-                                    }
 
+
+                                    } else {
+                                      // ask for login
+                                      print("ask for login");
+                                      pushNewScreen(
+                                        context,
+                                        screen: SignInUpPage(),
+                                        withNavBar: false, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      );
+                                    }
 
                                   } else {
                                     if (title == "") {

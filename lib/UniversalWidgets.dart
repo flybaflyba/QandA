@@ -63,7 +63,6 @@ class UniversalWidgets {
   }
 
   static Widget likeAndCommentBar(BuildContext context, Post post, bool pushToNewPage) {
-
     return  Padding(
       padding: EdgeInsets.only(left: 50, right: 50),
       child: Row(
