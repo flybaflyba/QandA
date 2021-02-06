@@ -161,6 +161,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
               //   height: 300,
               // ),
               Container(
+                color: Colors.grey[300],
                 child: Image.memory(
                   imageValue,
                   fit: BoxFit.cover,
@@ -386,6 +387,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Create Post"),),
+        actions: [
+          Icon(Icons.add, color: UniversalValues.primaryColor,), //  to make the title center
+        ],
       ),
       body:
       // disable screen touch and show progress indicator when work in progress
