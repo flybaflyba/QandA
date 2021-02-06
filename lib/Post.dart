@@ -110,11 +110,11 @@ class Post {
 
 
       // create a thumbnail to store in the data base, we don't need the larger image every time
-      imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+      imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
       dateTimeNow = DateTime.now();
       print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
       dateTimeLast = DateTime.now();
-      imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 300);
+      imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
       dateTimeNow = DateTime.now();
       print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
       dateTimeLast = DateTime.now();
@@ -156,6 +156,21 @@ class Post {
     }
 
     print("end of the uploading images");
+
+    // thumbnailAndImageUrls = urls;
+    // if(thumbnailAndImageUrls.length != imageUint8Lists.length) {
+    //   UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
+    // }
+    // // url list is where the images are saved
+    // var topicLowerCase = topic.toLowerCase();
+    // FirebaseFirestore.instance.collection('$topicLowerCase posts')
+    //     .doc(postDocName)
+    //     .update({
+    //   "thumbnail and image urls": thumbnailAndImageUrls
+    // })
+    //     .then((value) => print("Post image urls saved"))
+    //     .catchError((error) => print("Failed to saved Post urls: $error"));
+
 
     return urls;
   }
