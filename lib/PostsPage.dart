@@ -11,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
+import 'package:qanda/PostList.dart';
 import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
@@ -44,72 +45,76 @@ class _PostsPageState extends State<PostsPage>{
         body: Center(
             child: Container(
                 constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
-                child: ListView(
-                  children: [
+                child:
+                PostList(postType: widget.postType,),
 
-                    // main page top images
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: FutureBuilder(
-                          future: UniversalFunctions.getTopImages(context),
-                          builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
-                            if (snapshot.connectionState == ConnectionState.done) {
-                              var topImageSliders = new List<Widget>();
-                              if(snapshot.data != null ) {
-                                topImageSliders = snapshot.data;
-                              } else {
-                                topImageSliders = [
-                                  Container(
-                                      color: Colors.grey[300],
-                                      child: Center(
-                                          child: Icon(Icons.image_not_supported)
-                                      )
-                                  )
-                                ];
-                              }
-                              print("got data below");
-                              print(topImageSliders);
-                              return
-                                CarouselSlider(
-                                  items: topImageSliders,
-                                  options: CarouselOptions(
-                                      height: MediaQuery.of(context).size.height * 0.25,
-                                      autoPlay: true,
-                                      enlargeCenterPage: true,
-                                      aspectRatio: 2,
-                                      onPageChanged: (index, reason) {
-                                        // print(index);
-                                      }
-                                  ),
-                                );
-                            } else {
-                              return Container(
-                                color: Colors.grey,
-                                child: SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.2,
-                                  child: SpinKitWave(
-                                    color: Colors.white,
-                                    size: 50.0,
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 10,
-                      child: Container(
-                        color: Colors.grey[300],
-                      ),
-                    ),
-
-                    UniversalWidgets.mainPostList(widget.postType),
-
-                    SizedBox(height: 50,),
-                  ],
-                )
+                // if we put PostList in this ListView, lazy load won't load more
+                // ListView(
+                //   // physics: NeverScrollableScrollPhysics(),
+                //   children: [
+                //     // main page top images
+                //     Padding(
+                //       padding: EdgeInsets.all(20),
+                //       child: FutureBuilder(
+                //           future: UniversalFunctions.getTopImages(context),
+                //           builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
+                //             if (snapshot.connectionState == ConnectionState.done) {
+                //               var topImageSliders = new List<Widget>();
+                //               if(snapshot.data != null ) {
+                //                 topImageSliders = snapshot.data;
+                //               } else {
+                //                 topImageSliders = [
+                //                   Container(
+                //                       color: Colors.grey[300],
+                //                       child: Center(
+                //                           child: Icon(Icons.image_not_supported)
+                //                       )
+                //                   )
+                //                 ];
+                //               }
+                //               print("got data below");
+                //               print(topImageSliders);
+                //               return
+                //                 CarouselSlider(
+                //                   items: topImageSliders,
+                //                   options: CarouselOptions(
+                //                       height: MediaQuery.of(context).size.height * 0.25,
+                //                       autoPlay: true,
+                //                       enlargeCenterPage: true,
+                //                       aspectRatio: 2,
+                //                       onPageChanged: (index, reason) {
+                //                         // print(index);
+                //                       }
+                //                   ),
+                //                 );
+                //             } else {
+                //               return Container(
+                //                 color: Colors.grey,
+                //                 child: SizedBox(
+                //                   height: MediaQuery.of(context).size.height * 0.2,
+                //                   child: SpinKitWave(
+                //                     color: Colors.white,
+                //                     size: 50.0,
+                //                   ),
+                //                 ),
+                //               );
+                //             }
+                //           }
+                //       ),
+                //     ),
+                //
+                //     SizedBox(
+                //       height: 10,
+                //       child: Container(
+                //         color: Colors.grey[300],
+                //       ),
+                //     ),
+                //
+                //     PostList(postType: widget.postType,),
+                //
+                //     SizedBox(height: 50,),
+                //   ],
+                // )
             )
         ),
 

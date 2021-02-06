@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:photo_view/photo_view.dart';
@@ -220,174 +221,11 @@ class UniversalWidgets {
 
   }
 
+
+
   static Widget mainPostList(String postType) {
 
-    return Padding(
-      padding: EdgeInsets.all(0),
-      child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection(postType)
-            .snapshots(),
-        builder: (context, snapshot){
-          List<Widget> postsList = [];
-          if(snapshot.hasData){
-            final content = snapshot.data.docs.reversed;
 
-            for(var postDocumentSnapshot in content){
-              Post post = new Post();
-              post.setPostWithDocumentSnapshot(postDocumentSnapshot);
-
-              final contentToDisplay =
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, bottom: 15, left: 20, right: 20), // on the bottom there is often a ... or images, 20 feels a too large padding for bottom
-                    child: InkWell(
-                      onTap: () {
-                        print("tapped on Post: " + post.postDocName);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          post.course != ""
-                              ?
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              post.course,
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54
-                              ),
-                            ),
-                          )
-                              :
-                          SizedBox(height: 0,),
-
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              post.title,
-                              maxLines: 100,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(3),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    post.author,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(3),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child:Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          // this handles what if text is more than three lines
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: AutoSizeText(
-                              post.content,
-                              maxLines: 3,
-                              style: TextStyle(fontSize: 20),
-                              minFontSize: 15,
-                              maxFontSize: 15,
-                              overflowReplacement: Column( // This widget will be replaced.
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    post.content,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    "......",
-                                    // style: TextStyle(color: Colors.red),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          // Align(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: Text(
-                          //     post.content,
-                          //     maxLines: 3, // only display three lines
-                          //     overflow: TextOverflow.ellipsis,
-                          //   ),
-                          // ),
-
-                          // Align(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: Text(
-                          //     ('\n'.allMatches(post.content).length + 1).toString(),
-                          //   ),
-                          // ),
-                          //
-                          // // if more content has more than 3 lines, we display ... in the end
-                          // ('\n'.allMatches(post.content).length + 1) > 3
-                          //     ?
-                          // Align(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: Text(
-                          //     "...",
-                          //   ),
-                          // )
-                          //     :
-                          // SizedBox(height: 0,),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // images
-
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                    child: gridView(post.thumbnailAndImageUrls, context),
-                  ),
-
-                  UniversalWidgets.likeAndCommentBar(context, post, true),
-
-                  SizedBox(
-                    height: 10,
-                    child: Container(
-                      color: Colors.grey[300],
-                    ),
-                  ),
-                ],
-              );
-              postsList.add(contentToDisplay);
-            }
-          }
-          return Column(
-              children: postsList
-          );
-        },
-
-      ),
-    );
   }
 
 
