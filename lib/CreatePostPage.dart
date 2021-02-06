@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -52,6 +53,19 @@ class _CreatePostPageState extends State<CreatePostPage>{
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) {
+      Fluttertoast.showToast(
+          msg: "Image processing is extremely slow in browser, if you are uploading images, we suggest you upload smaller images, or use the app versions of our app",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 10,
+          backgroundColor: UniversalValues.toastMessageTypeWarningColor,
+          webBgColor: "linear-gradient(to right, #cc00ff, #ff0000)",
+          webPosition: "right",
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
   }
 
   void resetCreatePostPageFields() {
