@@ -119,7 +119,7 @@ class UniversalWidgets {
               builder: (context, snapshot){
                 var numOfMainComment = 0;
                 if(snapshot.hasData) {
-                  print("numOfMainComment is " + snapshot.data.docs.length.toString());
+                  // print("numOfMainComment is " + snapshot.data.docs.length.toString());
                   numOfMainComment = numOfMainComment + snapshot.data.docs.length;
                   snapshot.data.docs.forEach((doc) {
                     // print(doc["replies"].length.toString());

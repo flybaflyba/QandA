@@ -90,7 +90,15 @@ class Post {
     // so we put something in the end, so that we don't miss any good url
     // this is to add an element in the end of the image list, so that we miss this url instead of a real image url, not a good way to solve the problem though
     // imageUint8Lists.add(Uint8List(1));
+
+    var dateTimeNow = DateTime.now();
+    var dateTimeLast = DateTime.now();
+
     for (Uint8List imageUint8List in imageUint8Lists) {
+
+      dateTimeNow = DateTime.now();
+      print("start one image processing at index ${imageUint8Lists.indexOf(imageUint8List).toString()} " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+      dateTimeLast = DateTime.now();
 
       // image name is created time plus a number, created time is also the post name
       // images are under the created time named folder for each post
@@ -98,13 +106,25 @@ class Post {
       var topicLowerCase = topic.toLowerCase();
       Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
 
+      print("start creating thumbnail");
+
 
       // create a thumbnail to store in the data base, we don't need the larger image every time
-      imagePackage.Image image = imagePackage.decodeImage(imageUint8List);
-      imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 100);
+      imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+      dateTimeNow = DateTime.now();
+      print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+      dateTimeLast = DateTime.now();
+      imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 300);
+      dateTimeNow = DateTime.now();
+      print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+      dateTimeLast = DateTime.now();
       Reference ref2 = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name thumbnail');
       Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
+      // Uint8List thumbnailUint8list = imageUint8List;
 
+      dateTimeNow = DateTime.now();
+      print("end of creating thumbnail (encoding image took) " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+      dateTimeLast = DateTime.now();
 
       // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
       SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
@@ -124,13 +144,19 @@ class Post {
         // print(imageUrl);
         String thumbnailUrl = await ref2.getDownloadURL();
         urls[thumbnailUrl] = imageUrl;
-        print(urls.length);
+        // print(urls.length);
       } on FirebaseException catch (e) {
         print("image upload failed due to error $e");
       }
+
+      dateTimeNow = DateTime.now();
+      print("end of one image processing " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+      dateTimeLast = DateTime.now();
+
     }
 
     print("end of the uploading images");
+
     return urls;
   }
 

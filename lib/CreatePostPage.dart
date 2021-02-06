@@ -190,7 +190,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
     FilePickerResult result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: true,
-        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']);
+        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']
+    );
 
     if (result != null) {
       // cannot use path, does not support on web https://github.com/miguelpruivo/flutter_file_picker/issues/591
