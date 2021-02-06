@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -22,6 +23,7 @@ import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:qanda/UniversalWidgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image/image.dart' as imagePackage;
 
 class CreatePostPage extends StatefulWidget{
   @override
@@ -44,6 +46,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   List<Asset> imageAssets = List<Asset>();
   List<Uint8List> imageUint8Lists = List<Uint8List>();
+  Map thumbnailAndImageUrls = Map<dynamic, dynamic>();
   String _error = 'No Error Detected';
 
   @override
@@ -65,6 +68,39 @@ class _CreatePostPageState extends State<CreatePostPage>{
      imageUint8Lists.clear();
    });
   }
+  //
+  // void createThumbnails() {
+  //   var dateTimeNow = DateTime.now();
+  //   var dateTimeLast = DateTime.now();
+  //
+  //   List<Uint8List> imageUint8ListsTemp = new List<Uint8List>();
+  //   imageUint8ListsTemp = imageUint8Lists;
+  //
+  //
+  //   for(Uint8List i in imageUint8ListsTemp) {
+  //     dateTimeNow = DateTime.now();
+  //     print("start creating thumbnail");
+  //     dateTimeLast = DateTime.now();
+  //
+  //     // create a thumbnail to store in the data base, we don't need the larger image every time
+  //     imagePackage.Image image = imagePackage.decodeImage(i); // TODO this process of is taking long time only ON WEB
+  //     dateTimeNow = DateTime.now();
+  //     print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+  //     dateTimeLast = DateTime.now();
+  //     imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
+  //     dateTimeNow = DateTime.now();
+  //     print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+  //     dateTimeLast = DateTime.now();
+  //     Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
+  //     thumbnailAndImageUrls[thumbnailUint8list] = i;
+  //
+  //     dateTimeNow = DateTime.now();
+  //     print("end of creating thumbnail (encoding image took) " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+  //     dateTimeLast = DateTime.now();
+  //   }
+  //
+  //   print(thumbnailAndImageUrls);
+  // }
 
   Widget buildGridView() {
     var loopTimes = imageUint8Lists.length + 1;
@@ -95,10 +131,20 @@ class _CreatePostPageState extends State<CreatePostPage>{
                     FocusScope.of(context).requestFocus(new FocusNode()); // do not show keyboard
                     if(kIsWeb) {
                       print("web");
-                      loadImagesOnWeb();
+                      loadImagesOnWeb()
+                          .then((value) => {
+
+                      });
                     } else {
                       print("app");
-                      loadImagesOnDevices();
+                      loadImagesOnDevices()
+                          .then((value) => {
+                        // Future.delayed(Duration(milliseconds: 1000)).then((_) {
+                        //   print("start image processing");
+                        //   createThumbnails();
+                        // })
+
+                      });
                     }
                   }
               ),
@@ -106,6 +152,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         } else {
           // Asset asset = imageAssets[index];
            Uint8List imageValue = imageUint8Lists[index];
+
           return Stack(
             children: [
               // AssetThumb(
@@ -114,7 +161,10 @@ class _CreatePostPageState extends State<CreatePostPage>{
               //   height: 300,
               // ),
               Container(
-                child: Image.memory(imageValue, fit: BoxFit.cover,),
+                child: Image.memory(
+                  imageValue,
+                  fit: BoxFit.cover,
+                ),
                 width: 300,
                 height: 300,
               ),
@@ -214,7 +264,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
     }
   }
 
-  Future<void> savePost() async {
+  Future<void> savePost(BuildContext context) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -228,6 +278,12 @@ class _CreatePostPageState extends State<CreatePostPage>{
       print("missing user name");
       UniversalFunctions.askForUserMissingInfo(context, true, "Tell us who is posting?");
     } else {
+
+      setState(() {
+        print("show progress bar");
+        workInProgress = true;
+      });
+
       print("saving post now");
       var currentUserEmail = FirebaseAuth.instance.currentUser.email;
       var currentTimeInUtc = DateTime.now().toUtc();
@@ -249,9 +305,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
       post.printOut();
 
       print("start saving post to database");
-      setState(() {
-        workInProgress = true;
-      });
+
       post.create()
           .then((value) {
         print("finish saving post");
@@ -328,6 +382,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   @override
   Widget build(BuildContext context) {
+    print("build view");
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Create Post"),),
@@ -525,11 +580,11 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                           UniversalFunctions.showToast("Please search/select a course.", UniversalValues.toastMessageTypeWarningColor);
                                         } else {
                                           // save post
-                                          savePost();
+                                          savePost(context);
                                         }
                                       } else {
                                         //save post
-                                        savePost();
+                                        savePost(context);
                                       }
 
 

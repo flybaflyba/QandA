@@ -106,8 +106,10 @@ class Post {
       var topicLowerCase = topic.toLowerCase();
       Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
 
+      UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+      dateTimeNow = DateTime.now();
       print("start creating thumbnail");
-
+      dateTimeLast = DateTime.now();
 
       // create a thumbnail to store in the data base, we don't need the larger image every time
       imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
@@ -129,6 +131,7 @@ class Post {
       // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
       SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
       try {
+        UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
         // Upload raw data.
         await ref.putData(imageUint8List, settableMetadata)
             .catchError((e){

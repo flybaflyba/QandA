@@ -26,9 +26,9 @@ class UniversalFunctions{
   static void showToast(String msg, Color toastMessageType) {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 2,
+        timeInSecForIosWeb: 3,
         backgroundColor: toastMessageType,
         webBgColor: toastMessageType == UniversalValues.toastMessageTypeWarningColor ? "linear-gradient(to right, #cc00ff, #ff0000)" : "	linear-gradient(to right, #00b09b, #96c93d)",
         webPosition: "center",
