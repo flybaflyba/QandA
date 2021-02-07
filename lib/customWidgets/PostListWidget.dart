@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:qanda/customWidgets/ImageGridViewWidget.dart';
 import 'package:qanda/customWidgets/LikeAndCommentBarWidget.dart';
+import 'package:qanda/customWidgets/PostTileWidget.dart';
 import 'package:qanda/models/Post.dart';
 import 'package:qanda/pages/ShowPostPage.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -28,6 +29,178 @@ class _PostListWidgetState extends State<PostListWidget>{
   var allPosts;
 
   Widget item(int position) {
+
+    // return Container(height: 100, child: Center(child: Text(position.toString()),),);
+
+    String id = allPosts.elementAt(position).id;
+
+    Post post = new Post();
+    post.setPostWithDocumentSnapshot(allPosts.elementAt(position));
+
+    return Column(
+      children: [
+
+        PostTileWidget(position: position, postType: widget.postType, id: id,),
+
+        LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
+
+        SizedBox(
+          height: 10,
+          child: Container(
+            color: Colors.grey[300],
+          ),
+        ),
+      ],
+    );
+
+    return PostTileWidget(position: position, postType: widget.postType, id: id,);
+
+    // this won't jump
+    // return Column(
+    //   children: [
+    //     Padding(
+    //       padding: EdgeInsets.only(top: 20, bottom: 15, left: 20, right: 20), // on the bottom there is often a ... or images, 20 feels a too large padding for bottom
+    //       child: InkWell(
+    //         onTap: () {
+    //           print("tapped on Post: " + post.postDocName);
+    //           Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+    //         },
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [
+    //             post.course != ""
+    //                 ?
+    //             Align(
+    //               alignment: Alignment.centerLeft,
+    //               child: Text(
+    //                 post.course,
+    //                 style: TextStyle(
+    //                     fontSize: 13,
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.black54
+    //                 ),
+    //               ),
+    //             )
+    //                 :
+    //             SizedBox(height: 0,),
+    //
+    //             // no need title
+    //             // Align(
+    //             //   alignment: Alignment.centerLeft,
+    //             //   child: Text(
+    //             //     post.title,
+    //             //     maxLines: 100,
+    //             //     style: TextStyle(
+    //             //         fontSize: 20,
+    //             //         fontWeight: FontWeight.bold
+    //             //     ),
+    //             //   ),
+    //             // ),
+    //
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+    //                 Padding(
+    //                   padding: EdgeInsets.all(3),
+    //                   child: Align(
+    //                     alignment: Alignment.centerLeft,
+    //                     child: Text(
+    //                       post.author + " " + position.toString(),
+    //                       style: TextStyle(
+    //                         fontSize: 15,
+    //                         fontWeight: FontWeight.bold,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 Padding(
+    //                   padding: EdgeInsets.all(3),
+    //                   child: Align(
+    //                     alignment: Alignment.centerRight,
+    //                     child:Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //
+    //             // this handles what if text is more than three lines
+    //             Align(
+    //               alignment: Alignment.centerLeft,
+    //               child: AutoSizeText(
+    //                 post.content,
+    //                 maxLines: 3,
+    //                 style: TextStyle(fontSize: 20),
+    //                 minFontSize: 15,
+    //                 maxFontSize: 15,
+    //                 overflowReplacement: Column( // This widget will be replaced.
+    //                   crossAxisAlignment: CrossAxisAlignment.start,
+    //                   children: <Widget>[
+    //                     Text(
+    //                       post.content,
+    //                       maxLines: 3,
+    //                       overflow: TextOverflow.ellipsis,
+    //                     ),
+    //                     Text(
+    //                       "......",
+    //                       // style: TextStyle(color: Colors.red),
+    //                     )
+    //                   ],
+    //                 ),
+    //               ),
+    //             ),
+    //             // Align(
+    //             //   alignment: Alignment.centerLeft,
+    //             //   child: Text(
+    //             //     post.content,
+    //             //     maxLines: 3, // only display three lines
+    //             //     overflow: TextOverflow.ellipsis,
+    //             //   ),
+    //             // ),
+    //
+    //             // Align(
+    //             //   alignment: Alignment.centerLeft,
+    //             //   child: Text(
+    //             //     ('\n'.allMatches(post.content).length + 1).toString(),
+    //             //   ),
+    //             // ),
+    //             //
+    //             // // if more content has more than 3 lines, we display ... in the end
+    //             // ('\n'.allMatches(post.content).length + 1) > 3
+    //             //     ?
+    //             // Align(
+    //             //   alignment: Alignment.centerLeft,
+    //             //   child: Text(
+    //             //     "...",
+    //             //   ),
+    //             // )
+    //             //     :
+    //             // SizedBox(height: 0,),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //
+    //     // images
+    //
+    //     Padding(
+    //         padding: EdgeInsets.only(bottom: 10),
+    //         child: ImageGridViewWidget(thumbnailAndImageUrls: post.thumbnailAndImageUrls, context: context) // UniversalWidgets.gridView(post.thumbnailAndImageUrls, context),
+    //     ),
+    //
+    //     LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
+    //
+    //
+    //     // UniversalWidgets.likeAndCommentBar(context, post, true),
+    //
+    //     SizedBox(
+    //       height: 10,
+    //       child: Container(
+    //         color: Colors.grey[300],
+    //       ),
+    //     ),
+    //   ],
+    // );
+
 
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -92,7 +265,7 @@ class _PostListWidgetState extends State<PostListWidget>{
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    post.author,
+                                    post.author + " " + position.toString(),
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -175,6 +348,8 @@ class _PostListWidgetState extends State<PostListWidget>{
                   ),
 
                   LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
+
+
                   // UniversalWidgets.likeAndCommentBar(context, post, true),
 
                   SizedBox(
@@ -276,6 +451,8 @@ class _PostListWidgetState extends State<PostListWidget>{
         return Center(child: Text("No Content"),);
       } else {
         return
+        // [bug is fixed] this list jumps to the top of the list sometimes, need to be fixed
+          // find out why this is happening, because I'm using stream builder for each post.
           SmartRefresher(
             enablePullDown: true,
             enablePullUp: data.length > allPosts.length ? false : true,
@@ -313,6 +490,7 @@ class _PostListWidgetState extends State<PostListWidget>{
             child: ListView.builder(
               shrinkWrap: true,
               itemBuilder: (context, position) {
+                // return Container(height: 100, child: Center(child: Text("$position"),),);
                 // print("one post build");
                 if (allPosts.length > position){
                   return item(position);

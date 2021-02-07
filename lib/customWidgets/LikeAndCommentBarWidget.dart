@@ -31,6 +31,8 @@ class LikeAndCommentBarWidget extends StatelessWidget{
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
+          // no need this if the post passed in is already from stream builder
           StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('${post.topic.toLowerCase()} posts')
@@ -38,7 +40,7 @@ class LikeAndCommentBarWidget extends StatelessWidget{
                   .snapshots(),
               builder: (context, snapshot){
 
-                if(snapshot.hasData) {
+                if(snapshot.hasData && snapshot != null) {
                   Post postTempForLike = new Post();
                   postTempForLike.postDocName = snapshot.data["post doc name"];
                   postTempForLike.topic = snapshot.data["topic"];
@@ -90,6 +92,49 @@ class LikeAndCommentBarWidget extends StatelessWidget{
                   );
                 }
               }),
+
+          // Row(
+          //   children: [
+          //     IconButton(
+          //         icon: Icon(
+          //           Icons.thumb_up_alt_outlined,
+          //           // if user is not logged in, no email can be accessed
+          //           color:
+          //           FirebaseAuth.instance.currentUser == null
+          //               ?
+          //           Colors.black
+          //               :
+          //           post.likedBy.contains(FirebaseAuth.instance.currentUser.email)
+          //               ?
+          //           Colors.blueAccent
+          //               :
+          //           Colors.black,
+          //         ),
+          //         onPressed: () {
+          //           // if user want to like a post, check if logged in
+          //           if (FirebaseAuth.instance.currentUser != null) {
+          //             if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+          //               post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+          //             } else {
+          //               post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+          //             }
+          //           } else {
+          //             // ask for login
+          //             print("ask for login");
+          //             pushNewScreen(
+          //               context,
+          //               screen: SignInUpPage(),
+          //               withNavBar: false, // OPTIONAL VALUE. True by default.
+          //               pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          //             );
+          //           }
+          //
+          //         }
+          //     ),
+          //     Text(post.likedBy.length.toString()),
+          //   ],
+          // ),
+
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('${post.topic.toLowerCase()} posts')
