@@ -33,107 +33,107 @@ class LikeAndCommentBarWidget extends StatelessWidget{
         children: [
 
           // no need this if the post passed in is already from stream builder
-          StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('${post.topic.toLowerCase()} posts')
-                  .doc(post.postDocName)
-                  .snapshots(),
-              builder: (context, snapshot){
-
-                if(snapshot.hasData && snapshot != null) {
-                  Post postTempForLike = new Post();
-                  postTempForLike.postDocName = snapshot.data["post doc name"];
-                  postTempForLike.topic = snapshot.data["topic"];
-                  postTempForLike.likedBy = snapshot.data["liked by"];
-                  // postTempForLike.setPostWithDocumentSnapshot(snapshot.data);
-                  Color likeButtonColor;
-                  if (FirebaseAuth.instance.currentUser == null) {
-                    likeButtonColor = Colors.black;
-                  } else if (!snapshot.data["liked by"].contains(FirebaseAuth.instance.currentUser.email)){
-                    likeButtonColor = Colors.black;
-                  } else {
-                    likeButtonColor = Colors.blueAccent;
-                  }
-                  return Row(
-                    children: [
-                      IconButton(
-                          icon: Icon(Icons.thumb_up_alt_outlined, color: likeButtonColor,),
-                          onPressed: () {
-                            print(postTempForLike.likedBy);
-                            // if user want to like a post, check if logged in
-                            if (FirebaseAuth.instance.currentUser != null) {
-                              if(postTempForLike.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
-                                postTempForLike.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
-                              } else {
-                                postTempForLike.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
-                              }
-                            } else {
-                              // ask for login
-                              print("ask for login");
-                              pushNewScreen(
-                                context,
-                                screen: SignInUpPage(),
-                                withNavBar: false, // OPTIONAL VALUE. True by default.
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
-                            }
-
-                          }
-                      ),
-                      Text(postTempForLike.likedBy.length.toString()),
-                    ],
-                  );
-                } else {
-                  return Row(
-                    children: [
-                      IconButton(icon: Icon(Icons.thumb_up_alt_outlined, color: Colors.black,),),
-                      Text("0"),
-                    ],
-                  );
-                }
-              }),
-
-          // Row(
-          //   children: [
-          //     IconButton(
-          //         icon: Icon(
-          //           Icons.thumb_up_alt_outlined,
-          //           // if user is not logged in, no email can be accessed
-          //           color:
-          //           FirebaseAuth.instance.currentUser == null
-          //               ?
-          //           Colors.black
-          //               :
-          //           post.likedBy.contains(FirebaseAuth.instance.currentUser.email)
-          //               ?
-          //           Colors.blueAccent
-          //               :
-          //           Colors.black,
-          //         ),
-          //         onPressed: () {
-          //           // if user want to like a post, check if logged in
-          //           if (FirebaseAuth.instance.currentUser != null) {
-          //             if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
-          //               post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
-          //             } else {
-          //               post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
-          //             }
-          //           } else {
-          //             // ask for login
-          //             print("ask for login");
-          //             pushNewScreen(
-          //               context,
-          //               screen: SignInUpPage(),
-          //               withNavBar: false, // OPTIONAL VALUE. True by default.
-          //               pageTransitionAnimation: PageTransitionAnimation.cupertino,
-          //             );
-          //           }
+          // StreamBuilder<DocumentSnapshot>(
+          //     stream: FirebaseFirestore.instance
+          //         .collection('${post.topic.toLowerCase()} posts')
+          //         .doc(post.postDocName)
+          //         .snapshots(),
+          //     builder: (context, snapshot){
           //
+          //       if(snapshot.hasData && snapshot != null) {
+          //         Post postTempForLike = new Post();
+          //         postTempForLike.postDocName = snapshot.data["post doc name"];
+          //         postTempForLike.topic = snapshot.data["topic"];
+          //         postTempForLike.likedBy = snapshot.data["liked by"];
+          //         // postTempForLike.setPostWithDocumentSnapshot(snapshot.data);
+          //         Color likeButtonColor;
+          //         if (FirebaseAuth.instance.currentUser == null) {
+          //           likeButtonColor = Colors.black;
+          //         } else if (!snapshot.data["liked by"].contains(FirebaseAuth.instance.currentUser.email)){
+          //           likeButtonColor = Colors.black;
+          //         } else {
+          //           likeButtonColor = Colors.blueAccent;
           //         }
-          //     ),
-          //     Text(post.likedBy.length.toString()),
-          //   ],
-          // ),
+          //         return Row(
+          //           children: [
+          //             IconButton(
+          //                 icon: Icon(Icons.thumb_up_alt_outlined, color: likeButtonColor,),
+          //                 onPressed: () {
+          //                   print(postTempForLike.likedBy);
+          //                   // if user want to like a post, check if logged in
+          //                   if (FirebaseAuth.instance.currentUser != null) {
+          //                     if(postTempForLike.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+          //                       postTempForLike.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+          //                     } else {
+          //                       postTempForLike.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+          //                     }
+          //                   } else {
+          //                     // ask for login
+          //                     print("ask for login");
+          //                     pushNewScreen(
+          //                       context,
+          //                       screen: SignInUpPage(),
+          //                       withNavBar: false, // OPTIONAL VALUE. True by default.
+          //                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          //                     );
+          //                   }
+          //
+          //                 }
+          //             ),
+          //             Text(postTempForLike.likedBy.length.toString()),
+          //           ],
+          //         );
+          //       } else {
+          //         return Row(
+          //           children: [
+          //             IconButton(icon: Icon(Icons.thumb_up_alt_outlined, color: Colors.black,),),
+          //             Text("0"),
+          //           ],
+          //         );
+          //       }
+          //     }),
+
+          Row(
+            children: [
+              IconButton(
+                  icon: Icon(
+                    Icons.thumb_up_alt_outlined,
+                    // if user is not logged in, no email can be accessed
+                    color:
+                    FirebaseAuth.instance.currentUser == null
+                        ?
+                    Colors.black
+                        :
+                    post.likedBy.contains(FirebaseAuth.instance.currentUser.email)
+                        ?
+                    Colors.blueAccent
+                        :
+                    Colors.black,
+                  ),
+                  onPressed: () {
+                    // if user want to like a post, check if logged in
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+                        post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                      } else {
+                        post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                      }
+                    } else {
+                      // ask for login
+                      print("ask for login");
+                      pushNewScreen(
+                        context,
+                        screen: SignInUpPage(),
+                        withNavBar: false, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      );
+                    }
+
+                  }
+              ),
+              Text(post.likedBy.length.toString()),
+            ],
+          ),
 
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance

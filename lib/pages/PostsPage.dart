@@ -40,8 +40,23 @@ class _PostsPageState extends State<PostsPage>{
             child: Container(
                 constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
                 child:
-                PostListWidget(postType: widget.postType,),
-
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection(widget.postType)
+                        .snapshots(),
+                    builder: (context, snapshot){
+                      if(snapshot.hasData){
+                        var docs = snapshot.data.docs.reversed;
+                        print(docs.length);
+                        return PostListWidget(postType: widget.postType, allPostsStream: docs,);
+                      } else {
+                        return SpinKitRipple(
+                          color: Colors.blue,
+                          size: 50.0,
+                        );
+                      }
+                    }
+                )
                 // if we put PostList in this ListView, lazy load won't load more
                 // ListView(
                 //   // physics: NeverScrollableScrollPhysics(),
