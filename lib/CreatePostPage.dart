@@ -19,6 +19,7 @@ import 'package:qanda/BlankPages.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/SignInUpPage.dart';
+import 'package:qanda/TitleWidget.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -417,7 +418,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   ListView(
                     children: [
 
-                      UniversalWidgets.titleWidget(topic),
+                      TitleWidget(title: topic,),
 
                       Center(
                         child: ToggleButtons(

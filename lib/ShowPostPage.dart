@@ -7,7 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qanda/Comment.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
+import 'package:qanda/NetworkImageWidget.dart';
 import 'package:qanda/Post.dart';
+import 'package:qanda/TitleWidget.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
 import 'package:qanda/UniversalWidgets.dart';
@@ -94,7 +96,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               child:
                               ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                child: UniversalWidgets.myNetworkImage(item, MediaQuery.of(context).size.width * 0.9),
+                                child: NetworkImageWidget(url: item, width: MediaQuery.of(context).size.width * 0.9,), // UniversalWidgets.myNetworkImage(item, MediaQuery.of(context).size.width * 0.9),
 
 
                                 // Container(
@@ -134,7 +136,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                 color: Colors.grey[300],
                                 child: Column(
                                   children: [
-                                    UniversalWidgets.titleWidget(post.title),
+                                    TitleWidget(title: post.title,),
 
                                     Padding(
                                       padding: EdgeInsets.only(bottom: 20),

@@ -9,19 +9,19 @@ import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalWidgets.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
-class PostList extends StatefulWidget{
+class PostListWidget extends StatefulWidget{
 
-  PostList({Key key, this.postType}) : super(key: key);
+  PostListWidget({Key key, this.postType}) : super(key: key);
   var postType;
 
   @override
-  _PostListState createState() => _PostListState();
+  _PostListWidgetState createState() => _PostListWidgetState();
 }
 
-class _PostListState extends State<PostList>{
+class _PostListWidgetState extends State<PostListWidget>{
 
   List<int> data = [];
-  final int increment = 10;
+  final int increment = 5;
   bool isLoadingVertical = false;
 
   Column item(Post post) {
@@ -194,7 +194,7 @@ class _PostListState extends State<PostList>{
             .get();
 
     setState(() {
-      allPosts = result.docs;
+      allPosts = result.docs.reversed;
     });
     // print(result.docs.toList());
 

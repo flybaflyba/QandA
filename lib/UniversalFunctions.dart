@@ -13,6 +13,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:qanda/Comment.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
+import 'package:qanda/NetworkImageWidget.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/SignInUpPage.dart';
 import 'package:qanda/UniversalValues.dart';
@@ -359,7 +360,7 @@ class UniversalFunctions{
                 child:
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: UniversalWidgets.myNetworkImage(url, MediaQuery.of(context).size.width * 0.9),
+                  child: NetworkImageWidget(url: url, width: MediaQuery.of(context).size.width * 0.9,) // UniversalWidgets.myNetworkImage(url, MediaQuery.of(context).size.width * 0.9),
 
 
                   // Container(

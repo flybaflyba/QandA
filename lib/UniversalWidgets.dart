@@ -13,6 +13,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
+import 'package:qanda/NetworkImageWidget.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/SignInUpPage.dart';
@@ -23,45 +24,23 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UniversalWidgets {
 
-  static Widget titleWidget(String title) {
-    return Column(
-      children: [
-        SizedBox(height: 20,),
-        Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-              ),
-            )
-        ),
-      ],
-    );
-  }
+  // static Widget titleWidget(String title) {
+  //   return Column(
+  //     children: [
+  //       SizedBox(height: 20,),
+  //       Padding(
+  //           padding: const EdgeInsets.all(20.0),
+  //           child: Center(
+  //             child: Text(
+  //               title,
+  //               style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+  //             ),
+  //           )
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  static Widget myNetworkImage(String url, double width) {
-    return Container(
-        color: Colors.grey[300],
-        child: Image.network(
-          url,
-          fit: BoxFit.cover,
-          width: width,
-          filterQuality: FilterQuality.high,
-          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-            if (loadingProgress == null) return child;
-            return SpinKitRipple(
-              color: Colors.blue,
-              size: 50.0,
-            );
-          },
-          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-            print("error loading network image");
-            return Icon(Icons.image_not_supported);
-          },
-        ),
-    );
-  }
 
   static Widget likeAndCommentBar(BuildContext context, Post post, bool pushToNewPage) {
     return  Padding(
@@ -69,47 +48,56 @@ class UniversalWidgets {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              IconButton(
-                  icon: Icon(
-                    Icons.thumb_up_alt_outlined,
-                    // if user is not logged in, no email can be accessed
-                    color:
-                    FirebaseAuth.instance.currentUser == null
-                        ?
-                    Colors.black
-                        :
-                    post.likedBy.contains(FirebaseAuth.instance.currentUser.email)
-                        ?
-                    Colors.blueAccent
-                        :
-                    Colors.black,
-                  ),
-                  onPressed: () {
-                    // if user want to like a post, check if logged in
-                    if (FirebaseAuth.instance.currentUser != null) {
-                      if(post.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
-                        post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
-                      } else {
-                        post.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
-                      }
-                    } else {
-                      // ask for login
-                      print("ask for login");
-                      pushNewScreen(
-                        context,
-                        screen: SignInUpPage(),
-                        withNavBar: false, // OPTIONAL VALUE. True by default.
-                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                      );
-                    }
 
-                  }
-              ),
-              Text(post.likedBy.length.toString()),
-            ],
-          ),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('${post.topic.toLowerCase()} posts')
+                  .doc(post.postDocName)
+                  .snapshots(),
+              builder: (context, snapshot){
+                Post postTempForLike = new Post();
+                postTempForLike.postDocName = snapshot.data["post doc name"];
+                postTempForLike.topic = snapshot.data["topic"];
+                postTempForLike.likedBy = snapshot.data["liked by"];
+                Color likeButtonColor;
+
+                if (FirebaseAuth.instance.currentUser == null) {
+                  likeButtonColor = Colors.black;
+                } else if (!snapshot.data["liked by"].contains(FirebaseAuth.instance.currentUser.email)){
+                  likeButtonColor = Colors.black;
+                } else {
+                  likeButtonColor = Colors.blueAccent;
+                }
+                return Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(Icons.thumb_up_alt_outlined, color: likeButtonColor,),
+                        onPressed: () {
+                          print(postTempForLike.likedBy);
+                          // if user want to like a post, check if logged in
+                          if (FirebaseAuth.instance.currentUser != null) {
+                            if(postTempForLike.likedBy.contains(FirebaseAuth.instance.currentUser.email)) {
+                              postTempForLike.likedByUpdate(FirebaseAuth.instance.currentUser.email, "-");
+                            } else {
+                              postTempForLike.likedByUpdate(FirebaseAuth.instance.currentUser.email, "+");
+                            }
+                          } else {
+                            // ask for login
+                            print("ask for login");
+                            pushNewScreen(
+                              context,
+                              screen: SignInUpPage(),
+                              withNavBar: false, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
+                          }
+
+                        }
+                    ),
+                    Text(postTempForLike.likedBy.length.toString()),
+                  ],
+                );
+              }),
 
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -210,7 +198,7 @@ class UniversalWidgets {
 
             },
             child: Container(
-              child: myNetworkImage(urls[index], null),
+              child: NetworkImageWidget(url: urls[index]), // myNetworkImage(urls[index], null),
             )
           );
         }
@@ -220,15 +208,6 @@ class UniversalWidgets {
 
 
   }
-
-
-
-  static Widget mainPostList(String postType) {
-
-
-  }
-
-
 
 
 

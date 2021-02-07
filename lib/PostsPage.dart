@@ -11,7 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
 import 'package:qanda/Post.dart';
-import 'package:qanda/PostList.dart';
+import 'package:qanda/PostListWidget.dart';
 import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalFunctions.dart';
 import 'package:qanda/UniversalValues.dart';
@@ -40,13 +40,13 @@ class _PostsPageState extends State<PostsPage>{
 
     return  Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("BYU Hawaii"),),
+          title: Center(child: Text(widget.postType == "academic posts" ? "Academic" : "Campus Life"),),
         ),
         body: Center(
             child: Container(
                 constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
                 child:
-                PostList(postType: widget.postType,),
+                PostListWidget(postType: widget.postType,),
 
                 // if we put PostList in this ListView, lazy load won't load more
                 // ListView(
