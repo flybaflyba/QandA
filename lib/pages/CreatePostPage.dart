@@ -251,8 +251,12 @@ class _CreatePostPageState extends State<CreatePostPage>{
                         if(imageValue.runtimeType != String) {
                           imageAssets.removeAt(index - countUrls()); // imageAssets has a different length
                         }
-
                       }
+                      if(imageValue.runtimeType == String) {
+                        widget.post.thumbnailAndImageUrls.remove(imageValue);
+                      }
+
+
                     });
                   }
               )
@@ -373,17 +377,24 @@ class _CreatePostPageState extends State<CreatePostPage>{
       var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
       print(postDocName);
 
-      Post post = new Post(
-        title: title,
-        content: content,
-        authorEmail: currentUserEmail,
-        author: userName,
-        postDocName: postDocName,
-        topic: topic,
-        course: course,
-        createdTime: currentTimeInUtc, // with timezone info
-        imageUint8Lists: imageUint8Lists,
-      );
+      Post post;
+
+      if(widget.post == null) {
+        post = new Post(
+          title: title,
+          content: content,
+          authorEmail: currentUserEmail,
+          author: userName,
+          postDocName: postDocName,
+          topic: topic,
+          course: course,
+          createdTime: currentTimeInUtc, // with timezone info
+          imageUint8Lists: imageUint8Lists,
+        );
+      } else {
+        post = widget.post;
+        post.imageUint8Lists = imageUint8Lists;
+      }
 
       post.printOut();
 
@@ -655,7 +666,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 text: "Post",
                                 background: UniversalValues.buttonColor,
                                 onPressed: () {
-                                  // widget.post.printOut();
+                                  widget.post.printOut();
                                   // print(images);
                                   // print(titleTextEditingController.text);
                                   // print(titleTextEditingController.value);

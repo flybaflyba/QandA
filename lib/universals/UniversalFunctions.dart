@@ -26,7 +26,7 @@ class UniversalFunctions{
   static void showToast(String msg, Color toastMessageType) {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_LONG,
+        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 3,
         backgroundColor: toastMessageType,

@@ -96,68 +96,74 @@ class Post {
 
     for (var imageUint8List in imageUint8Lists) {
 
-      dateTimeNow = DateTime.now();
-      print("start one image processing at index ${imageUint8Lists.indexOf(imageUint8List).toString()} " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
-      dateTimeLast = DateTime.now();
+      if(imageUint8List.runtimeType == String) {
+        // do nothing, if we are updating post, this might already be the url.
+      } else {
+        dateTimeNow = DateTime.now();
+        print("start one image processing at index ${imageUint8Lists.indexOf(imageUint8List).toString()} " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+        dateTimeLast = DateTime.now();
 
-      // image name is created time plus a number, created time is also the post name
-      // images are under the created time named folder for each post
-      String name = postDocName + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
-      var topicLowerCase = topic.toLowerCase();
-      Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
+        // image name is created time plus a number, created time is also the post name
+        // images are under the created time named folder for each post
+        String name = postDocName + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
+        var topicLowerCase = topic.toLowerCase();
+        Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
 
-      UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
-      dateTimeNow = DateTime.now();
-      print("start creating thumbnail");
-      dateTimeLast = DateTime.now();
+        UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+        dateTimeNow = DateTime.now();
+        print("start creating thumbnail");
+        dateTimeLast = DateTime.now();
 
-      // create a thumbnail to store in the data base, we don't need the larger image every time
-      imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
-      dateTimeNow = DateTime.now();
-      print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
-      dateTimeLast = DateTime.now();
-      imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
-      dateTimeNow = DateTime.now();
-      print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
-      dateTimeLast = DateTime.now();
-      Reference ref2 = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name thumbnail');
-      Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
-      // Uint8List thumbnailUint8list = imageUint8List;
+        // create a thumbnail to store in the data base, we don't need the larger image every time
+        imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
+        dateTimeNow = DateTime.now();
+        print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+        dateTimeLast = DateTime.now();
+        imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
+        dateTimeNow = DateTime.now();
+        print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+        dateTimeLast = DateTime.now();
+        Reference ref2 = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name thumbnail');
+        Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
+        // Uint8List thumbnailUint8list = imageUint8List;
 
-      dateTimeNow = DateTime.now();
-      print("end of creating thumbnail (encoding image took) " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
-      dateTimeLast = DateTime.now();
+        dateTimeNow = DateTime.now();
+        print("end of creating thumbnail (encoding image took) " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+        dateTimeLast = DateTime.now();
 
-      // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
-      SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
-      try {
-        UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
-        // Upload raw data.
-        await ref.putData(imageUint8List, settableMetadata)
-            .timeout((Duration(seconds: 10)), onTimeout: () {
-              UniversalFunctions.showToast("Your internet is too slow", UniversalValues.toastMessageTypeWarningColor);
-              return null;
-            })
-            .catchError((e){
-              print("image upload failed due to error $e");
-            });
-        await ref2.putData(thumbnailUint8list, settableMetadata)
-            .catchError((e){
-              print("thumbnail upload failed due to error $e");
-            }
-        );
-        String imageUrl = await ref.getDownloadURL();
-        // print(imageUrl);
-        String thumbnailUrl = await ref2.getDownloadURL();
-        urls[thumbnailUrl] = imageUrl;
-        // print(urls.length);
-      } on FirebaseException catch (e) {
-        print("image upload failed due to error $e");
+        // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
+        SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
+        try {
+          UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+          // Upload raw data.
+          await ref.putData(imageUint8List, settableMetadata)
+              .timeout((Duration(seconds: 10)), onTimeout: () {
+            UniversalFunctions.showToast("Your internet is too slow", UniversalValues.toastMessageTypeWarningColor);
+            return null;
+          })
+              .catchError((e){
+            print("image upload failed due to error $e");
+          });
+          await ref2.putData(thumbnailUint8list, settableMetadata)
+              .catchError((e){
+            print("thumbnail upload failed due to error $e");
+          }
+          );
+          String imageUrl = await ref.getDownloadURL();
+          // print(imageUrl);
+          String thumbnailUrl = await ref2.getDownloadURL();
+          urls[thumbnailUrl] = imageUrl;
+          // print(urls.length);
+        } on FirebaseException catch (e) {
+          print("image upload failed due to error $e");
+        }
+
+        dateTimeNow = DateTime.now();
+        print("end of one image processing " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
+        dateTimeLast = DateTime.now();
       }
 
-      dateTimeNow = DateTime.now();
-      print("end of one image processing " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
-      dateTimeLast = DateTime.now();
+
 
     }
 
@@ -188,7 +194,12 @@ class Post {
           print("after upload images function is done, we create post doc with url list ready");
           print(urls.length);
           // imageUrls = urls;
-          thumbnailAndImageUrls = urls;
+          // the post might already have links if it's editing.
+          for(var u in urls.keys.toList()){
+            thumbnailAndImageUrls[u] = urls[u];
+          }
+          // thumbnailAndImageUrls = urls;
+          print("${thumbnailAndImageUrls.length} and ${imageUint8Lists.length}");
           if(thumbnailAndImageUrls.length != imageUint8Lists.length) {
             UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
           }
