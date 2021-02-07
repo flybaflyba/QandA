@@ -22,6 +22,7 @@ class PostTileWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection(postType)
@@ -181,7 +182,38 @@ class PostTileWidget extends StatelessWidget{
               );
             }
           } else {
-            return SizedBox(height: 0,);
+            return Padding(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Container(
+                      height: 30,
+                      color: Colors.grey[300],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Container(
+                          height: 100,
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Container(
+                          height: 100,
+                          color: Colors.grey[300],
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              )
+            );
             //   Center(
             //   child: Container(
             //     height: 100,

@@ -39,7 +39,6 @@ class _PostListWidgetState extends State<PostListWidget>{
 
     return Column(
       children: [
-
         PostTileWidget(position: position, postType: widget.postType, id: id,),
 
         LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
@@ -52,6 +51,10 @@ class _PostListWidgetState extends State<PostListWidget>{
         ),
       ],
     );
+
+
+
+
 
     return PostTileWidget(position: position, postType: widget.postType, id: id,);
 
