@@ -58,7 +58,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   int countUrls() {
     int count = 0;
-    for(String i in imageUint8Lists){
+    for(var i in imageUint8Lists){
       if (i.runtimeType == String) {
         count ++;
       }
