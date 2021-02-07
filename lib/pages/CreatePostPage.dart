@@ -640,22 +640,29 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   Center(
                     child: workInProgress
                         ?
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          backgroundColor: UniversalValues.primaryColor,
-                          valueColor: AlwaysStoppedAnimation(Colors.green),
-                          strokeWidth: 10,
-                        ),
-                        SizedBox(height: 15,),
-                        LinearProgressIndicator(
-                          backgroundColor: UniversalValues.primaryColor,
-                          valueColor: AlwaysStoppedAnimation(Colors.green),
-                          minHeight: 10,
-                        )
-                      ],
+
+                    SpinKitFadingCircle(
+                      color: Colors.blue,
+                      size: 50.0,
                     )
+                    // Column(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     CircularProgressIndicator(
+                    //       backgroundColor: UniversalValues.primaryColor,
+                    //       valueColor: AlwaysStoppedAnimation(Colors.green),
+                    //       strokeWidth: 10,
+                    //     ),
+                    //     SizedBox(height: 15,),
+                    //     LinearProgressIndicator(
+                    //       backgroundColor: UniversalValues.primaryColor,
+                    //       valueColor: AlwaysStoppedAnimation(Colors.green),
+                    //       minHeight: 10,
+                    //     )
+                    //   ],
+                    // )
+
+
                         :
                     SizedBox(height: 0,),)
                 ],

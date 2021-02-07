@@ -215,7 +215,15 @@ class _PostListWidgetState extends State<PostListWidget>{
     // print("build view");
 
     if(allPosts == null) {
-      return Center(child: Text("Loading"),);
+      return Center(
+        child: Container(
+          color: Colors.grey[300],
+          child: SpinKitCircle(
+            color: Colors.blue,
+            size: 50.0,
+          ),
+        ),
+      );
     } else {
       // print(allPosts);
       if(allPosts.length == 0) {
@@ -233,10 +241,13 @@ class _PostListWidgetState extends State<PostListWidget>{
 
                   if(data.length == position + 1) {
                     return Center(
-                      child: SpinKitRipple(
-                        color: Colors.blue,
-                        size: 50.0,
-                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child:  SpinKitThreeBounce(
+                          color: Colors.blue,
+                          size: 50.0,
+                        ),
+                      )
                     );
                   } else {
                     Post post = new Post();

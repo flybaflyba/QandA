@@ -135,7 +135,7 @@ class Post {
         // Upload raw data.
         await ref.putData(imageUint8List, settableMetadata)
             .timeout((Duration(seconds: 10)), onTimeout: () {
-              UniversalFunctions.showToast("Your internet is too week", UniversalValues.toastMessageTypeWarningColor);
+              UniversalFunctions.showToast("Your internet is too slow", UniversalValues.toastMessageTypeWarningColor);
               return null;
             })
             .catchError((e){
