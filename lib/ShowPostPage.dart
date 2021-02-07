@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qanda/Comment.dart';
 import 'package:qanda/LargeImagesPhotoView.dart';
+import 'package:qanda/LikeAndCommentBarWidget.dart';
 import 'package:qanda/NetworkImageWidget.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/TitleWidget.dart';
@@ -213,7 +214,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                 ]
                             ),
 
-                            UniversalWidgets.likeAndCommentBar(context, post, false),
+                            LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: false,),
+                            // UniversalWidgets.likeAndCommentBar(context, post, false),
                             // SizedBox(height: 20, child: Container(color: Colors.white,),),
 
                             Container(

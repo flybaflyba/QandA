@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:qanda/LikeAndCommentBarWidget.dart';
 import 'package:qanda/Post.dart';
 import 'package:qanda/ShowPostPage.dart';
 import 'package:qanda/UniversalWidgets.dart';
@@ -155,7 +156,8 @@ class _PostListWidgetState extends State<PostListWidget>{
           child: UniversalWidgets.gridView(post.thumbnailAndImageUrls, context),
         ),
 
-        UniversalWidgets.likeAndCommentBar(context, post, true),
+        LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
+        // UniversalWidgets.likeAndCommentBar(context, post, true),
 
         SizedBox(
           height: 10,
