@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/models/Post.dart';
 import 'file:///C:/Projects/QandA/lib/pages/BlankPages.dart';
 import 'file:///C:/Projects/QandA/lib/pages/CreatePostPage.dart';
 import 'file:///C:/Projects/QandA/lib/pages/PersonalPage.dart';
@@ -103,7 +104,8 @@ class _MenuPageState extends State<MenuPage>{
           child: Icon(Icons.add),
           onPressed: () {
             print("float action button pressed");
-            Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePostPage(),));
+            // Post post = new Post();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePostPage(post: null,),));
           },
         ),
       ),

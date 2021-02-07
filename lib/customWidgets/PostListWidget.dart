@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:qanda/models/Post.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/ImageGridViewWidget.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
-import 'file:///C:/Projects/QandA/lib/models/Post.dart';
 import 'file:///C:/Projects/QandA/lib/pages/ShowPostPage.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 

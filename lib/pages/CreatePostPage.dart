@@ -16,17 +16,22 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'file:///C:/Projects/QandA/lib/pages/BlankPages.dart';
-import 'file:///C:/Projects/QandA/lib/models/Post.dart';
 import 'file:///C:/Projects/QandA/lib/pages/ShowPostPage.dart';
 import 'file:///C:/Projects/QandA/lib/pages/SignInUpPage.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/TitleWidget.dart';
 import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
 import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:qanda/models/Post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as imagePackage;
 
 class CreatePostPage extends StatefulWidget{
+
+  CreatePostPage({Key key, this.post}) : super(key: key);
+
+  Post post;
+
   @override
   _CreatePostPageState createState() => _CreatePostPageState();
 }
@@ -41,18 +46,45 @@ class _CreatePostPageState extends State<CreatePostPage>{
   var title = "";
   var content = "";
   var topic = "What are Your Posting for?";
-
   List<bool> topicSelectionList = [false, false];
-  var workInProgress = false;
-
   List<Asset> imageAssets = List<Asset>();
   List<Uint8List> imageUint8Lists = List<Uint8List>();
-  Map thumbnailAndImageUrls = Map<dynamic, dynamic>();
+  // Map thumbnailAndImageUrls = Map<dynamic, dynamic>();
+
+  var workInProgress = false;
+
+
   String _error = 'No Error Detected';
 
   @override
   void initState() {
     super.initState();
+
+    if (widget.post == null) {
+      print("creating new post");
+    } else {
+      print("editing post");
+      setState(() {
+        topicSelectionList = [widget.post.topic == "Campus Life", widget.post.topic == "Academic"];
+
+        if(widget.post.topic == "") {
+          widget.post.topic = "What are Your Posting for?";
+        }
+        topic = widget.post.topic;
+        course = widget.post.course;
+        courseTextEditingController.text = course;
+        content = widget.post.content;
+        contentTextEditingController.text = content;
+        title = widget.post.title;
+
+        // TODO download images to local
+        // imageUint8Lists = List<Uint8List>();
+
+      });
+    }
+
+
+
     if (kIsWeb) {
       Fluttertoast.showToast(
           msg: "Image processing is extremely slow in browser, if you are uploading images, we suggest you upload smaller images, or use the app versions of our app",
@@ -82,7 +114,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
      imageUint8Lists.clear();
    });
   }
-  //
+
   // void createThumbnails() {
   //   var dateTimeNow = DateTime.now();
   //   var dateTimeLast = DateTime.now();
@@ -281,6 +313,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   Future<void> savePost(BuildContext context) async {
 
+
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // prefs.setString("userName", "");
@@ -317,6 +351,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         createdTime: currentTimeInUtc, // with timezone info
         imageUint8Lists: imageUint8Lists,
       );
+
       post.printOut();
 
       print("start saving post to database");
@@ -587,6 +622,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 text: "Post",
                                 background: UniversalValues.buttonColor,
                                 onPressed: () {
+                                  // widget.post.printOut();
                                   // print(images);
                                   // print(titleTextEditingController.text);
                                   // print(titleTextEditingController.value);
@@ -640,7 +676,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   Center(
                     child: workInProgress
                         ?
-
                     SpinKitFadingCircle(
                       color: Colors.blue,
                       size: 50.0,

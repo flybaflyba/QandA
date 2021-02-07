@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/models/Post.dart';
+import 'package:qanda/pages/CreatePostPage.dart';
 import 'file:///C:/Projects/QandA/lib/models/Comment.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/LargeImagesPhotoWidget.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/NetworkImageWidget.dart';
-import 'file:///C:/Projects/QandA/lib/models/Post.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/TitleWidget.dart';
 import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
 import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
@@ -49,6 +51,28 @@ class _ShowPostPageState extends State<ShowPostPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: ()  async {
+                  print("clicked on action button of view post page");
+                  Post post = new Post();
+                  DocumentSnapshot postDoc = await
+                      FirebaseFirestore.instance
+                      .collection(widget.postDocTypePath)
+                      .doc(widget.postDocName).get();
+                  post.setPostWithDocumentSnapshot(postDoc);
+
+                  pushNewScreen(
+                    context,
+                    screen: CreatePostPage(post: post,),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+
+                }
+            )
+          ],
         ),
       body:  Center(
           child: Container(

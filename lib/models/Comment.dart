@@ -1,7 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///C:/Projects/QandA/lib/models/Post.dart';
+import 'package:qanda/models/Post.dart';
 
 class Comment {
   var content = "";
