@@ -54,17 +54,18 @@ class _PostListWidgetState extends State<PostListWidget>{
                     :
                 SizedBox(height: 0,),
 
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    post.title,
-                    maxLines: 100,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
+                // no need title
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Text(
+                //     post.title,
+                //     maxLines: 100,
+                //     style: TextStyle(
+                //         fontSize: 20,
+                //         fontWeight: FontWeight.bold
+                //     ),
+                //   ),
+                // ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

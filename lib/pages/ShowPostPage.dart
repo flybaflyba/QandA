@@ -70,7 +70,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
 
                         var imgList = post.thumbnailAndImageUrls.keys.toList();
 
-                        appBarText = post.title;
+                        // no need title
+                        // appBarText = post.title;
 
                         final List<Widget> imageSliders = imgList.map((item) => Container(
                           child: InkWell(
@@ -130,31 +131,6 @@ class _ShowPostPageState extends State<ShowPostPage>{
                         Column(
                           children: [
 
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10),
-                              child:  Container(
-                                color: Colors.grey[300],
-                                child: Column(
-                                  children: [
-                                    TitleWidget(title: post.title,),
-
-                                    Padding(
-                                      padding: EdgeInsets.only(bottom: 20),
-                                      child:
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Center(child: Text(post.topic + " " + post.course),),
-                                          Center(child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-
                             // Center(child: Text(DateFormat.yMEd().add_jms().format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
                             // Center(child: Text(timeago.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),),
 
@@ -172,50 +148,75 @@ class _ShowPostPageState extends State<ShowPostPage>{
                             //   )).toList(),
                             // ),
 
-                            post.thumbnailAndImageUrls.length == 0 ?
-                            SizedBox(height: 0,) :
-                            Column(
-                                children: [
-                                  CarouselSlider(
-                                    items: imageSliders,
-                                    carouselController: carouselController,
-                                    options: CarouselOptions(
-                                        height: MediaQuery.of(context).size.height * 0.3,
-                                        autoPlay: false,
-                                        enlargeCenterPage: true,
-                                        aspectRatio: 2,
-                                        onPageChanged: (index, reason) {
-                                          // print(index);
-                                          setState(() {
-                                            UniversalValues.currentViewingImageIndex = index;
-                                          });
-                                        }
+                            Padding(
+                              padding: EdgeInsets.only(top: 5, bottom: 5),
+                              child:
+                              post.thumbnailAndImageUrls.length == 0 ?
+                              SizedBox(height: 0,) :
+                              Column(
+                                  children: [
+                                    CarouselSlider(
+                                      items: imageSliders,
+                                      carouselController: carouselController,
+                                      options: CarouselOptions(
+                                          height: MediaQuery.of(context).size.height * 0.3,
+                                          autoPlay: false,
+                                          enlargeCenterPage: true,
+                                          aspectRatio: 2,
+                                          onPageChanged: (index, reason) {
+                                            // print(index);
+                                            setState(() {
+                                              UniversalValues.currentViewingImageIndex = index;
+                                            });
+                                          }
+                                      ),
                                     ),
-                                  ),
-                                  // indicator
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: imgList.map((url) {
-                                      int index = imgList.indexOf(url);
-                                      return Container(
-                                        width: 8.0,
-                                        height: 8.0,
-                                        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: UniversalValues.currentViewingImageIndex == index
-                                              ? Color.fromRGBO(0, 0, 0, 0.9)
-                                              : Color.fromRGBO(0, 0, 0, 0.4),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ]
+                                    // indicator
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: imgList.map((url) {
+                                        int index = imgList.indexOf(url);
+                                        return Container(
+                                          width: 8.0,
+                                          height: 8.0,
+                                          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: UniversalValues.currentViewingImageIndex == index
+                                                ? Color.fromRGBO(0, 0, 0, 0.9)
+                                                : Color.fromRGBO(0, 0, 0, 0.4),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ]
+                              ),
                             ),
 
-                            LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: false,),
-                            // UniversalWidgets.likeAndCommentBar(context, post, false),
-                            // SizedBox(height: 20, child: Container(color: Colors.white,),),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 1),
+                              child:  Container(
+                                // color: Colors.grey[300],
+                                child: Column(
+                                  children: [
+                                    // no need title
+                                    // TitleWidget(title: post.title,),
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child:
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Center(child: Text(post.topic + " " + post.course),),
+                                          Center(child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
 
                             Container(
                               color: Colors.grey[300],
@@ -237,6 +238,10 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               ),
                             ),
 
+                            LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: false,),
+                            // UniversalWidgets.likeAndCommentBar(context, post, false),
+                            // SizedBox(height: 20, child: Container(color: Colors.white,),),
+
                             // FlatButton(
                             //   color: Colors.blueAccent,
                             //   textColor: Colors.white,
@@ -256,21 +261,20 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     .collection("comments")
                                     .snapshots(),
                                 builder: (context, snapshot){
-
                                   List<Widget> commentWidgets = [
-                                  Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Center(
-                                        child: Container(
-                                          // color: Colors.grey[300],
-                                          child: SpinKitRotatingPlain(
-                                            color: Colors.blue,
-                                            size: 50.0,
-                                          ),
-                                        )
-
-                                    ),
-                                  )
+                                  // Padding(
+                                  //   padding: EdgeInsets.all(10),
+                                  //   child: Center(
+                                  //       child: Container(
+                                  //         // color: Colors.grey[300],
+                                  //         child: SpinKitRotatingPlain(
+                                  //           color: Colors.blue,
+                                  //           size: 50.0,
+                                  //         ),
+                                  //       )
+                                  //
+                                  //   ),
+                                  // )
                                   ];
                                   if(snapshot.data != null) {
                                     commentWidgets.clear();
@@ -428,7 +432,6 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                           ),
                                         ),
                                       );
-
 
                                       commentWidgets.add(oneComment);
                                     }

@@ -492,35 +492,36 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
 
 
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child:
-                        Column(
-                          children: [
-                            title != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Title",),),) : SizedBox(height: 0,),
-                            TextField(
-                              controller: titleTextEditingController,
-                              style: TextStyle(fontSize: 25),
-                              textAlign: TextAlign.center,
-                              onChanged: (value){
-                                setState(() {
-                                  title = value;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                hintText: "Title",
-                                alignLabelWithHint: true,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ),
+                      // // no need title
+                      // Container(
+                      //   margin: EdgeInsets.all(20),
+                      //   child:
+                      //   Column(
+                      //     children: [
+                      //       title != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Title",),),) : SizedBox(height: 0,),
+                      //       TextField(
+                      //         controller: titleTextEditingController,
+                      //         style: TextStyle(fontSize: 25),
+                      //         textAlign: TextAlign.center,
+                      //         onChanged: (value){
+                      //           setState(() {
+                      //             title = value;
+                      //           });
+                      //         },
+                      //         decoration: InputDecoration(
+                      //           hintText: "Title",
+                      //           alignLabelWithHint: true,
+                      //           focusedBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                      //           ),
+                      //           enabledBorder: OutlineInputBorder(
+                      //             borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   )
+                      // ),
 
                       Container(
                         margin: EdgeInsets.all(20),
@@ -589,8 +590,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                   // print(images);
                                   // print(titleTextEditingController.text);
                                   // print(titleTextEditingController.value);
-                                  if (title != "" && content != "" && topic != "What are Your Posting for?") {
-
+                                  // if (title != "" && content != "" && topic != "What are Your Posting for?") {
+                                  if (content != "" && topic != "What are Your Posting for?") {
                                     if (FirebaseAuth.instance.currentUser != null) {
 
                                       if(topic == "Academic") {
@@ -618,9 +619,11 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                     }
 
                                   } else {
-                                    if (title == "") {
-                                      UniversalFunctions.showToast("What's the title?", UniversalValues.toastMessageTypeWarningColor);
-                                    } else if (content == "") {
+                                    // if (title == "") {
+                                    //   UniversalFunctions.showToast("What's the title?", UniversalValues.toastMessageTypeWarningColor);
+                                    // } else
+
+                                      if (content == "") {
                                       UniversalFunctions.showToast("Please provide some content.", UniversalValues.toastMessageTypeWarningColor);
                                     } else {
                                       UniversalFunctions.showToast("What are you posting for?", UniversalValues.toastMessageTypeWarningColor);
