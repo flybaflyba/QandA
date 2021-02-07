@@ -58,7 +58,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
           msg: "Image processing is extremely slow in browser, if you are uploading images, we suggest you upload smaller images, or use the app versions of our app",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 3,
           backgroundColor: UniversalValues.toastMessageTypeWarningColor,
           webBgColor: "linear-gradient(to right, #cc00ff, #ff0000)",
           webPosition: "right",

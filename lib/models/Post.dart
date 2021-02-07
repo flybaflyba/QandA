@@ -134,10 +134,13 @@ class Post {
         UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
         // Upload raw data.
         await ref.putData(imageUint8List, settableMetadata)
+            .timeout((Duration(seconds: 10)), onTimeout: () {
+              UniversalFunctions.showToast("Your internet is too week", UniversalValues.toastMessageTypeWarningColor);
+              return null;
+            })
             .catchError((e){
               print("image upload failed due to error $e");
-            }
-        );
+            });
         await ref2.putData(thumbnailUint8list, settableMetadata)
             .catchError((e){
               print("thumbnail upload failed due to error $e");
