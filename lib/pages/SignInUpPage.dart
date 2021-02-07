@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:qanda/MenuPage.dart';
-import 'package:qanda/UniversalFunctions.dart';
-import 'package:qanda/UniversalValues.dart';
-import 'package:qanda/UserInformation.dart';
+import 'file:///C:/Projects/QandA/lib/pages/MenuPage.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
+import 'file:///C:/Projects/QandA/lib/models/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInUpPage extends StatefulWidget{

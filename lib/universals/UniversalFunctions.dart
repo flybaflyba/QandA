@@ -11,14 +11,13 @@ import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:qanda/Comment.dart';
-import 'package:qanda/LargeImagesPhotoView.dart';
-import 'package:qanda/NetworkImageWidget.dart';
-import 'package:qanda/Post.dart';
-import 'package:qanda/SignInUpPage.dart';
-import 'package:qanda/UniversalValues.dart';
-import 'package:qanda/UniversalWidgets.dart';
-import 'package:qanda/UserInformation.dart';
+import 'file:///C:/Projects/QandA/lib/models/Comment.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/LargeImagesPhotoWidget.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/NetworkImageWidget.dart';
+import 'file:///C:/Projects/QandA/lib/models/Post.dart';
+import 'file:///C:/Projects/QandA/lib/pages/SignInUpPage.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
+import 'file:///C:/Projects/QandA/lib/models/UserInformation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -319,8 +318,6 @@ class UniversalFunctions{
           );
         }
     );
-
-
   }
 
   static Future<List<Widget>> getTopImages(BuildContext context) async {
@@ -348,7 +345,7 @@ class UniversalFunctions{
                         context: context,
                         duration: Duration(milliseconds: 700),
                         builder: (context) =>
-                            LargeImagesPhotoView(pageController: pageController, imageUrls: topImageUrls,)
+                            LargeImagesPhotoWidget(pageController: pageController, imageUrls: topImageUrls,)
                     );
                     future.then((void value) {
                       print("bottom sheet closed");

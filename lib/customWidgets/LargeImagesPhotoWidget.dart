@@ -3,20 +3,20 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:qanda/UniversalValues.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
 
-class LargeImagesPhotoView extends StatefulWidget{
+class LargeImagesPhotoWidget extends StatefulWidget{
 
-  LargeImagesPhotoView({Key key, this.pageController, this.imageUrls}) : super(key: key);
+  LargeImagesPhotoWidget({Key key, this.pageController, this.imageUrls}) : super(key: key);
 
   PageController pageController;
   List<dynamic> imageUrls;
 
   @override
-  _LargeImagesPhotoViewState createState() => _LargeImagesPhotoViewState();
+  _LargeImagesPhotoWidgetState createState() => _LargeImagesPhotoWidgetState();
 }
 
-class _LargeImagesPhotoViewState extends State<LargeImagesPhotoView> {
+class _LargeImagesPhotoWidgetState extends State<LargeImagesPhotoWidget> {
 
   @override
   Widget build(BuildContext context) {

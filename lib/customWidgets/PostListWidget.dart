@@ -4,16 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-import 'package:qanda/LikeAndCommentBarWidget.dart';
-import 'package:qanda/Post.dart';
-import 'package:qanda/ShowPostPage.dart';
-import 'package:qanda/UniversalWidgets.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/ImageGridViewWidget.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
+import 'file:///C:/Projects/QandA/lib/models/Post.dart';
+import 'file:///C:/Projects/QandA/lib/pages/ShowPostPage.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostListWidget extends StatefulWidget{
 
   PostListWidget({Key key, this.postType}) : super(key: key);
-  var postType;
+  final String postType;
 
   @override
   _PostListWidgetState createState() => _PostListWidgetState();
@@ -153,7 +153,7 @@ class _PostListWidgetState extends State<PostListWidget>{
 
         Padding(
           padding: EdgeInsets.only(bottom: 10),
-          child: UniversalWidgets.gridView(post.thumbnailAndImageUrls, context),
+          child: ImageGridViewWidget(thumbnailAndImageUrls: post.thumbnailAndImageUrls, context: context) // UniversalWidgets.gridView(post.thumbnailAndImageUrls, context),
         ),
 
         LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
@@ -209,8 +209,6 @@ class _PostListWidgetState extends State<PostListWidget>{
     loadMore();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     // print("build view");
@@ -219,8 +217,10 @@ class _PostListWidgetState extends State<PostListWidget>{
       return Center(child: Text("Loading"),);
     } else {
       // print(allPosts);
-      return
-        LazyLoadScrollView(
+      if(allPosts.length == 0) {
+        return Center(child: Text("No Content"),);
+      } else {
+        return LazyLoadScrollView(
             isLoading: isLoadingVertical,
             onEndOfPage: () => loadMore(),
             child: Scrollbar(
@@ -246,6 +246,7 @@ class _PostListWidgetState extends State<PostListWidget>{
               ),
             )
         );
+      }
     }
 
 

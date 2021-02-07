@@ -9,13 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:qanda/LargeImagesPhotoView.dart';
-import 'package:qanda/Post.dart';
-import 'package:qanda/PostListWidget.dart';
-import 'package:qanda/ShowPostPage.dart';
-import 'package:qanda/UniversalFunctions.dart';
-import 'package:qanda/UniversalValues.dart';
-import 'package:qanda/UniversalWidgets.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/LargeImagesPhotoWidget.dart';
+import 'file:///C:/Projects/QandA/lib/models/Post.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/PostListWidget.dart';
+import 'file:///C:/Projects/QandA/lib/pages/ShowPostPage.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostsPage extends StatefulWidget{

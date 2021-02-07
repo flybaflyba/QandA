@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:image/image.dart' as imagePackage;
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:qanda/Comment.dart';
-import 'package:qanda/UniversalFunctions.dart';
-import 'package:qanda/UniversalValues.dart';
+import 'file:///C:/Projects/QandA/lib/models/Comment.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
 
 class Post {
   var title = "";

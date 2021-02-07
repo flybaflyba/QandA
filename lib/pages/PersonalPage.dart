@@ -2,9 +2,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:qanda/SignInUpPage.dart';
-import 'package:qanda/UniversalFunctions.dart';
-import 'package:qanda/UniversalValues.dart';
+import 'file:///C:/Projects/QandA/lib/pages/SignInUpPage.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

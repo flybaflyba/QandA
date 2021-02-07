@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:qanda/Comment.dart';
-import 'package:qanda/LargeImagesPhotoView.dart';
-import 'package:qanda/LikeAndCommentBarWidget.dart';
-import 'package:qanda/NetworkImageWidget.dart';
-import 'package:qanda/Post.dart';
-import 'package:qanda/TitleWidget.dart';
-import 'package:qanda/UniversalFunctions.dart';
-import 'package:qanda/UniversalValues.dart';
-import 'package:qanda/UniversalWidgets.dart';
+import 'file:///C:/Projects/QandA/lib/models/Comment.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/LargeImagesPhotoWidget.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/NetworkImageWidget.dart';
+import 'file:///C:/Projects/QandA/lib/models/Post.dart';
+import 'file:///C:/Projects/QandA/lib/customWidgets/TitleWidget.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
+import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class ShowPostPage extends StatefulWidget{
@@ -86,7 +85,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                     context: context,
                                     duration: Duration(milliseconds: 700),
                                     builder: (context) =>
-                                        LargeImagesPhotoView(pageController: pageController, imageUrls: post.thumbnailAndImageUrls.values.toList(),)
+                                        LargeImagesPhotoWidget(pageController: pageController, imageUrls: post.thumbnailAndImageUrls.values.toList(),)
                                 );
                                 future.then((void value) {
                                   print("bottom sheet closed");
