@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -372,14 +373,15 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
       print("saving post now");
       var currentUserEmail = FirebaseAuth.instance.currentUser.email;
-      var currentTimeInUtc = DateTime.now().toUtc();
-      var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
-      var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
-      print(postDocName);
+
 
       Post post;
 
       if(widget.post == null) {
+        var currentTimeInUtc = DateTime.now().toUtc();
+        var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
+        var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
+        print(postDocName);
         post = new Post(
           title: title,
           content: content,
@@ -392,7 +394,19 @@ class _CreatePostPageState extends State<CreatePostPage>{
           imageUint8Lists: imageUint8Lists,
         );
       } else {
+
+        // if topic changed, we need to delete the old one, because the new post will be save into a another category, the old one won't be overridden.
+        if (widget.post.topic != topic) {
+          var topicLowerCase = widget.post.topic.toLowerCase();
+          FirebaseFirestore.instance.collection('$topicLowerCase posts')
+              .doc(widget.post.postDocName)
+              .delete();
+        }
         post = widget.post;
+        post.title=title;
+        post.content=content;
+        post.topic=topic;
+        post.course=course;
         post.imageUint8Lists = imageUint8Lists;
       }
 
