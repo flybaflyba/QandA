@@ -680,7 +680,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                                 text: "Post",
                                 background: UniversalValues.buttonColor,
                                 onPressed: () {
-                                  widget.post.printOut();
+                                  // widget.post.printOut();
                                   // print(images);
                                   // print(titleTextEditingController.text);
                                   // print(titleTextEditingController.value);

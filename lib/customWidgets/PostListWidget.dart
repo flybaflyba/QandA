@@ -1,9 +1,10 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:qanda/models/Post.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/ImageGridViewWidget.dart';
 import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
@@ -22,8 +23,9 @@ class PostListWidget extends StatefulWidget{
 class _PostListWidgetState extends State<PostListWidget>{
 
   List<int> data = [];
-  final int increment = 5;
-  bool isLoadingVertical = false;
+  final int increment = 10;
+  // bool isLoadingVertical = false;
+  var allPosts;
 
   Widget item(int position) {
 
@@ -185,39 +187,20 @@ class _PostListWidgetState extends State<PostListWidget>{
               );
             }
           } else {
-            return Center(
-              child: Container(
-                height: 100,
-                child: SpinKitDualRing(
-                  color: Colors.blue,
-                  size: 50.0,
-                ),
-              )
-            );
+            return SizedBox(height: 0,);
+            //   Center(
+            //   child: Container(
+            //     height: 100,
+            //     child: SpinKitDualRing(
+            //       color: Colors.blue,
+            //       size: 50.0,
+            //     ),
+            //   )
+            // );
           }
         }
     );
   }
-
-  Future loadMore() async {
-
-    print("load more called");
-    setState(() {
-      isLoadingVertical = true;
-    });
-
-    // Add in an artificial delay
-    await new Future.delayed(const Duration(seconds: 2));
-
-    data.addAll(
-        List.generate(increment, (index) => data.length + index));
-
-    setState(() {
-      isLoadingVertical = false;
-    });
-  }
-
-  var allPosts;
 
   void getPosts() async {
     final QuerySnapshot result =
@@ -232,11 +215,45 @@ class _PostListWidgetState extends State<PostListWidget>{
 
   }
 
+  RefreshController refreshController =
+  RefreshController(initialRefresh: true);
+
+  void onRefresh() async{
+    // monitor network fetch
+    getPosts();
+    await Future.delayed(Duration(milliseconds: 2000));
+    // if failed,use refreshFailed()
+    refreshController.refreshCompleted();
+  }
+
+  void onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 2000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+
+    data.addAll(
+        List.generate(increment, (index) => data.length + index));
+
+    // if(data.length + 5 > allPosts.length) {
+    //   data.addAll(
+    //       List.generate(allPosts.length - data.length + 1, (index) => data.length + index));
+    // } else {
+    //   data.addAll(
+    //       List.generate(increment, (index) => data.length + index));
+    // }
+
+    if(mounted)
+      setState(() {
+      });
+    refreshController.loadComplete();
+  }
+
+
   @override
   void initState() {
     super.initState();
     getPosts();
-    loadMore();
+    onLoading();
   }
 
   @override
@@ -258,35 +275,86 @@ class _PostListWidgetState extends State<PostListWidget>{
       if(allPosts.length == 0) {
         return Center(child: Text("No Content"),);
       } else {
-        return LazyLoadScrollView(
-            isLoading: isLoadingVertical,
-            onEndOfPage: () => loadMore(),
-            child: Scrollbar(
-              child: ListView.builder(
-                // physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: data.length <= allPosts.length ? data.length : allPosts.length,
-                itemBuilder: (context, position) {
+        return
+          SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: data.length > allPosts.length ? false : true,
+            header: WaterDropHeader(),
+            footer: CustomFooter(
+              builder: (BuildContext context,LoadStatus mode){
+                Widget body ;
+                if(mode==LoadStatus.idle){
+                  body =  Text("");
+                }
+                else if(mode==LoadStatus.loading){
+                  body =  SpinKitThreeBounce(
+                    color: Colors.blue,
+                    size: 50.0,
+                  );
+                }
+                else if(mode == LoadStatus.failed){
+                  body = Text("Load Failed! Click retry!");
+                }
+                else if(mode == LoadStatus.canLoading){
+                  body = Text("release to load more");
+                }
+                else{
+                  body = Text("No more Data");
+                }
+                return Container(
+                  height: 55.0,
+                  child: Center(child:body),
+                );
+              },
+            ),
+            controller: refreshController,
+            onRefresh: onRefresh,
+            onLoading: onLoading,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, position) {
+                // print("one post build");
+                if (allPosts.length > position){
+                  return item(position);
+                } else {
+                  return SizedBox(height: 0,);
+                }
+              },
+              itemCount: data.length,
+            ),
+          );
 
-                  if(data.length == position + 1) {
-                    return Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child:  SpinKitThreeBounce(
-                          color: Colors.blue,
-                          size: 50.0,
-                        ),
-                      )
-                    );
-                  } else {
-                    // Post post = new Post();
-                    // post.setPostWithDocumentSnapshot(allPosts.elementAt(position));
-                    return item(position);
-                  }
-                },
-              ),
-            )
-        );
+        //   LazyLoadScrollView(
+        //     isLoading: isLoadingVertical,
+        //     onEndOfPage: () => loadMore(),
+        //     child: Scrollbar(
+        //       child: ListView.builder(
+        //         // physics: NeverScrollableScrollPhysics(),
+        //         shrinkWrap: true,
+        //         itemCount: data.length <= allPosts.length ? data.length : allPosts.length,
+        //         itemBuilder: (context, position) {
+        //
+        //           if(data.length == position + 1) {
+        //             return Center(
+        //               child: Padding(
+        //                 padding: EdgeInsets.only(top: 10, bottom: 10),
+        //                 child:  SpinKitThreeBounce(
+        //                   color: Colors.blue,
+        //                   size: 50.0,
+        //                 ),
+        //               )
+        //             );
+        //           } else {
+        //             // Post post = new Post();
+        //             // post.setPostWithDocumentSnapshot(allPosts.elementAt(position));
+        //             return item(position);
+        //           }
+        //         },
+        //       ),
+        //     )
+        // );
+
+
       }
     }
 

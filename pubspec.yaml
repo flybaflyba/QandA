@@ -45,7 +45,8 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   auto_size_text: ^2.1.0
   image: ^2.1.19 # handle creating thumbnails, but too slow on decoding on web
-  lazy_load_scrollview: 1.2.0
+  pull_to_refresh: ^1.6.3
+
 
 
 
