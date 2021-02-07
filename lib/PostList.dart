@@ -185,17 +185,19 @@ class _PostListState extends State<PostList>{
     });
   }
 
-  var allPost;
+  var allPosts;
 
-  Future<QuerySnapshot> getPosts() async {
+  void getPosts() async {
     final QuerySnapshot result =
         await FirebaseFirestore.instance
             .collection(widget.postType)
             .get();
 
-    allPost = result;
-    print(result.docs.toList());
-    return result;
+    setState(() {
+      allPosts = result.docs;
+    });
+    // print(result.docs.toList());
+
   }
 
   @override
@@ -205,33 +207,45 @@ class _PostListState extends State<PostList>{
     loadMore();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return
-      LazyLoadScrollView(
-        isLoading: isLoadingVertical,
-        onEndOfPage: () => loadMore(),
-        child: Scrollbar(
-          child: ListView.builder(
-            // physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: data.length,
-            itemBuilder: (context, position) {
-              Post post = new Post();
-              // post.setPostWithDocumentSnapshot(allPosts.elementAt(position));
-              if(data.length == position + 1) {
-                return Center(
-                  child: SpinKitRipple(
-                  color: Colors.blue,
-                  size: 50.0,
-                ),
-                );
-              } else {
-                return Text("$position ${post.title} ");
-              }
-            },
-          ),
-        )
-    );
+    // print("build view");
+
+    if(allPosts == null) {
+      return Center(child: Text("Loading"),);
+    } else {
+      // print(allPosts);
+      return
+        LazyLoadScrollView(
+            isLoading: isLoadingVertical,
+            onEndOfPage: () => loadMore(),
+            child: Scrollbar(
+              child: ListView.builder(
+                // physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: data.length <= allPosts.length ? data.length : allPosts.length,
+                itemBuilder: (context, position) {
+
+                  if(data.length == position + 1) {
+                    return Center(
+                      child: SpinKitRipple(
+                        color: Colors.blue,
+                        size: 50.0,
+                      ),
+                    );
+                  } else {
+                    Post post = new Post();
+                    post.setPostWithDocumentSnapshot(allPosts.elementAt(position));
+                    return item(post);
+                  }
+                },
+              ),
+            )
+        );
+    }
+
+
   }
 }
