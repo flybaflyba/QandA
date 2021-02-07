@@ -25,6 +25,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:qanda/models/Post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as imagePackage;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CreatePostPage extends StatefulWidget{
 
@@ -48,13 +49,21 @@ class _CreatePostPageState extends State<CreatePostPage>{
   var topic = "What are Your Posting for?";
   List<bool> topicSelectionList = [false, false];
   List<Asset> imageAssets = List<Asset>();
-  List<Uint8List> imageUint8Lists = List<Uint8List>();
+  List<dynamic> imageUint8Lists = List<dynamic>();
   // Map thumbnailAndImageUrls = Map<dynamic, dynamic>();
 
   var workInProgress = false;
-
-
   String _error = 'No Error Detected';
+
+  int countUrls() {
+    int count = 0;
+    for(String i in imageUint8Lists){
+      if (i.runtimeType == String) {
+        count ++;
+      }
+    }
+    return count;
+  }
 
   @override
   void initState() {
@@ -78,7 +87,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
         title = widget.post.title;
 
         // TODO download images to local
-        // imageUint8Lists = List<Uint8List>();
+
+        // downloadImages();
+
+        for(String url in widget.post.thumbnailAndImageUrls.keys.toList()){
+          imageUint8Lists.add(url);
+          // imageAssets.add(null);
+        }
 
       });
     }
@@ -197,7 +212,9 @@ class _CreatePostPageState extends State<CreatePostPage>{
             );
         } else {
           // Asset asset = imageAssets[index];
-           Uint8List imageValue = imageUint8Lists[index];
+          var imageValue = imageUint8Lists[index];
+
+          print(imageValue.runtimeType);
 
           return Stack(
             children: [
@@ -208,28 +225,40 @@ class _CreatePostPageState extends State<CreatePostPage>{
               // ),
               Container(
                 color: Colors.grey[300],
-                child: Image.memory(
+                child:
+                imageValue.runtimeType == String ?
+                Image.network(
+                  imageValue,
+                  fit: BoxFit.cover,
+                ) :
+                Image.memory(
                   imageValue,
                   fit: BoxFit.cover,
                 ),
+
+
                 width: 300,
                 height: 300,
               ),
               IconButton(
-                iconSize: 20,
+                  iconSize: 20,
                   icon: Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
                       imageUint8Lists.removeAt(index);
                       // imageAssets is only use on phones
                       if(!kIsWeb){
-                        imageAssets.removeAt(index);
+                        if(imageValue.runtimeType != String) {
+                          imageAssets.removeAt(index - countUrls()); // imageAssets has a different length
+                        }
+
                       }
                     });
                   }
               )
             ],
           );
+
         }
       }),
     );
@@ -262,7 +291,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-    List<Uint8List> imageUint8ListsTemp = List<Uint8List>();
+    List<dynamic> imageUint8ListsTemp = List<dynamic>();
     for (Asset imageAsset in resultList) {
       final filePath = await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
 
@@ -277,7 +306,10 @@ class _CreatePostPageState extends State<CreatePostPage>{
     setState(() {
       if (resultList.length != 0) {
         imageAssets = resultList;
-        imageUint8Lists = imageUint8ListsTemp;
+        for (var i in imageUint8ListsTemp) {
+          imageUint8Lists.add(i);
+        }
+        // imageUint8Lists = imageUint8ListsTemp;
       }
       _error = error;
     });
@@ -299,11 +331,14 @@ class _CreatePostPageState extends State<CreatePostPage>{
       Uint8List imageValue = result.files.first.bytes;
       // File imageFile = File.fromRawPath(imageValue); // uses dart.io, not supported on web
 
-      List<Uint8List> imageUint8ListsTemp = result.files.map((file) => file.bytes).toList();
+      List<dynamic> imageUint8ListsTemp = result.files.map((file) => file.bytes).toList();
 
       setState(() {
         // imageFiles = files;
-        imageUint8Lists = imageUint8ListsTemp;
+        for (var i in imageUint8ListsTemp) {
+          imageUint8Lists.add(i);
+        }
+        // imageUint8Lists = imageUint8ListsTemp;
       });
 
     } else {
@@ -312,8 +347,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
   }
 
   Future<void> savePost(BuildContext context) async {
-
-
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

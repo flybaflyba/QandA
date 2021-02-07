@@ -22,7 +22,7 @@ class Post {
   var topic = "";
   var course = "";
   var createdTime; // DateTime type, has timezone info
-  List<Uint8List> imageUint8Lists = [];
+  List<dynamic> imageUint8Lists = [];
   // List<dynamic> imageUrls = [];
 
   // no need to set when create post locally, but do need when save to database
@@ -80,7 +80,7 @@ class Post {
   }
 
   // upload images, and get their urls to store in the post doc
-  Future<Map<dynamic, dynamic>> uploadImages(List<Uint8List> imageUint8Lists) async {
+  Future<Map<dynamic, dynamic>> uploadImages(List<dynamic> imageUint8Lists) async {
     // List<String> urls = List<String>();
     Map urls = Map();
 
@@ -94,7 +94,7 @@ class Post {
     var dateTimeNow = DateTime.now();
     var dateTimeLast = DateTime.now();
 
-    for (Uint8List imageUint8List in imageUint8Lists) {
+    for (var imageUint8List in imageUint8Lists) {
 
       dateTimeNow = DateTime.now();
       print("start one image processing at index ${imageUint8Lists.indexOf(imageUint8List).toString()} " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
