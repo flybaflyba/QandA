@@ -62,7 +62,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                       .collection(widget.postDocTypePath)
                       .doc(widget.postDocName).get();
                   post.setPostWithDocumentSnapshot(postDoc);
-
+                  Navigator.pop(context);
                   pushNewScreen(
                     context,
                     screen: CreatePostPage(post: post,),

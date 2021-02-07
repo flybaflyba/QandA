@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image/image.dart' as imagePackage;
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'file:///C:/Projects/QandA/lib/models/Comment.dart';
@@ -109,6 +110,7 @@ class Post {
         var topicLowerCase = topic.toLowerCase();
         Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
 
+        Fluttertoast.cancel();
         UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
         dateTimeNow = DateTime.now();
         print("start creating thumbnail");
@@ -134,6 +136,7 @@ class Post {
         // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
         SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
         try {
+          Fluttertoast.cancel();
           UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
           // Upload raw data.
           await ref.putData(imageUint8List, settableMetadata)
