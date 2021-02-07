@@ -10,13 +10,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/models/Post.dart';
-import 'file:///C:/Projects/QandA/lib/pages/BlankPages.dart';
-import 'file:///C:/Projects/QandA/lib/pages/CreatePostPage.dart';
-import 'file:///C:/Projects/QandA/lib/pages/PersonalPage.dart';
-import 'file:///C:/Projects/QandA/lib/pages/PostsPage.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
-import 'file:///C:/Projects/QandA/lib/models/UserInformation.dart';
+import 'package:qanda/models/UserInformation.dart';
+import 'package:qanda/pages/CreatePostPage.dart';
+import 'package:qanda/pages/PersonalPage.dart';
+import 'package:qanda/pages/PostsPage.dart';
+import 'package:qanda/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 BuildContext selectedTabScreenContext;

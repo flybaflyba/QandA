@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
+import 'package:qanda/universals/UniversalValues.dart';
 
 class LargeImagesPhotoWidget extends StatefulWidget{
 

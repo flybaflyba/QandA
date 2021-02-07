@@ -6,15 +6,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/customWidgets/LargeImagesPhotoWidget.dart';
+import 'package:qanda/customWidgets/LikeAndCommentBarWidget.dart';
+import 'package:qanda/customWidgets/NetworkImageWidget.dart';
+import 'package:qanda/models/Comment.dart';
 import 'package:qanda/models/Post.dart';
 import 'package:qanda/pages/CreatePostPage.dart';
-import 'file:///C:/Projects/QandA/lib/models/Comment.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/LargeImagesPhotoWidget.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/NetworkImageWidget.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/TitleWidget.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
+import 'package:qanda/universals/UniversalFunctions.dart';
+import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class ShowPostPage extends StatefulWidget{

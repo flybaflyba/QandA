@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
+import 'package:qanda/universals/UniversalFunctions.dart';
 
 class BlankPage1 extends StatefulWidget{
 

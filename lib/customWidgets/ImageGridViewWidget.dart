@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/LargeImagesPhotoWidget.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/NetworkImageWidget.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalValues.dart';
+import 'package:qanda/customWidgets/LargeImagesPhotoWidget.dart';
+import 'package:qanda/customWidgets/NetworkImageWidget.dart';
+import 'package:qanda/universals/UniversalValues.dart';
 
 class ImageGridViewWidget extends StatelessWidget {
 
@@ -75,8 +75,7 @@ class ImageGridViewWidget extends StatelessWidget {
                 );
                 future.then((void value) {
                   print("bottom sheet closed");
-                  UniversalValues.currentViewingImageIndex =
-                  0; // try not to change it because we are not in show post page
+                  UniversalValues.currentViewingImageIndex = 0; // try not to change it because we are not in show post page
                   print(UniversalValues.currentViewingImageIndex);
                 });
               },

@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'file:///C:/Projects/QandA/lib/pages/ShowPostPage.dart';
-import 'file:///C:/Projects/QandA/lib/pages/SignInUpPage.dart';
-import 'file:///C:/Projects/QandA/lib/universals/UniversalFunctions.dart';
 import 'package:qanda/models/Post.dart';
+import 'package:qanda/pages/ShowPostPage.dart';
+import 'package:qanda/pages/SignInUpPage.dart';
+import 'package:qanda/universals/UniversalFunctions.dart';
 
 
 

@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UniversalValues {
   static Color primaryColor = Colors.blue;
@@ -22,5 +21,4 @@ class UniversalValues {
 
   static var currentViewingImageIndex = 0;
 
-  static var currentComment = "";
 }

@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:qanda/customWidgets/ImageGridViewWidget.dart';
+import 'package:qanda/customWidgets/LikeAndCommentBarWidget.dart';
 import 'package:qanda/models/Post.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/ImageGridViewWidget.dart';
-import 'file:///C:/Projects/QandA/lib/customWidgets/LikeAndCommentBarWidget.dart';
-import 'file:///C:/Projects/QandA/lib/pages/ShowPostPage.dart';
+import 'package:qanda/pages/ShowPostPage.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostListWidget extends StatefulWidget{
