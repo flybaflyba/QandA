@@ -14,8 +14,7 @@ import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostListWidget extends StatefulWidget{
 
-  PostListWidget({Key key, this.postType, this.allPostsStream}) : super(key: key);
-  final String postType;
+  PostListWidget({Key key, this.allPostsStream}) : super(key: key);
   var allPostsStream;
 
   @override

@@ -18,8 +18,7 @@ import 'package:timeago/timeago.dart' as timeAgo;
 
 class ShowPostPage extends StatefulWidget{
 
-  ShowPostPage({Key key, this.postDocTypePath, this.postDocName}) : super(key: key);
-  var postDocTypePath;
+  ShowPostPage({Key key,this.postDocName}) : super(key: key);
   var postDocName;
 
   @override
@@ -58,7 +57,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                   Post post = new Post();
                   DocumentSnapshot postDoc = await
                       FirebaseFirestore.instance
-                      .collection(widget.postDocTypePath)
+                      .collection("posts")
                       .doc(widget.postDocName).get();
                   post.setPostWithDocumentSnapshot(postDoc);
                   Navigator.pop(context);
@@ -80,7 +79,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                 children: [
                   StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection(widget.postDocTypePath)
+                        .collection("posts")
                         .doc(widget.postDocName)
                         .snapshots(),
                     builder: (context, snapshot){
@@ -279,7 +278,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                             // comments area
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
-                                    .collection(widget.postDocTypePath)
+                                    .collection("posts")
                                     .doc(widget.postDocName)
                                     .collection("comments")
                                     .snapshots(),

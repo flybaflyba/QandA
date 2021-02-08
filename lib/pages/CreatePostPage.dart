@@ -394,6 +394,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         );
       } else {
 
+        // TODO update post, no need to delete
         // if topic changed, we need to delete the old one, because the new post will be save into a another category, the old one won't be overridden.
         if (widget.post.topic != topic) {
           var topicLowerCase = widget.post.topic.toLowerCase();
@@ -422,7 +423,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         resetCreatePostPageFields();
         Navigator.pop(context);
         // push to a new page
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
       });
 
     }

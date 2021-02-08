@@ -137,7 +137,7 @@ class LikeAndCommentBarWidget extends StatelessWidget{
 
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('${post.topic.toLowerCase()} posts')
+                  .collection('posts')
                   .doc(post.postDocName)
                   .collection("comments")
                   .snapshots(),
@@ -157,7 +157,7 @@ class LikeAndCommentBarWidget extends StatelessWidget{
                         icon: Icon(Icons.comment_bank_outlined),
                         onPressed: () {
                           if(pushToNewPage) {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocTypePath: post.topic.toLowerCase() + " posts", postDocName: post.postDocName,),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
                           }
                           UniversalFunctions.showCommentInput(context, post, null, post.author, post.authorEmail);
                         }

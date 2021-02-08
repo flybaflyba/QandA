@@ -106,8 +106,7 @@ class Post {
         // image name is created time plus a number, created time is also the post name
         // images are under the created time named folder for each post
         String name = postDocName + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
-        var topicLowerCase = topic.toLowerCase();
-        Reference ref = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name');
+        Reference ref = FirebaseStorage.instance.ref('post images/$postDocName/$name');
 
         Fluttertoast.cancel();
         UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
@@ -124,7 +123,7 @@ class Post {
         dateTimeNow = DateTime.now();
         print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
         dateTimeLast = DateTime.now();
-        Reference ref2 = FirebaseStorage.instance.ref('$topicLowerCase post Images/$postDocName/$name thumbnail');
+        Reference ref2 = FirebaseStorage.instance.ref('post Images/$postDocName/$name thumbnail');
         Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
         // Uint8List thumbnailUint8list = imageUint8List;
 
@@ -206,8 +205,7 @@ class Post {
             UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
           }
           // url list is where the images are saved
-          var topicLowerCase = topic.toLowerCase();
-          FirebaseFirestore.instance.collection('$topicLowerCase posts')
+          FirebaseFirestore.instance.collection('posts')
               .doc(postDocName)
               .set({
             "title": title,
@@ -239,8 +237,7 @@ class Post {
     } else{
       print("invalid action");
     }
-    var topicLowerCase = topic.toLowerCase();
-    FirebaseFirestore.instance.collection('$topicLowerCase posts')
+    FirebaseFirestore.instance.collection('posts')
         .doc(postDocName)
         .update({
       "liked by": likedBy,

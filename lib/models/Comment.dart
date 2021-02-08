@@ -26,8 +26,7 @@ class Comment {
   }
 
   void create(Post post) {
-    var topicLowerCase = post.topic.toLowerCase();
-    FirebaseFirestore.instance.collection('$topicLowerCase posts')
+    FirebaseFirestore.instance.collection('posts')
         .doc(post.postDocName)
         .collection("comments")
         .doc(time.toString().split(".")[0] + " by " + byEmail)
@@ -43,8 +42,7 @@ class Comment {
   }
 
   void update(Post post) {
-    var topicLowerCase = post.topic.toLowerCase();
-    FirebaseFirestore.instance.collection('$topicLowerCase posts')
+    FirebaseFirestore.instance.collection('posts')
         .doc(post.postDocName)
         .collection("comments")
         .doc(commentDocName)
