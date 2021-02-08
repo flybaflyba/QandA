@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:nice_button/nice_button.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/pages/PostsPage.dart';
+import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 
 class SearchCourseWidget extends StatefulWidget{
@@ -149,7 +152,12 @@ class _SearchCourseWidgetState extends State<SearchCourseWidget>{
                           gradientColors: [Color(0xff5b86e5), Color(0xff36d1dc)],
                           text: "Search",
                           onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
+                            if(UniversalValues.courses.contains(course)){
+                              Navigator.of(context, rootNavigator: true).pop();
+                              UniversalValues.searchCourseTerm = course;
+                            } else {
+                              UniversalFunctions.showToast("Invalid search term", UniversalValues.toastMessageTypeWarningColor);
+                            }
                           },
                         ),
                       ),

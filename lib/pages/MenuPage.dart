@@ -97,7 +97,7 @@ class _MenuPageState extends State<MenuPage>{
       //   leading: BackButton(),
       // ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
+        padding: const EdgeInsets.only(bottom: 50.0, right: 8),
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {

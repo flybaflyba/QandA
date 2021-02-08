@@ -11,23 +11,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nice_button/nice_button.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/customWidgets/PostListWidget.dart';
 import 'package:qanda/customWidgets/SearchCourseWidget.dart';
+import 'package:qanda/pages/CreatePostPage.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostsPage extends StatefulWidget{
-  PostsPage({Key key, @required this.postType}) : super(key: key);
+  PostsPage({Key key, @required this.postType, this.searchCourse}) : super(key: key);
 
   final postType;
+  final searchCourse;
 
   @override
   _PostsPageState createState() => _PostsPageState();
 }
 
 class _PostsPageState extends State<PostsPage>{
-
-
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _PostsPageState extends State<PostsPage>{
     return  Scaffold(
         appBar: AppBar(
           title: Center(child: Text(widget.postType == "academic posts" ? "Academic" : "Campus Life"),),
-          leading: Text(""),
+          leading: widget.searchCourse == null ? Text("") : BackButton(),
           actions: [
             IconButton(
                 icon: Icon(Icons.search),
@@ -54,7 +55,19 @@ class _PostsPageState extends State<PostsPage>{
                     dialogBackgroundColor: Color(0x00000000),
                     body: SearchCourseWidget(),
 
-                  )..show();
+                  )..show()
+                      .then((value) {
+                    print(value);
+                    print("dialog closed");
+                    print(UniversalValues.searchCourseTerm);
+
+                    // TODO push to course page then reset search term
+                    if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
+                      var searchTerm = UniversalValues.searchCourseTerm;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
+                    }
+                    UniversalValues.searchCourseTerm = "";
+                  });
                 }
                 )
           ],
@@ -63,36 +76,39 @@ class _PostsPageState extends State<PostsPage>{
             child: Container(
                 constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
                 child:
+                    Stack(
+                      children: [
+                        widget.searchCourse == null
+                            ?
 
-                Stack(
-                  children: [
-                    // TODO we might want to change this later
-                    // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
-                    StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection(widget.postType)
-                            .snapshots(),
-                        builder: (context, snapshot){
-                          if(snapshot.hasData){
-                            var docs = snapshot.data.docs.reversed;
-                            print(docs.length);
-                            return PostListWidget(postType: widget.postType, allPostsStream: docs,);
-                          } else {
-                            return SpinKitRipple(
-                              color: Colors.blue,
-                              size: 50.0,
-                            );
-                          }
-                        }
-                    ),
+                        // TODO we might want to change this later
+                        // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection(widget.postType)
+                                .snapshots(),
+                            builder: (context, snapshot){
+                              if(snapshot.hasData){
+                                var docs = snapshot.data.docs.reversed;
+                                print(docs.length);
+                                return PostListWidget(postType: widget.postType, allPostsStream: docs,);
+                              } else {
+                                return SpinKitRipple(
+                                  color: Colors.blue,
+                                  size: 50.0,
+                                );
+                              }
+                            }
+                        )
+                            :
+                        Center(child: Text("search ${widget.searchCourse}"),),
+                      ],
+                    )
 
 
 
-                  ],
-                )
 
-
-                // if we put PostList in this ListView, lazy load won't load more
+              // if we put PostList in this ListView, lazy load won't load more
                 // ListView(
                 //   // physics: NeverScrollableScrollPhysics(),
                 //   children: [

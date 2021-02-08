@@ -439,7 +439,6 @@ class _PostListWidgetState extends State<PostListWidget>{
         return Center(child: Text("No Content"),);
       } else {
         return SmartRefresher(
-          enableTwoLevel: true,
           enablePullDown: false,
           enablePullUp: data.length > widget.allPostsStream.length ? false : true,
           header: WaterDropHeader(),
@@ -474,7 +473,7 @@ class _PostListWidgetState extends State<PostListWidget>{
           onRefresh: onRefresh,
           onLoading: onLoading,
           child: ListView.builder(
-            shrinkWrap: true,
+            // shrinkWrap: true,
             itemBuilder: (context, position) {
               // return Container(height: 100, child: Center(child: Text("$position"),),);
               // print("one post build");
