@@ -30,6 +30,9 @@ class PostsPage extends StatefulWidget{
 
 class _PostsPageState extends State<PostsPage>{
 
+
+
+
   @override
   void initState() {
     super.initState();
@@ -40,9 +43,25 @@ class _PostsPageState extends State<PostsPage>{
 
     return  Scaffold(
         appBar: AppBar(
-          title: Center(child: Text(widget.postType == "academic posts" ? "Academic" : "Campus Life"),),
+          title: Center(
+            child: Text(
+                widget.postType == "academic posts"
+                    ?
+                widget.searchCourse == null
+                    ?
+                "Academic"
+                    :
+                widget.searchCourse
+                    :
+                "Campus Life"
+            ),
+          ),
           leading: widget.searchCourse == null ? Text("") : BackButton(),
           actions: [
+
+
+            widget.postType == "academic posts"
+                ?
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
@@ -69,7 +88,10 @@ class _PostsPageState extends State<PostsPage>{
                     UniversalValues.searchCourseTerm = "";
                   });
                 }
-                )
+            )
+                :
+            Text(" ")
+
           ],
         ),
         body: Center(
@@ -78,6 +100,7 @@ class _PostsPageState extends State<PostsPage>{
                 child:
                     Stack(
                       children: [
+
                         widget.searchCourse == null
                             ?
 
@@ -102,9 +125,28 @@ class _PostsPageState extends State<PostsPage>{
                             }
                         )
                             :
-                        Center(child: Text("search ${widget.searchCourse}"),),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection("posts")
+                                .where("course", isEqualTo: widget.searchCourse)
+                                .snapshots(),
+                            builder: (context, snapshot){
+                              if(snapshot.hasData){
+                                var docs = snapshot.data.docs.reversed;
+                                print(docs.length);
+                                return PostListWidget(allPostsStream: docs,);
+                              } else {
+                                return SpinKitRipple(
+                                  color: Colors.blue,
+                                  size: 50.0,
+                                );
+                              }
+                            }
+                        ),
+
                       ],
                     )
+
 
 
 
