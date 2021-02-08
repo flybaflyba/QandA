@@ -1,6 +1,7 @@
 
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +10,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:nice_button/nice_button.dart';
 import 'package:qanda/customWidgets/PostListWidget.dart';
+import 'package:qanda/customWidgets/SearchCourseWidget.dart';
+import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostsPage extends StatefulWidget{
@@ -24,6 +28,7 @@ class PostsPage extends StatefulWidget{
 class _PostsPageState extends State<PostsPage>{
 
 
+
   @override
   void initState() {
     super.initState();
@@ -35,28 +40,58 @@ class _PostsPageState extends State<PostsPage>{
     return  Scaffold(
         appBar: AppBar(
           title: Center(child: Text(widget.postType == "academic posts" ? "Academic" : "Campus Life"),),
+          leading: Text(""),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  print("search by subject");
+                  AwesomeDialog(
+                    context: context,
+                    useRootNavigator: true,
+                    animType: AnimType.SCALE,
+                    dialogType: DialogType.QUESTION,
+                    dialogBackgroundColor: Color(0x00000000),
+                    body: SearchCourseWidget(),
+
+                  )..show();
+                }
+                )
+          ],
         ),
         body: Center(
             child: Container(
                 constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
                 child:
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection(widget.postType)
-                        .snapshots(),
-                    builder: (context, snapshot){
-                      if(snapshot.hasData){
-                        var docs = snapshot.data.docs.reversed;
-                        print(docs.length);
-                        return PostListWidget(postType: widget.postType, allPostsStream: docs,);
-                      } else {
-                        return SpinKitRipple(
-                          color: Colors.blue,
-                          size: 50.0,
-                        );
-                      }
-                    }
+
+                Stack(
+                  children: [
+                    // TODO we might want to change this later
+                    // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection(widget.postType)
+                            .snapshots(),
+                        builder: (context, snapshot){
+                          if(snapshot.hasData){
+                            var docs = snapshot.data.docs.reversed;
+                            print(docs.length);
+                            return PostListWidget(postType: widget.postType, allPostsStream: docs,);
+                          } else {
+                            return SpinKitRipple(
+                              color: Colors.blue,
+                              size: 50.0,
+                            );
+                          }
+                        }
+                    ),
+
+
+
+                  ],
                 )
+
+
                 // if we put PostList in this ListView, lazy load won't load more
                 // ListView(
                 //   // physics: NeverScrollableScrollPhysics(),

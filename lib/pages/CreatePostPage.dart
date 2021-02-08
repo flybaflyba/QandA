@@ -478,8 +478,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
         );
       }
     }
-
-
     return new ListView(
       shrinkWrap: true,
       children: list,

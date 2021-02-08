@@ -438,57 +438,57 @@ class _PostListWidgetState extends State<PostListWidget>{
       if(widget.allPostsStream.length == 0) {
         return Center(child: Text("No Content"),);
       } else {
-        return
-        // [bug is fixed] this list jumps to the top of the list sometimes, need to be fixed
-          // find out why this is happening, because I'm using stream builder for each post.
-          SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: data.length > widget.allPostsStream.length ? false : true,
-            header: WaterDropHeader(),
-            footer: CustomFooter(
-              builder: (BuildContext context,LoadStatus mode){
-                Widget body ;
-                if(mode==LoadStatus.idle){
-                  body =  Text("");
-                }
-                else if(mode==LoadStatus.loading){
-                  body =  SpinKitThreeBounce(
-                    color: Colors.blue,
-                    size: 50.0,
-                  );
-                }
-                else if(mode == LoadStatus.failed){
-                  body = Text("Load Failed! Click retry!");
-                }
-                else if(mode == LoadStatus.canLoading){
-                  body = Text("release to load more");
-                }
-                else{
-                  body = Text("No more Data");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child:body),
+        return SmartRefresher(
+          enableTwoLevel: true,
+          enablePullDown: false,
+          enablePullUp: data.length > widget.allPostsStream.length ? false : true,
+          header: WaterDropHeader(),
+          footer: CustomFooter(
+            builder: (BuildContext context,LoadStatus mode){
+              Widget body ;
+              if(mode==LoadStatus.idle){
+                body =  Text("");
+              }
+              else if(mode==LoadStatus.loading){
+                body =  SpinKitThreeBounce(
+                  color: Colors.blue,
+                  size: 50.0,
                 );
-              },
-            ),
-            controller: refreshController,
-            onRefresh: onRefresh,
-            onLoading: onLoading,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, position) {
-                // return Container(height: 100, child: Center(child: Text("$position"),),);
-                // print("one post build");
-                if (widget.allPostsStream.length > position){
-                  return item(position);
-                } else {
-                  return SizedBox(height: 0,);
-                }
-              },
-              itemCount: data.length,
-            ),
-          );
+              }
+              else if(mode == LoadStatus.failed){
+                body = Text("Load Failed! Click retry!");
+              }
+              else if(mode == LoadStatus.canLoading){
+                body = Text("release to load more");
+              }
+              else{
+                body = Text("No more Data");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child:body),
+              );
+            },
+          ),
+          controller: refreshController,
+          onRefresh: onRefresh,
+          onLoading: onLoading,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (context, position) {
+              // return Container(height: 100, child: Center(child: Text("$position"),),);
+              // print("one post build");
+              if (widget.allPostsStream.length > position){
+                return item(position);
+              } else {
+                return SizedBox(height: 0,);
+              }
+            },
+            itemCount: data.length,
+          ),
+        );
+
+
 
         //   LazyLoadScrollView(
         //     isLoading: isLoadingVertical,
