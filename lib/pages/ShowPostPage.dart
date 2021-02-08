@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -50,13 +51,16 @@ class _ShowPostPageState extends State<ShowPostPage>{
     return Scaffold(
         appBar: AppBar(
           actions: [
+
+            widget.postDocName.contains(FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser.email : "user is not logged in and this sentence won't be in doc name so it returns false")
+            ?
             IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: ()  async {
                   print("clicked on action button of view post page");
                   Post post = new Post();
                   DocumentSnapshot postDoc = await
-                      FirebaseFirestore.instance
+                  FirebaseFirestore.instance
                       .collection("posts")
                       .doc(widget.postDocName).get();
                   post.setPostWithDocumentSnapshot(postDoc);
@@ -70,6 +74,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
 
                 }
             )
+                :
+                Text("")
           ],
         ),
       body:  Center(

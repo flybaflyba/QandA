@@ -352,6 +352,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   Future<void> savePost(BuildContext context) async {
 
+
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // prefs.setString("userName", "");
@@ -377,6 +379,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
       Post post;
 
       if(widget.post == null) {
+
         var currentTimeInUtc = DateTime.now().toUtc();
         var currentTimeInUtcString = currentTimeInUtc.toString().split(".")[0];
         var postDocName = currentTimeInUtcString + " by " + currentUserEmail;
@@ -416,7 +419,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
         post.course= topic == "Campus Life" ? "" : course; // campus life post does not have a course
         post.imageUint8Lists = imageUint8Lists;
 
-        // TODO update post
+        // update post
         post.printOut();
         print("start saving post to database");
         post.update()
@@ -496,7 +499,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
   @override
   Widget build(BuildContext context) {
-    print("build view");
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Create Post"),),
@@ -760,18 +762,13 @@ class _CreatePostPageState extends State<CreatePostPage>{
                     //     )
                     //   ],
                     // )
-
-
+                    
                         :
                     SizedBox(height: 0,),)
                 ],
               )
           ),
         )
-
       )
-
-
-
     );
   }}
