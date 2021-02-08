@@ -762,7 +762,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                     //     )
                     //   ],
                     // )
-                    
+
                         :
                     SizedBox(height: 0,),)
                 ],

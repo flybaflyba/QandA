@@ -266,6 +266,16 @@ class Post {
 
   }
 
+  void delete() {
+
+    FirebaseFirestore.instance.collection('posts')
+        .doc(postDocName)
+        .delete()
+        .then((value) {
+          UniversalFunctions.showToast("Your post is deleted", UniversalValues.toastMessageTypeGoodColor);
+    });
+  }
+
   void likedByUpdate(String actionUserEmail, String action) {
     if(action == "+") {
       print("likedBy add one " + actionUserEmail);

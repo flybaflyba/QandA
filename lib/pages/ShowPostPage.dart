@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,20 +58,66 @@ class _ShowPostPageState extends State<ShowPostPage>{
             IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: ()  async {
-                  print("clicked on action button of view post page");
-                  Post post = new Post();
-                  DocumentSnapshot postDoc = await
-                  FirebaseFirestore.instance
-                      .collection("posts")
-                      .doc(widget.postDocName).get();
-                  post.setPostWithDocumentSnapshot(postDoc);
-                  Navigator.pop(context);
-                  pushNewScreen(
-                    context,
-                    screen: CreatePostPage(post: post,),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+
+                  AwesomeDialog(
+                    context: context,
+                    useRootNavigator: true,
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.BOTTOMSLIDE,
+                    title: 'Update your post?',
+                    desc: "",
+                    btnCancelText: "Delete",
+                    btnCancelColor: Colors.red,
+                    btnCancelOnPress: () {
+
+                      AwesomeDialog(
+                          context: context,
+                          useRootNavigator: true,
+                          dialogType: DialogType.INFO,
+                          animType: AnimType.BOTTOMSLIDE,
+                          title: 'Are you sure to delete?',
+                          desc: "",
+                          btnCancelText: "Delete",
+                          btnCancelColor: Colors.red,
+                          btnCancelOnPress: ()
+                          {
+                            // go to post page, then delete so that we don't see error because we try to show something that's deleted
+                            Navigator.pop(context);
+                            Future.delayed(Duration(milliseconds: 500)).then((_) async {
+                              Post post = new Post(postDocName: widget.postDocName);
+                              post.delete();
+                            });
+
+                          },
+                          btnOkText: "Cancel",
+                          btnOkColor: Colors.blueAccent,
+                          btnOkOnPress: () {},
+                          )..show();
+
+
+                    },
+                    btnOkText: "Edit",
+                    btnOkColor: Colors.blueAccent,
+                    btnOkOnPress: () async {
+                      print("clicked on action button of view post page");
+                      Post post = new Post();
+                      DocumentSnapshot postDoc = await
+                      FirebaseFirestore.instance
+                          .collection("posts")
+                          .doc(widget.postDocName).get();
+                      post.setPostWithDocumentSnapshot(postDoc);
+                      Navigator.pop(context);
+                      pushNewScreen(
+                        context,
+                        screen: CreatePostPage(post: post,),
+                        withNavBar: false, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      );
+
+                    },
+                  )..show();
+
+
 
                 }
             )
