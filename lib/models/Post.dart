@@ -123,7 +123,7 @@ class Post {
         dateTimeNow = DateTime.now();
         print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
         dateTimeLast = DateTime.now();
-        Reference ref2 = FirebaseStorage.instance.ref('post Images/$postDocName/$name thumbnail');
+        Reference ref2 = FirebaseStorage.instance.ref('post images/$postDocName/$name thumbnail');
         Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
         // Uint8List thumbnailUint8list = imageUint8List;
 

@@ -86,7 +86,6 @@ class _CreatePostPageState extends State<CreatePostPage>{
         contentTextEditingController.text = content;
         title = widget.post.title;
 
-        // TODO download images to local
 
         // downloadImages();
 
@@ -100,19 +99,19 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
 
 
-    if (kIsWeb) {
-      Fluttertoast.showToast(
-          msg: "Image processing is extremely slow in browser, if you are uploading images, we suggest you upload smaller images, or use the app versions of our app",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 3,
-          backgroundColor: UniversalValues.toastMessageTypeWarningColor,
-          webBgColor: "linear-gradient(to right, #cc00ff, #ff0000)",
-          webPosition: "right",
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    }
+    // if (kIsWeb) {
+    //   Fluttertoast.showToast(
+    //       msg: "Image processing is extremely slow in browser, if you are uploading images, we suggest you upload smaller images, or use the app versions of our app",
+    //       toastLength: Toast.LENGTH_LONG,
+    //       gravity: ToastGravity.BOTTOM,
+    //       timeInSecForIosWeb: 3,
+    //       backgroundColor: UniversalValues.toastMessageTypeWarningColor,
+    //       webBgColor: "linear-gradient(to right, #cc00ff, #ff0000)",
+    //       webPosition: "right",
+    //       textColor: Colors.white,
+    //       fontSize: 16.0
+    //   );
+    // }
   }
 
   void resetCreatePostPageFields() {

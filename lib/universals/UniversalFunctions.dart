@@ -31,7 +31,7 @@ class UniversalFunctions{
         timeInSecForIosWeb: 3,
         backgroundColor: toastMessageType,
         webBgColor: toastMessageType == UniversalValues.toastMessageTypeWarningColor ? "linear-gradient(to right, #cc00ff, #ff0000)" : "	linear-gradient(to right, #00b09b, #96c93d)",
-        webPosition: "center",
+        webPosition: "left",
         textColor: Colors.white,
         fontSize: 16.0
     );
