@@ -227,6 +227,45 @@ class Post {
 
   }
 
+  Future<void> update() async {
+
+    await uploadImages(imageUint8Lists)
+        .then((urls) {
+      print("after upload images function is done, we create post doc with url list ready");
+      print(urls.length);
+      // imageUrls = urls;
+      // the post might already have links if it's editing.
+      for(var u in urls.keys.toList()){
+        thumbnailAndImageUrls[u] = urls[u];
+      }
+      // thumbnailAndImageUrls = urls;
+      print("${thumbnailAndImageUrls.length} and ${imageUint8Lists.length}");
+      if(thumbnailAndImageUrls.length != imageUint8Lists.length) {
+        UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
+      }
+      // url list is where the images are saved
+      FirebaseFirestore.instance.collection('posts')
+          .doc(postDocName)
+          .update({
+        "title": title,
+        "content": content,
+        "author email": authorEmail,
+        "author": author,
+        "post doc name": postDocName,
+        "topic" : topic,
+        "course" : course,
+        "created time": createdTime,
+        // "image urls": imageUrls,
+        "liked by": likedBy,
+        "comments": comments,
+        "thumbnail and image urls": thumbnailAndImageUrls
+      })
+          .then((value) => print("Post Created"))
+          .catchError((error) => print("Failed to create Post: $error"));
+    });
+
+  }
+
   void likedByUpdate(String actionUserEmail, String action) {
     if(action == "+") {
       print("likedBy add one " + actionUserEmail);

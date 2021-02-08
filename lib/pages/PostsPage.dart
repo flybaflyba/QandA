@@ -85,7 +85,8 @@ class _PostsPageState extends State<PostsPage>{
                         // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
                         StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
-                                .collection("posts") // TODO change to just posts
+                                .collection("posts")
+                                .where("topic", isEqualTo: widget.postType == "academic posts" ? "Academic" : "Campus Life")
                                 .snapshots(),
                             builder: (context, snapshot){
                               if(snapshot.hasData){

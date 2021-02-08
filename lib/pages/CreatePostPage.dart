@@ -392,39 +392,47 @@ class _CreatePostPageState extends State<CreatePostPage>{
           createdTime: currentTimeInUtc, // with timezone info
           imageUint8Lists: imageUint8Lists,
         );
+
+        post.printOut();
+        print("start saving post to database");
+        post.create()
+            .then((value) {
+          print("finish saving post");
+          setState(() {
+            workInProgress = false;
+          });
+          resetCreatePostPageFields();
+          Navigator.pop(context);
+          // push to a new page
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+        });
+
       } else {
 
-        // TODO update post, no need to delete
-        // if topic changed, we need to delete the old one, because the new post will be save into a another category, the old one won't be overridden.
-        if (widget.post.topic != topic) {
-          var topicLowerCase = widget.post.topic.toLowerCase();
-          FirebaseFirestore.instance.collection('$topicLowerCase posts')
-              .doc(widget.post.postDocName)
-              .delete();
-        }
         post = widget.post;
         post.title=title;
         post.content=content;
         post.topic=topic;
-        post.course=course;
+        post.course= topic == "Campus Life" ? "" : course; // campus life post does not have a course
         post.imageUint8Lists = imageUint8Lists;
+
+        // TODO update post
+        post.printOut();
+        print("start saving post to database");
+        post.update()
+            .then((value) {
+          print("finish saving post");
+          setState(() {
+            workInProgress = false;
+          });
+          resetCreatePostPageFields();
+          Navigator.pop(context);
+          // push to a new page
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+        });
+
       }
 
-      post.printOut();
-
-      print("start saving post to database");
-
-      post.create()
-          .then((value) {
-        print("finish saving post");
-        setState(() {
-          workInProgress = false;
-        });
-        resetCreatePostPageFields();
-        Navigator.pop(context);
-        // push to a new page
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
-      });
 
     }
 
