@@ -8,7 +8,9 @@ import 'package:qanda/models/Post.dart';
 import 'package:qanda/pages/ShowPostPage.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
-class PostTileWidget extends StatelessWidget{
+
+
+class PostTileWidget extends StatefulWidget{
 
   final int position;
   // final String postType;
@@ -22,27 +24,58 @@ class PostTileWidget extends StatelessWidget{
     @required this.post,
   });
 
+
+  @override
+  _PostTileWidgetState createState() => _PostTileWidgetState();
+}
+
+class _PostTileWidgetState extends State<PostTileWidget>{
+
+  var authorProfileImageUrl = "";
+
+  Future<void> getAuthorProfileImage() async {
+
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.post.authorEmail)
+        .get();
+
+    setState(() {
+      authorProfileImageUrl = documentSnapshot["profile image url"];
+    });
+    print("author profile image at ");
+    print(authorProfileImageUrl);
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    getAuthorProfileImage();
+
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Padding(
           padding: EdgeInsets.only(top: 20, bottom: 15, left: 20, right: 20), // on the bottom there is often a ... or images, 20 feels a too large padding for bottom
           child: InkWell(
             onTap: () {
-              print("tapped on Post: " + post.postDocName);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+              print("tapped on Post: " + widget.post.postDocName);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: widget.post.postDocName,),));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                post.course != ""
+                widget.post.course != ""
                     ?
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    post.course,
+                    widget.post.course,
                     style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -69,24 +102,52 @@ class PostTileWidget extends StatelessWidget{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(3),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          post.author + " " + position.toString(),
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 3),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.grey[300],
+                                  border: Border.all(color: const Color(0x33A6A6A6)),
+                                  image: DecorationImage(
+                                      image: authorProfileImageUrl == "" ?
+                                      AssetImage('assets/images/no_photo.png',)
+                                      :
+                                      NetworkImage(authorProfileImageUrl),
+                                      fit: BoxFit.fill)
+                              ),
+                            )
                           ),
                         ),
-                      ),
+
+                        Padding(
+                          padding: EdgeInsets.all(3),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              widget.post.author + " " + widget.position.toString(),
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+
+
                     Padding(
                       padding: EdgeInsets.all(3),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child:Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch))),
+                        child:Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(widget.post.createdTime.microsecondsSinceEpoch))),
                       ),
                     ),
                   ],
@@ -96,7 +157,7 @@ class PostTileWidget extends StatelessWidget{
                 Align(
                   alignment: Alignment.centerLeft,
                   child: AutoSizeText(
-                    post.content,
+                    widget.post.content,
                     maxLines: 3,
                     style: TextStyle(fontSize: 20),
                     minFontSize: 15,
@@ -105,7 +166,7 @@ class PostTileWidget extends StatelessWidget{
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          post.content,
+                          widget.post.content,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -153,10 +214,10 @@ class PostTileWidget extends StatelessWidget{
 
         Padding(
             padding: EdgeInsets.only(bottom: 10),
-            child: ImageGridViewWidget(thumbnailAndImageUrls: post.thumbnailAndImageUrls, context: context) // UniversalWidgets.gridView(post.thumbnailAndImageUrls, context),
+            child: ImageGridViewWidget(thumbnailAndImageUrls: widget.post.thumbnailAndImageUrls, context: context) // UniversalWidgets.gridView(post.thumbnailAndImageUrls, context),
         ),
 
-        LikeAndCommentBarWidget(context: context, post: post, pushToNewPage: true,),
+        LikeAndCommentBarWidget(context: context, post: widget.post, pushToNewPage: true,),
 
         SizedBox(
           height: 10,
@@ -372,3 +433,9 @@ class PostTileWidget extends StatelessWidget{
     // );
   }
 }
+
+
+// class PostTileWidget extends StatelessWidget{
+//
+//
+// }
