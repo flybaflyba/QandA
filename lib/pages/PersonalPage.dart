@@ -107,14 +107,21 @@ class _PersonalPageState extends State<PersonalPage>{
                 onTap: () {
 
                   showCupertinoModalBottomSheet(
-
                     enableDrag: true,
                     isDismissible: true,
                     useRootNavigator: true,
                     context: context,
                     duration: Duration(milliseconds: 700),
                     builder: (context) => UserInfoFormWidget(userName: " ", messageText: "UpdateProfile",),
-                  );
+                  ).then((value) {
+                    print("user info updated ++++++++++++++++++++++++++++++");
+                    userInformation.get()
+                    .whenComplete(() {
+                      setState(() {
+                        userInformation.profileImageUrl = userInformation.profileImageUrl;
+                      });
+                    });
+                  });
 
 
                 },
