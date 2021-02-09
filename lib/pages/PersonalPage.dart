@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/models/UserInformation.dart';
 import 'package:qanda/pages/SignInUpPage.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
@@ -58,11 +59,9 @@ class _PersonalPageState extends State<PersonalPage>{
                     );
                   } else {
                     print("sign out button pressed");
+                    UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
+                    userInformation.clearLocal();
                     FirebaseAuth.instance.signOut();
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.setString('userName', "");
-                    await prefs.setString('userEmail', "");
-                    await prefs.setString('userMajor',  "");
                     UniversalFunctions.showToast("Your are logged out", UniversalValues.toastMessageTypeGoodColor);
                   }
 
