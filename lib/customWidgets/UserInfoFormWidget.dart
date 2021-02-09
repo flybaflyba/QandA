@@ -52,7 +52,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
 
 
   void getSampleProfileImageUrls(BuildContext context) async {
-    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("profile images").listAll();
+    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("sample profile images").listAll();
     for(firebase_storage.Reference ref in result.items){
       var url = await ref.getDownloadURL();
       print(url);
@@ -108,7 +108,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                 border: Border.all(color: const Color(0x33A6A6A6)),
                                 image: DecorationImage(
                                     image: profileImageUrlOrUInt8List.length == 0 ?
-                                   AssetImage('assets/images/byu_hawaii_medallion_logo.png',)
+                                   AssetImage('assets/images/no_photo.png',)
                                         :
                                     profileImageUrlOrUInt8List[0].runtimeType == String
                                         ?
@@ -129,7 +129,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                             ?
 
                         Container(
-                          color: Colors.grey[300],
+                          // color: Colors.grey[300],
                           child: Stack(
                             children: [
 
@@ -145,7 +145,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                     alignment: Alignment.topRight,
                                     child: CircleAvatar(
                                       radius: 14.0,
-                                      backgroundColor: Colors.white,
+                                      backgroundColor: Colors.grey[300],
                                       child: Icon(Icons.close, color: Colors.red),
                                     ),
                                   ),
