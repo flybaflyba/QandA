@@ -33,7 +33,7 @@ class _LargeImagesPhotoWidgetState extends State<LargeImagesPhotoWidget> {
                         return PhotoViewGalleryPageOptions(
                           filterQuality: FilterQuality.high,
                           imageProvider: NetworkImage(widget.imageUrls[index]),
-                          initialScale: PhotoViewComputedScale.contained * 0.8,
+                          initialScale: PhotoViewComputedScale.contained * 0.99,
                           heroAttributes: PhotoViewHeroAttributes(
                               tag: widget.imageUrls[index]),
                         );

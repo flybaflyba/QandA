@@ -280,8 +280,8 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                               print(userName);
 
                               if (userName == "") {
-                                print("user info not set");
-                                UniversalFunctions.showToast("Username is not set", UniversalValues.toastMessageTypeWarningColor);
+                                print("user name not set");
+                                UniversalFunctions.showToast("Username not set", UniversalValues.toastMessageTypeWarningColor);
                               } else {
                                 UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
                                 userInformation.name = userName;
@@ -293,9 +293,10 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                   } else { // if profile image is image
                                     userInformation.uploadImage(profileImageUrlOrUInt8List[0]); // update is already in upload image
                                   }
+                                  UniversalFunctions.showToast("Profile photo updated", UniversalValues.toastMessageTypeGoodColor);
 
                                 } else {
-                                  UniversalFunctions.showToast("profile photo not set", UniversalValues.toastMessageTypeWarningColor);
+                                  UniversalFunctions.showToast("Profile photo not set", UniversalValues.toastMessageTypeWarningColor);
                                   userInformation.update();
                                 }
 
@@ -304,7 +305,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                 UniversalFunctions.showToast("Username updated", UniversalValues.toastMessageTypeGoodColor);
                               }
 
-                              // Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
                             },
                           ),
                         ),
