@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/pages/SignInUpPage.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,29 @@ class PersonalPage extends StatefulWidget{
 
 class _PersonalPageState extends State<PersonalPage>{
 
+  var signInOurButtonIcon = Icon(Icons.person);
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User user) {
+      if (user == null) {
+        print('User is currently signed out!');
+        setState(() {
+          signInOurButtonIcon = Icon(Icons.login);
+        });
+      } else {
+        print('User is signed in!');
+        setState(() {
+          signInOurButtonIcon = Icon(Icons.logout);
+        });
+
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,22 +47,25 @@ class _PersonalPageState extends State<PersonalPage>{
           leading: Icon(Icons.logout, color: UniversalValues.primaryColor,), //  to make the title center
           actions: [
             IconButton(
-                icon: Icon(Icons.logout),
+                icon: signInOurButtonIcon,
                 onPressed: () async {
-                  print("sign out button pressed");
-                  FirebaseAuth.instance.signOut();
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('userName', "");
-                  await prefs.setString('userEmail', "");
-                  await prefs.setString('userMajor',  "");
-                  UniversalFunctions.showToast("Your are logged out", UniversalValues.toastMessageTypeGoodColor);
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => SignInUpPage(),));
-                  // pushNewScreen(
-                  //   context,
-                  //   screen: SignInUpPage(),
-                  //   withNavBar: false, // OPTIONAL VALUE. True by default.
-                  //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  // );
+                  if(FirebaseAuth.instance.currentUser == null) {
+                    pushNewScreen(
+                      context,
+                      screen: SignInUpPage(),
+                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    );
+                  } else {
+                    print("sign out button pressed");
+                    FirebaseAuth.instance.signOut();
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('userName', "");
+                    await prefs.setString('userEmail', "");
+                    await prefs.setString('userMajor',  "");
+                    UniversalFunctions.showToast("Your are logged out", UniversalValues.toastMessageTypeGoodColor);
+                  }
+
                 }
             ),
           ],

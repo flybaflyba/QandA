@@ -43,54 +43,104 @@ class _PostsPageState extends State<PostsPage>{
 
     return  Scaffold(
         appBar: AppBar(
-          title: Center(
-            child: Text(
-                widget.postType == "academic posts"
-                    ?
-                widget.searchCourse == null
-                    ?
-                "Academic"
-                    :
-                widget.searchCourse
-                    :
-                "Campus Life"
-            ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+
+              widget.searchCourse == null ?
+              Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(""),
+
+                  )
+              ) :
+              SizedBox(width: 0,),
+
+              Text(
+                  widget.postType == "academic posts"
+                      ?
+                  widget.searchCourse == null
+                      ?
+                  "Academic"
+                      :
+                  widget.searchCourse
+                      :
+                  "Campus Life"
+              ),
+              Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: widget.postType == "academic posts"
+                        ?
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          print("search by subject");
+                          AwesomeDialog(
+                            context: context,
+                            useRootNavigator: true,
+                            animType: AnimType.SCALE,
+                            dialogType: DialogType.QUESTION,
+                            dialogBackgroundColor: Color(0x00000000),
+                            body: SearchCourseWidget(),
+
+                          )..show()
+                              .then((value) {
+                            print(value);
+                            print("dialog closed");
+                            print(UniversalValues.searchCourseTerm);
+
+                            // push to course page then reset search term
+                            if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
+                              var searchTerm = UniversalValues.searchCourseTerm;
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
+                            }
+                            UniversalValues.searchCourseTerm = "";
+                          });
+                        }
+                    )
+                        :
+                    Text(""),
+                  )
+
+              )
+            ],
           ),
-          leading: widget.searchCourse == null ? Text("") : BackButton(),
+          // leading: widget.searchCourse == null ? Text("a") : BackButton(),
           actions: [
+            // widget.postType == "academic posts"
+            //     ?
+            // IconButton(
+            //     icon: Icon(Icons.search),
+            //     onPressed: () {
+            //       print("search by subject");
+            //       AwesomeDialog(
+            //         context: context,
+            //         useRootNavigator: true,
+            //         animType: AnimType.SCALE,
+            //         dialogType: DialogType.QUESTION,
+            //         dialogBackgroundColor: Color(0x00000000),
+            //         body: SearchCourseWidget(),
+            //
+            //       )..show()
+            //           .then((value) {
+            //         print(value);
+            //         print("dialog closed");
+            //         print(UniversalValues.searchCourseTerm);
+            //
+            //         // push to course page then reset search term
+            //         if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
+            //           var searchTerm = UniversalValues.searchCourseTerm;
+            //           Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
+            //         }
+            //         UniversalValues.searchCourseTerm = "";
+            //       });
+            //     }
+            // )
+            //     :
+            // Text("a")
 
-
-            widget.postType == "academic posts"
-                ?
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  print("search by subject");
-                  AwesomeDialog(
-                    context: context,
-                    useRootNavigator: true,
-                    animType: AnimType.SCALE,
-                    dialogType: DialogType.QUESTION,
-                    dialogBackgroundColor: Color(0x00000000),
-                    body: SearchCourseWidget(),
-
-                  )..show()
-                      .then((value) {
-                    print(value);
-                    print("dialog closed");
-                    print(UniversalValues.searchCourseTerm);
-
-                    // TODO push to course page then reset search term
-                    if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
-                      var searchTerm = UniversalValues.searchCourseTerm;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
-                    }
-                    UniversalValues.searchCourseTerm = "";
-                  });
-                }
-            )
-                :
-            Text(" ")
 
           ],
         ),
