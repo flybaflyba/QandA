@@ -28,6 +28,8 @@ class UserInformation {
 
   Future<void> get() async {
 
+    print("getting user info from database");
+
     DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(email)
@@ -40,6 +42,15 @@ class UserInformation {
         await prefs.setString('userEmail', documentSnapshot.data()["email"]);
         await prefs.setString('userMajor',  documentSnapshot.data()["major"]);
         await prefs.setString('profileImageUrl',  documentSnapshot.data()["profile image url"]);
+
+        name = documentSnapshot.data()["name"];
+        email = documentSnapshot.data()["email"];
+        major = documentSnapshot.data()["major"];
+        profileImageUrl = documentSnapshot.data()["profile image url"];
+
+        print(name);
+        print(email);
+        print(profileImageUrl);
 
       } else {
         print('User document does not exist on the database');
@@ -54,6 +65,7 @@ class UserInformation {
     await prefs.setString('userEmail', "");
     await prefs.setString('userMajor',  "");
     await prefs.setString('profileImageUrl',  "");
+
   }
 
   // useless
