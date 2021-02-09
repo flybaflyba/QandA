@@ -12,7 +12,7 @@ class UserInformation {
   var name = "";
   var email = "";
   var major = "";
-  var profileImageUrl;
+  var profileImageUrl = "";
 
   UserInformation({
     var name,
@@ -79,30 +79,34 @@ class UserInformation {
   }
 
 
-  Future<void> uploadImage(Uint8List imageUint8List) async {
+  Future<void> uploadImage(var imageUint8List) async {
 
-    Reference ref = FirebaseStorage.instance.ref('profile images/$email');
+    if(imageUint8List.runtimeType == String) {
+      profileImageUrl = imageUint8List;
+    } else {
+      Reference ref = FirebaseStorage.instance.ref('profile images/$email');
+      imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
+      imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
+      Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
+      SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
+      try {
+        await ref.putData(thumbnailUint8list, settableMetadata)
+            .timeout((Duration(seconds: 10)), onTimeout: () {
+          UniversalFunctions.showToast("Your internet is too slow", UniversalValues.toastMessageTypeWarningColor);
+          return null;
+        })
+            .catchError((e){
+          print("image upload failed due to error $e");
+        });
+        String imageUrl = await ref.getDownloadURL();
+        profileImageUrl = imageUrl;
 
-    imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
-    imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
-    Uint8List thumbnailUint8list = imagePackage.encodePng(thumbnail);
-    SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
-    try {
-
-      await ref.putData(thumbnailUint8list, settableMetadata)
-          .timeout((Duration(seconds: 10)), onTimeout: () {
-        UniversalFunctions.showToast("Your internet is too slow", UniversalValues.toastMessageTypeWarningColor);
-        return null;
-      })
-          .catchError((e){
+      } on FirebaseException catch (e) {
         print("image upload failed due to error $e");
-      });
-      String imageUrl = await ref.getDownloadURL();
-      profileImageUrl = imageUrl;
-      update();
-    } on FirebaseException catch (e) {
-      print("image upload failed due to error $e");
+      }
     }
+    update();
+
   }
 
   void update() {

@@ -34,6 +34,8 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
   File image;
   final picker = ImagePicker();
 
+  var userName = "";
+
   Future getImage(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(source: imageSource);
     setState(() {
@@ -63,9 +65,11 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
   }
 
 
+
   @override
   void initState() {
     super.initState();
+    userName = widget.userName;
     getSampleProfileImageUrls(context);
   }
 
@@ -104,7 +108,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                 border: Border.all(color: const Color(0x33A6A6A6)),
                                 image: DecorationImage(
                                     image: profileImageUrlOrUInt8List.length == 0 ?
-                                    NetworkImage("")
+                                   AssetImage('assets/images/byu_hawaii_medallion_logo.png',)
                                         :
                                     profileImageUrlOrUInt8List[0].runtimeType == String
                                         ?
@@ -226,8 +230,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                     ),
 
 
-
-              Padding(
+                    Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +242,8 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                             margin: EdgeInsets.only(left: 10),
                             child: TextField(
                               onChanged: (value){
-                                widget.userName = value;
+                                userName = value;
+                                print(userName);
                               },
                               decoration: InputDecoration(
                                 hintText: "What do you want to be called?",
@@ -273,19 +277,34 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                             text: "Ok",
                             onPressed: () async {
 
-                              if (widget.userName == "") {
-                                print("user name not set");
+                              print(userName);
+
+                              if (userName == "") {
+                                print("user info not set");
                                 UniversalFunctions.showToast("Username is not set", UniversalValues.toastMessageTypeWarningColor);
                               } else {
                                 UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
-                                userInformation.name = widget.userName;
-                                userInformation.update();
+                                userInformation.name = userName;
+
+                                if(profileImageUrlOrUInt8List.length != 0) { // if profile image is chosen
+                                  if(profileImageUrlOrUInt8List.runtimeType == String) { // if profile image is link
+                                    userInformation.profileImageUrl = profileImageUrlOrUInt8List[0];
+                                    userInformation.update();
+                                  } else { // if profile image is image
+                                    userInformation.uploadImage(profileImageUrlOrUInt8List[0]); // update is already in upload image
+                                  }
+
+                                } else {
+                                  UniversalFunctions.showToast("profile photo not set", UniversalValues.toastMessageTypeWarningColor);
+                                  userInformation.update();
+                                }
+
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                                prefs.setString("userName", widget.userName);
+                                prefs.setString("userName", userName);
                                 UniversalFunctions.showToast("Username updated", UniversalValues.toastMessageTypeGoodColor);
                               }
 
-                              Navigator.of(context, rootNavigator: true).pop();
+                              // Navigator.of(context, rootNavigator: true).pop();
                             },
                           ),
                         ),
