@@ -71,6 +71,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
     if (widget.post == null) {
       print("creating new post");
+      topic = "What are you posting for?";
     } else {
       print("editing post");
       setState(() {
@@ -121,7 +122,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
      courseTextEditingController.text = "";
      title = "";
      content = "";
-     topic = "What are Your Posting for?";
+     topic = "What are your posting for?";
      topicSelectionList = [false, false];
      workInProgress = false;
      imageAssets.clear();
@@ -143,7 +144,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
   //     dateTimeLast = DateTime.now();
   //
   //     // create a thumbnail to store in the data base, we don't need the larger image every time
-  //     imagePackage.Image image = imagePackage.decodeImage(i); // TODO this process of is taking long time only ON WEB
+  //     imagePackage.Image image = imagePackage.decodeImage(i);
   //     dateTimeNow = DateTime.now();
   //     print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
   //     dateTimeLast = DateTime.now();
@@ -517,7 +518,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                   ListView(
                     children: [
 
-                      TitleWidget(title: topic,),
+                      TitleWidget(title: topic == "Campus Life" ? "Share your life" : topic == "Academic" ? "Ask a question" : topic,),
 
                       Center(
                         child: ToggleButtons(
@@ -627,7 +628,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
                         margin: EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            content != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Content",),),) : SizedBox(height: 0,),
+                            content != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("say something",),),) : SizedBox(height: 0,),
                             TextField(
                               controller: contentTextEditingController,
                               minLines: 1,
@@ -640,7 +641,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
 
                               },
                               decoration: InputDecoration(
-                                hintText: "Content",
+                                hintText: "say something",
                                 alignLabelWithHint: true,
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.blue, width: 1.0),
@@ -735,6 +736,8 @@ class _CreatePostPageState extends State<CreatePostPage>{
                             ],
                           )
                       ),
+
+                      SizedBox(height: 200,)
 
                     ],
                   ),
