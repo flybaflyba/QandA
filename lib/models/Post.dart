@@ -29,6 +29,7 @@ class Post {
   List<dynamic> likedBy = [];
   List<dynamic> comments = [];
   Map thumbnailAndImageUrls = Map<dynamic, dynamic>();
+  var authorImageUrl = "";
 
   Post({
     var title,
@@ -40,6 +41,7 @@ class Post {
     var topic,
     var course,
     var createdTime,
+    var authorImageUrl,
   }){
     if(title != null){ this.title = title; }
     if(content != null){ this.content = content; }
@@ -50,6 +52,7 @@ class Post {
     if(course != null){ this.course = course; }
     if(createdTime != null){ this.createdTime = createdTime; }
     if(imageUint8Lists != null){ this.imageUint8Lists = imageUint8Lists; }
+    if(authorImageUrl != null){ this.authorImageUrl = authorImageUrl; }
   }
 
   void setPostWithDocumentSnapshot(DocumentSnapshot postDocumentSnapshot) {
@@ -77,6 +80,7 @@ class Post {
     likedBy = postDocumentSnapshot.data().keys.contains("liked by") ? postDocumentSnapshot["liked by"] : "";
     // comments = postDocumentSnapshot.data().keys.contains("comments") ? postDocumentSnapshot["comments"] : [];
     thumbnailAndImageUrls = postDocumentSnapshot.data().keys.contains("thumbnail and image urls") ? postDocumentSnapshot["thumbnail and image urls"] : Map();
+    authorImageUrl = postDocumentSnapshot.data().keys.contains("author image url") ? postDocumentSnapshot["author image url"] : "";
   }
 
   // upload images, and get their urls to store in the post doc
@@ -219,7 +223,8 @@ class Post {
             // "image urls": imageUrls,
             "liked by": likedBy,
             "comments": comments,
-            "thumbnail and image urls": thumbnailAndImageUrls
+            "thumbnail and image urls": thumbnailAndImageUrls,
+            "author image url": authorImageUrl,
           })
               .then((value) => print("Post Created"))
               .catchError((error) => print("Failed to create Post: $error"));
@@ -258,7 +263,8 @@ class Post {
         // "image urls": imageUrls,
         "liked by": likedBy,
         "comments": comments,
-        "thumbnail and image urls": thumbnailAndImageUrls
+        "thumbnail and image urls": thumbnailAndImageUrls,
+        "author image url": authorImageUrl,
       })
           .then((value) => print("Post Created"))
           .catchError((error) => print("Failed to create Post: $error"));
@@ -308,6 +314,8 @@ class Post {
     print("imageUint8Lists.length： " + imageUint8Lists.length.toString());
     print("comments: " + comments.toString());
     print("thumbnailAndImageUrls: " + thumbnailAndImageUrls.toString());
+    print("authorImageUrl: " +authorImageUrl);
+
   }
 }
 

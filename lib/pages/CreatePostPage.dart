@@ -359,6 +359,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
     // prefs.setString("userName", "");
 
     var userName = prefs.get("userName");
+    var userImageUrl = prefs.get("profileImageUrl");
 
     print(userName);
 
@@ -394,6 +395,7 @@ class _CreatePostPageState extends State<CreatePostPage>{
           course: course,
           createdTime: currentTimeInUtc, // with timezone info
           imageUint8Lists: imageUint8Lists,
+          authorImageUrl: userImageUrl,
         );
 
         post.printOut();
