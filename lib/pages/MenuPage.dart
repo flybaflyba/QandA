@@ -68,6 +68,7 @@ class _MenuPageState extends State<MenuPage>{
     //
     // });
 
+    // get current user info when launch
     if(FirebaseAuth.instance.currentUser != null) {
       // check if we have user name locally if not get from database
       UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);

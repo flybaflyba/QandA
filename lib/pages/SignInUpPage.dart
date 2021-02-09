@@ -44,6 +44,18 @@ class _SignInUpPageState extends State<SignInUpPage> {
           print("I'm signing in!!!");
           // UserInformation userInformation = new UserInformation(email: userCredential.user.email);
           // userInformation.get(); // save user info to shared preference
+
+          UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
+          userInformation.get()
+              .then((value) async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            var userName = prefs.getString("userName");
+            if(userName == null || userName == "") {
+              print("missing user name from database");
+            } else {
+              print("user name is not saved locally but get from database");
+            }
+          });
         }
 
       } on FirebaseAuthException catch (e) {
@@ -86,6 +98,17 @@ class _SignInUpPageState extends State<SignInUpPage> {
         // create a user information document in database
         UserInformation userInformation = UserInformation(email: data.name);
         userInformation.create();
+
+        userInformation.get()
+            .then((value) async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var userName = prefs.getString("userName");
+          if(userName == null || userName == "") {
+            print("missing user name from database");
+          } else {
+            print("user name is not saved locally but get from database");
+          }
+        });
 
       }
       on FirebaseAuthException catch (e) {

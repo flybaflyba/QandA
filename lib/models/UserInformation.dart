@@ -37,6 +37,13 @@ class UserInformation {
 
   }
 
+  Future<void> clearLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userName', "");
+    await prefs.setString('userEmail', "");
+    await prefs.setString('userMajor',  "");
+  }
+
   // useless
   // void setUserInformationWithDocumentSnapshot(DocumentSnapshot userInformationDocumentSnapshot) {
   //   name = userInformationDocumentSnapshot["name"];
