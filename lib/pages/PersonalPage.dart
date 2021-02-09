@@ -116,7 +116,7 @@ class _PersonalPageState extends State<PersonalPage>{
                   ).then((value) {
                     print("user info updated ++++++++++++++++++++++++++++++");
                     userInformation.get()
-                    .whenComplete(() {
+                    .whenComplete(() { // bug here, when dialog close, user info is not updated in database, might use stream 
                       setState(() {
                         userInformation.profileImageUrl = userInformation.profileImageUrl;
                       });
