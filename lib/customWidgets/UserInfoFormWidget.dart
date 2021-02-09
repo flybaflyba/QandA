@@ -1,18 +1,23 @@
 
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nice_button/nice_button.dart';
 import 'package:qanda/models/UserInformation.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UserInfoFormWidget extends StatefulWidget{
 
   UserInfoFormWidget({Key key, this.userName, this.messageText}) : super(key: key);
   var userName;
   var messageText;
-
+  
   @override
   _UserInfoFormWidgetState createState() => _UserInfoFormWidgetState();
 }
@@ -21,6 +26,48 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
 
   var boxConstraints = BoxConstraints(minWidth: 100, maxWidth: 250);
   var boxColor = Colors.white;
+  List<String> sampleProfileImageUrls = [];
+  List<dynamic> profileImageUrlOrUInt8List = new List<dynamic>();
+
+  var pickImageOptionShow = false;
+
+  File image;
+  final picker = ImagePicker();
+
+  Future getImage(ImageSource imageSource) async {
+    final pickedFile = await picker.getImage(source: imageSource);
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+        Uint8List uInt8list = image.readAsBytesSync();
+        profileImageUrlOrUInt8List.clear();
+        profileImageUrlOrUInt8List.add(uInt8list);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+
+  void getSampleProfileImageUrls(BuildContext context) async {
+    firebase_storage.ListResult result = await firebase_storage.FirebaseStorage.instance.ref("profile images").listAll();
+    for(firebase_storage.Reference ref in result.items){
+      var url = await ref.getDownloadURL();
+      print(url);
+      setState(() {
+        sampleProfileImageUrls.add(url);
+      });
+    }
+    print(sampleProfileImageUrls);
+    print("end of getting sampleProfileImageUrls");
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getSampleProfileImageUrls(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +94,140 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                     ),
 
                     Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                        child: Container(
+                          width: 80.0,
+                          height: 80.0,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[300],
+                                border: Border.all(color: const Color(0x33A6A6A6)),
+                                image: DecorationImage(
+                                    image: profileImageUrlOrUInt8List.length == 0 ?
+                                    NetworkImage("")
+                                        :
+                                    profileImageUrlOrUInt8List[0].runtimeType == String
+                                        ?
+                                    NetworkImage(profileImageUrlOrUInt8List[0])
+                                        :
+                                    MemoryImage(profileImageUrlOrUInt8List[0]),
+                                    fit: BoxFit.fill)
+                            ),
+                        ),
+                    ),
+
+
+
+                    Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                        child:
+                        pickImageOptionShow
+                            ?
+
+                        Container(
+                          color: Colors.grey[300],
+                          child: Stack(
+                            children: [
+
+                              Positioned(
+                                right: 0.0,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      pickImageOptionShow = false;
+                                    });
+                                  },
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: CircleAvatar(
+                                      radius: 14.0,
+                                      backgroundColor: Colors.white,
+                                      child: Icon(Icons.close, color: Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                      icon: Icon(Icons.camera_alt, color: Colors.blueAccent, size: 40,),
+                                      onPressed: () {
+                                        getImage(ImageSource.camera);
+                                      }
+                                  ),
+                                  IconButton(
+                                      icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent, size: 40,),
+                                      onPressed: () {
+                                        getImage(ImageSource.gallery);
+                                      }
+                                  )
+                                ],
+
+                              ),
+
+                            ],
+                          ),
+                        )
+                            :
+
+                        GridView.count(
+                          physics: ScrollPhysics(),
+                          // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
+                          shrinkWrap: true,
+                          crossAxisCount: 5,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          children: List.generate(sampleProfileImageUrls.length, (index) {
+                            if(index == 0) {
+                              return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      pickImageOptionShow = true;
+                                    });
+                                  },
+                                  child:  Container(
+                                    width: 15.0,
+                                    height: 15.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.grey[300]
+                                    ),
+                                    child: Icon(Icons.add_photo_alternate),
+                                  )
+                              );
+                            } else {
+                              return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      profileImageUrlOrUInt8List.clear();
+                                      profileImageUrlOrUInt8List.add(sampleProfileImageUrls[index]);
+                                    });
+                                  },
+                                  child: Container(
+                                      width: 15.0,
+                                      height: 15.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: new NetworkImage(
+                                                  sampleProfileImageUrls[index]
+                                              )
+                                          )
+                                      )
+                                  )
+                              );
+                            }
+                          }
+                          ),
+                        )
+                    ),
+
+
+
+              Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
