@@ -243,7 +243,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                             child: TextField(
                               onChanged: (value){
                                 userName = value;
-                                print(userName);
+                                // print(userName);
                               },
                               decoration: InputDecoration(
                                 hintText: "What do you want to be called?",

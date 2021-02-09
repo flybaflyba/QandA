@@ -43,21 +43,24 @@ class _PostTileWidgetState extends State<PostTileWidget>{
     setState(() {
       authorProfileImageUrl = documentSnapshot["profile image url"];
     });
-    print("author profile image at ");
-    print(authorProfileImageUrl);
+    // print("author profile image at ");
+    // print(authorProfileImageUrl);
   }
 
 
   @override
   void initState() {
     super.initState();
-
     getAuthorProfileImage();
-
+    print("init called");
+    print(widget.position);
   }
+
+
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         Padding(
@@ -105,7 +108,7 @@ class _PostTileWidgetState extends State<PostTileWidget>{
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 3),
+                          padding: EdgeInsets.all(3),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Container(
