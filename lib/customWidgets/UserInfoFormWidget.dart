@@ -11,6 +11,7 @@ import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class UserInfoFormWidget extends StatefulWidget{
 
@@ -101,38 +102,34 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
                     ),
-
                     Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-                        child: Container(
-                          width: 80.0,
-                          height: 80.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey[300],
-                                border: Border.all(color: const Color(0x33A6A6A6)),
-                                image: DecorationImage(
-                                    image: profileImageUrlOrUInt8List.length == 0 ?
-                                   AssetImage('assets/images/no_photo.png',)
-                                        :
-                                    profileImageUrlOrUInt8List[0].runtimeType == String
-                                        ?
-                                    NetworkImage(profileImageUrlOrUInt8List[0])
-                                        :
-                                    MemoryImage(profileImageUrlOrUInt8List[0]),
-                                    fit: BoxFit.fill)
-                            ),
+                      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                      child: Container(
+                        width: 80.0,
+                        height: 80.0,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey[300],
+                            border: Border.all(color: const Color(0x33A6A6A6)),
+                            image: DecorationImage(
+                                image: profileImageUrlOrUInt8List.length == 0 ?
+                                AssetImage('assets/images/no_photo.png',)
+                                    :
+                                profileImageUrlOrUInt8List[0].runtimeType == String
+                                    ?
+                                NetworkImage(profileImageUrlOrUInt8List[0])
+                                    :
+                                MemoryImage(profileImageUrlOrUInt8List[0]),
+                                fit: BoxFit.fill)
                         ),
+                      ),
                     ),
-
-
 
                     Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
                         child:
                         pickImageOptionShow
                             ?
-
                         Container(
                           // color: Colors.grey[300],
                           child: Stack(
@@ -157,23 +154,35 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                 ),
                               ),
 
+                              kIsWeb ?
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   IconButton(
-                                      icon: Icon(Icons.camera_alt, color: Colors.blueAccent, size: 40,),
-                                      onPressed: () {
-                                        getImage(ImageSource.camera);
-                                      }
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent, size: 40,),
+                                      icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent,),
                                       onPressed: () {
                                         getImage(ImageSource.gallery);
                                       }
                                   )
                                 ],
-
+                              )
+                              :
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                      icon: Icon(Icons.camera_alt, color: Colors.blueAccent,),
+                                      onPressed: () {
+                                        getImage(ImageSource.camera);
+                                      }
+                                  ),
+                                  IconButton(
+                                      icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent,),
+                                      onPressed: () {
+                                        getImage(ImageSource.gallery);
+                                      }
+                                  )
+                                ],
                               ),
 
                             ],
