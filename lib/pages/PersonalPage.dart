@@ -94,8 +94,10 @@ class _PersonalPageState extends State<PersonalPage>{
                       .snapshots(),
                   builder: (context, snapshot){
                     if(snapshot.hasData && snapshot.data.data() != null) {
-                      userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
-                      userInformation.name = snapshot.data.data()["name"];
+                     if(userInformation != null) {
+                       userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
+                       userInformation.name = snapshot.data.data()["name"];
+                     }
                       return Column(
                         children: [
                           Padding(
@@ -109,7 +111,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                       useRootNavigator: true,
                                       context: context,
                                       duration: Duration(milliseconds: 700),
-                                      builder: (context) => UserInfoFormWidget(userName: " ", messageText: "UpdateProfile",),
+                                      builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
                                     );
                                   },
                                   child: Container(
@@ -231,7 +233,12 @@ class _PersonalPageState extends State<PersonalPage>{
                           text: "Sign In",
                           onPressed: () {
                             print("go to sign in page");
-
+                            pushNewScreen(
+                              context,
+                              screen: SignInUpPage(),
+                              withNavBar: false, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            );
                           },
                         ),
 

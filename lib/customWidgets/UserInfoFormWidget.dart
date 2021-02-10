@@ -14,9 +14,10 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UserInfoFormWidget extends StatefulWidget{
 
-  UserInfoFormWidget({Key key, this.userName, this.messageText}) : super(key: key);
+  UserInfoFormWidget({Key key, this.userName, this.messageText, this.profileUrl}) : super(key: key);
   var userName;
   var messageText;
+  var profileUrl;
   
   @override
   _UserInfoFormWidgetState createState() => _UserInfoFormWidgetState();
@@ -28,6 +29,8 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
   var boxColor = Colors.white;
   List<String> sampleProfileImageUrls = [];
   List<dynamic> profileImageUrlOrUInt8List = new List<dynamic>();
+
+  TextEditingController textEditingController = new TextEditingController();
 
   var pickImageOptionShow = false;
 
@@ -70,6 +73,8 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
   void initState() {
     super.initState();
     userName = widget.userName;
+    textEditingController.text = userName;
+    profileImageUrlOrUInt8List.add(widget.profileUrl);
     getSampleProfileImageUrls(context);
   }
 
@@ -241,6 +246,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                             constraints: boxConstraints,
                             margin: EdgeInsets.only(left: 10),
                             child: TextField(
+                              controller: textEditingController,
                               onChanged: (value){
                                 userName = value;
                                 // print(userName);
@@ -281,7 +287,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
 
                               if (userName == "") {
                                 print("user name not set");
-                                UniversalFunctions.showToast("Username not set", UniversalValues.toastMessageTypeWarningColor);
+                                UniversalFunctions.showToast("Username not updated", UniversalValues.toastMessageTypeWarningColor);
                               } else {
                                 UserInformation userInformation = new UserInformation(email: FirebaseAuth.instance.currentUser.email);
                                 userInformation.name = userName;
@@ -296,7 +302,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                   UniversalFunctions.showToast("Profile photo updated", UniversalValues.toastMessageTypeGoodColor);
 
                                 } else {
-                                  UniversalFunctions.showToast("Profile photo not set", UniversalValues.toastMessageTypeWarningColor);
+                                  UniversalFunctions.showToast("Profile photo not updated", UniversalValues.toastMessageTypeWarningColor);
                                   userInformation.update();
                                 }
 
