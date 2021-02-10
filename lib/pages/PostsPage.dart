@@ -14,7 +14,7 @@ import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/customWidgets/PostListWidget.dart';
 import 'package:qanda/customWidgets/SearchCourseWidget.dart';
-import 'package:qanda/pages/CreatePostPage.dart';
+import 'package:qanda/pages/EditPostPage.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 

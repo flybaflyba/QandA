@@ -27,17 +27,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as imagePackage;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class CreatePostPage extends StatefulWidget{
+class EditPostPage extends StatefulWidget{
 
-  CreatePostPage({Key key, this.post}) : super(key: key);
+  EditPostPage({Key key, this.post}) : super(key: key);
 
   Post post;
 
   @override
-  _CreatePostPageState createState() => _CreatePostPageState();
+  _EditPostPageState createState() => _EditPostPageState();
 }
 
-class _CreatePostPageState extends State<CreatePostPage>{
+class _EditPostPageState extends State<EditPostPage>{
 
   TextEditingController titleTextEditingController = new TextEditingController();
   TextEditingController contentTextEditingController = new TextEditingController();

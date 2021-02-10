@@ -13,7 +13,7 @@ import 'package:qanda/customWidgets/LikeAndCommentBarWidget.dart';
 import 'package:qanda/customWidgets/NetworkImageWidget.dart';
 import 'package:qanda/models/Comment.dart';
 import 'package:qanda/models/Post.dart';
-import 'package:qanda/pages/CreatePostPage.dart';
+import 'package:qanda/pages/EditPostPage.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -111,7 +111,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                       Navigator.pop(context);
                       pushNewScreen(
                         context,
-                        screen: CreatePostPage(post: post,),
+                        screen: EditPostPage(post: post,),
                         withNavBar: false, // OPTIONAL VALUE. True by default.
                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                       );

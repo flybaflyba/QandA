@@ -11,7 +11,7 @@ import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/models/Post.dart';
 import 'package:qanda/models/UserInformation.dart';
-import 'package:qanda/pages/CreatePostPage.dart';
+import 'package:qanda/pages/EditPostPage.dart';
 import 'package:qanda/pages/PersonalPage.dart';
 import 'package:qanda/pages/PostsPage.dart';
 import 'package:qanda/universals/UniversalValues.dart';
@@ -104,7 +104,7 @@ class _MenuPageState extends State<MenuPage>{
           onPressed: () {
             print("float action button pressed");
             // Post post = new Post();
-            Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePostPage(post: null,),));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPostPage(post: null,),));
           },
         ),
       ),
