@@ -1,4 +1,5 @@
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +54,31 @@ class _PersonalPageState extends State<PersonalPage>{
         userInformation.get();
       }
     });
+  }
 
-
+  void askForSignIn() {
+    AwesomeDialog(
+      width: 400,
+      context: context,
+      useRootNavigator: true,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Please Login',
+      desc: "",
+      btnCancelText: "Later",
+      btnCancelColor: Colors.red,
+      btnCancelOnPress: () {},
+      btnOkText: "Login",
+      btnOkColor: Colors.blueAccent,
+      btnOkOnPress: () {
+        pushNewScreen(
+          context,
+          screen: SignInUpPage(),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
+      },
+    )..show();
   }
 
   @override
@@ -98,15 +122,18 @@ class _PersonalPageState extends State<PersonalPage>{
                        userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
                        userInformation.name = snapshot.data.data()["name"];
                      }
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: Center(
-                              child: InkWell(
-                                  onTap: () {
+
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Center(
+                            child: InkWell(
+                                onTap: () {
+                                  if(userInformation != null) {
                                     showCupertinoModalBottomSheet(
                                       enableDrag: true,
                                       isDismissible: true,
@@ -115,35 +142,40 @@ class _PersonalPageState extends State<PersonalPage>{
                                       duration: Duration(milliseconds: 700),
                                       builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
                                     );
-                                  },
-                                  child: Container(
-                                      width: 150,
-                                      height: 150,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image:
-                                              userInformation == null
-                                                  ?
-                                              AssetImage("assets/images/no_photo.png")
-                                                  :
-                                              userInformation.profileImageUrl == ""
-                                                  ?
-                                              AssetImage("assets/images/no_photo.png")
-                                                  :
-                                              NetworkImage(userInformation.profileImageUrl)
-                                          )
-                                      )
-                                  )
-                              ),
+                                  } else {
+                                    askForSignIn();
+                                  }
+
+                                },
+                                child: Container(
+                                    width: 150,
+                                    height: 150,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image:
+                                            userInformation == null
+                                                ?
+                                            AssetImage("assets/images/no_photo.png")
+                                                :
+                                            userInformation.profileImageUrl == ""
+                                                ?
+                                            AssetImage("assets/images/no_photo.png")
+                                                :
+                                            NetworkImage(userInformation.profileImageUrl)
+                                        )
+                                    )
+                                )
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Center(
-                              child: InkWell(
-                                  onTap: () {
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Center(
+                            child: InkWell(
+                                onTap: () {
+                                  if(userInformation != null) {
                                     showCupertinoModalBottomSheet(
                                       enableDrag: true,
                                       isDismissible: true,
@@ -152,112 +184,129 @@ class _PersonalPageState extends State<PersonalPage>{
                                       duration: Duration(milliseconds: 700),
                                       builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
                                     );
-                                  },
-                                  child: Container(
-                                      child: Text(
-                                        userInformation == null ? "   " : userInformation.name,
-                                        style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
-                                      )
-                                  )
-                              ),
+                                  } else {
+                                    askForSignIn();
+                                  }
+
+                                },
+                                child: Container(
+                                    child: Text(
+                                      userInformation == null ? "   " : userInformation.name,
+                                      style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                                    )
+                                )
                             ),
                           ),
-                          Padding(
+                        ),
+                        Padding(
                             padding: EdgeInsets.only(top: 10),
                             child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 10),
-                                      child: Container(
-                                        child: FlatButton(
-                                          color: Colors.blue,
-                                          textColor: Colors.white,
-                                          disabledColor: Colors.grey,
-                                          disabledTextColor: Colors.black,
-                                          padding: EdgeInsets.all(8.0),
-                                          splashColor: Colors.blueAccent,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(18.0),
-                                          ),
-                                          onPressed: () {
-                                            pushNewScreen(
-                                              context,
-                                              screen: PostsPage(postType: "campus life posts", searchPerson: userInformation.email,),
-                                              withNavBar: false, // OPTIONAL VALUE. True by default.
-                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                            );
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10),
+                                        child: Container(
+                                            child: FlatButton(
+                                              color: userInformation == null ? Colors.grey : Colors.blue,
+                                              textColor: Colors.white,
+                                              disabledColor: Colors.grey,
+                                              disabledTextColor: Colors.black,
+                                              padding: EdgeInsets.all(8.0),
+                                              splashColor: userInformation == null ? Colors.black54 : Colors.blueAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(18.0),
+                                              ),
+                                              onPressed: () {
 
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(Icons.nightlife),
-                                            ],
-                                          ),
+                                                if(userInformation != null) {
+                                                  pushNewScreen(
+                                                    context,
+                                                    screen: PostsPage(postType: "campus life posts", searchPerson: userInformation.email,),
+                                                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                  );
+                                                } else {
+                                                  askForSignIn();
+                                                }
+
+
+
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Icon(Icons.nightlife),
+                                                ],
+                                              ),
+                                            )
                                         )
-                                      )
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 10),
-                                      child: Container(
-                                        child: FlatButton(
-                                          color: Colors.blue,
-                                          textColor: Colors.white,
-                                          disabledColor: Colors.grey,
-                                          disabledTextColor: Colors.black,
-                                          padding: EdgeInsets.all(8.0),
-                                          splashColor: Colors.blueAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(18.0),
-                                          ),
-                                          onPressed: () {
-                                            pushNewScreen(
-                                              context,
-                                              screen: PostsPage(postType: "academic posts", searchPerson: userInformation.email,),
-                                              withNavBar: false, // OPTIONAL VALUE. True by default.
-                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                            );
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10),
+                                        child: Container(
+                                            child: FlatButton(
+                                              color: userInformation == null ? Colors.grey : Colors.blue,
+                                              textColor: Colors.white,
+                                              disabledColor: Colors.grey,
+                                              disabledTextColor: Colors.black,
+                                              padding: EdgeInsets.all(8.0),
+                                              splashColor: userInformation == null ? Colors.black54 : Colors.blueAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(18.0),
+                                              ),
+                                              onPressed: () {
 
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Icon(Icons.school),
-                                            ],
-                                          ),
+                                                if(userInformation != null) {
+                                                  pushNewScreen(
+                                                    context,
+                                                    screen: PostsPage(postType: "academic posts", searchPerson: userInformation.email,),
+                                                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                  );
+                                                } else {
+                                                  askForSignIn();
+                                                }
+
+
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  Icon(Icons.school),
+                                                ],
+                                              ),
+                                            )
+
+
                                         )
-
-
-                                      )
-                                  ),
-                                ],
-                              )
+                                    ),
+                                  ],
+                                )
                             )
-                          ),
-                        ],
-                      );
-                    } else {
-                      return Center(
-                        child: NiceButton(
-                          // width: 250,
-                          radius: 40,
-                          padding: const EdgeInsets.all(15),
-                          icon: Icons.flight_takeoff_rounded,
-                          gradientColors: [Color(0xff5b86e5), Color(0xff36d1dc)],
-                          text: "Sign In",
-                          onPressed: () {
-                            print("go to sign in page");
-                            pushNewScreen(
-                              context,
-                              screen: SignInUpPage(),
-                              withNavBar: false, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            );
-                          },
                         ),
-
-                      );
-                    }
+                      ],
+                    );
+                    // else {
+                    //   return Center(
+                    //     child: NiceButton(
+                    //       // width: 250,
+                    //       radius: 40,
+                    //       padding: const EdgeInsets.all(15),
+                    //       icon: Icons.flight_takeoff_rounded,
+                    //       gradientColors: [Color(0xff5b86e5), Color(0xff36d1dc)],
+                    //       text: "Sign In",
+                    //       onPressed: () {
+                    //         print("go to sign in page");
+                    //         pushNewScreen(
+                    //           context,
+                    //           screen: SignInUpPage(),
+                    //           withNavBar: false, // OPTIONAL VALUE. True by default.
+                    //           pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    //         );
+                    //       },
+                    //     ),
+                    //
+                    //   );
+                    // }
                   }
               ),
             )

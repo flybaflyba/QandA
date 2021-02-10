@@ -74,7 +74,7 @@ class _PostsPageState extends State<PostsPage>{
             Expanded(
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: (widget.postType == "academic posts" && widget.searchPerson == null) || (widget.postType == "academic posts" && widget.searchPerson == "")
+                  child: (widget.postType == "academic posts" && widget.searchPerson == null) || (widget.postType == "academic posts" && widget.searchPerson == "") // searchPerson should be null, but for some reason, on web deployed it's "", ONLY DEPLOYED WEB
                       ?
                   IconButton(
                       icon: Icon(Icons.search),
