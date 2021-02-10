@@ -35,8 +35,10 @@ class _PersonalPageState extends State<PersonalPage>{
         print('User is currently signed out!');
         setState(() {
           signInOurButtonIcon = Icon(Icons.login);
-          userInformation.clearLocal();
-          userInformation = null;
+          if(userInformation != null) {
+            userInformation.clearLocal();
+            userInformation = null;
+          }
         });
       } else {
         print('User is signed in!');
@@ -116,7 +118,7 @@ class _PersonalPageState extends State<PersonalPage>{
                   ).then((value) {
                     print("user info updated ++++++++++++++++++++++++++++++");
                     userInformation.get()
-                    .whenComplete(() { // bug here, when dialog close, user info is not updated in database, might use stream 
+                    .whenComplete(() { // bug here, when dialog close, user info is not updated in database, might use stream
                       setState(() {
                         userInformation.profileImageUrl = userInformation.profileImageUrl;
                       });

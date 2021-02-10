@@ -72,47 +72,59 @@ class PostTileWidget extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
 
-                    Row(
-                      children: [
+                    StreamBuilder<DocumentSnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(post.authorEmail)
+                            .snapshots(),
+                        builder: (context, snapshot){
+                          if(snapshot.hasData) {
+                            post.authorImageUrl = snapshot.data.data()["profile image url"];
+                            post.author = snapshot.data.data()["name"];
 
-                        Padding(
-                          padding: EdgeInsets.all(3),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.grey[300],
-                                    border: Border.all(color: const Color(0x33A6A6A6)),
-                                    image: DecorationImage(
-                                        image:
-                                        post.authorImageUrl == ""
-                                            ?
-                                        AssetImage('assets/images/no_photo.png',)
-                                            :
-                                        NetworkImage(post.authorImageUrl),
-                                        fit: BoxFit.fill)
+                          }
+                          return Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      height: 45,
+                                      width: 45,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey[300],
+                                          border: Border.all(color: const Color(0x33A6A6A6)),
+                                          image: DecorationImage(
+                                              image:
+                                              post.authorImageUrl == ""
+                                                  ?
+                                              AssetImage('assets/images/no_photo.png',)
+                                                  :
+                                              NetworkImage(post.authorImageUrl),
+                                              fit: BoxFit.fill)
+                                      ),
+                                    )
                                 ),
-                              )
-                          ),
-                        ),
-
-                        Padding(
-                          padding: EdgeInsets.all(3),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              post.author + " " + position.toString(),
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                          ),
-                        ),
-                      ],
+
+                              Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    post.author + " " + position.toString(),
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
                     ),
 
 
