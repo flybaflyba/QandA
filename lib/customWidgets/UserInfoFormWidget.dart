@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,7 +41,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
 
   var userName = "";
 
-  Future getImage(ImageSource imageSource) async {
+  Future getImageOnPhones(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(source: imageSource);
     setState(() {
       if (pickedFile != null) {
@@ -69,6 +70,25 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
   }
 
 
+  Future<void> getImageOnWeb() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: false,
+        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']
+    );
+
+    if (result != null) {
+      List<dynamic> imageUint8ListsTemp = result.files.map((file) => file.bytes).toList();
+      setState(() {
+        for (var i in imageUint8ListsTemp) {
+          profileImageUrlOrUInt8List.clear();
+          profileImageUrlOrUInt8List.add(i);
+        }
+      });
+    } else {
+      UniversalFunctions.showToast("You didn't pick any image", UniversalValues.toastMessageTypeWarningColor);
+    }
+  }
 
   @override
   void initState() {
@@ -154,32 +174,20 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                 ),
                               ),
 
-                              kIsWeb ?
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  IconButton(
-                                      icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent,),
-                                      onPressed: () {
-                                        getImage(ImageSource.gallery);
-                                      }
-                                  )
-                                ],
-                              )
-                              :
+
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   IconButton(
                                       icon: Icon(Icons.camera_alt, color: Colors.blueAccent,),
                                       onPressed: () {
-                                        getImage(ImageSource.camera);
+                                        getImageOnPhones(ImageSource.camera);
                                       }
                                   ),
                                   IconButton(
                                       icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent,),
                                       onPressed: () {
-                                        getImage(ImageSource.gallery);
+                                        getImageOnPhones(ImageSource.gallery);
                                       }
                                   )
                                 ],
@@ -201,9 +209,16 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                             if(index == 0) {
                               return InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      pickImageOptionShow = true;
-                                    });
+
+                                    if(kIsWeb) {
+                                      getImageOnWeb();
+                                    } else {
+                                      setState(() {
+                                        pickImageOptionShow = true;
+                                      });
+                                    }
+
+
                                   },
                                   child:  Container(
                                     width: 15.0,
