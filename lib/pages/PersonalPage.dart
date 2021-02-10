@@ -88,6 +88,8 @@ class _PersonalPageState extends State<PersonalPage>{
           title: Center(child: Text("Home"),),
           leading: Icon(Icons.logout, color: UniversalValues.primaryColor,), //  to make the title center
           actions: [
+            FirebaseAuth.instance.currentUser == null ?
+            SizedBox(width: 0,) :
             IconButton(
                 icon: signInOurButtonIcon,
                 onPressed: () async {
@@ -106,6 +108,26 @@ class _PersonalPageState extends State<PersonalPage>{
 
                 }
             ),
+
+            IconButton(
+                icon: Icon(Icons.more_horiz),
+                onPressed: () {
+                  AwesomeDialog(
+                    width: 400,
+                    context: context,
+                    useRootNavigator: true,
+                    dialogType: DialogType.NO_HEADER,
+                    customHeader: Image.asset("assets/images/byu_hawaii_medallion_logo.png"),
+                    animType: AnimType.BOTTOMSLIDE,
+                    title: 'About BYU-H App',
+                    desc: "Created by BYU-Hawaii students.",
+                    btnOkText: "Dismiss",
+                    btnOkColor: Colors.blueAccent,
+                    btnOkOnPress: () {},
+                  )..show();
+                }
+            ),
+
           ],
         ),
         body: Center(
@@ -122,7 +144,6 @@ class _PersonalPageState extends State<PersonalPage>{
                        userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
                        userInformation.name = snapshot.data.data()["name"];
                      }
-
                     }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
