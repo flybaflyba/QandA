@@ -74,7 +74,7 @@ class _PostsPageState extends State<PostsPage>{
             Expanded(
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: widget.postType == "academic posts" && widget.searchPerson == null
+                  child: (widget.postType == "academic posts" && widget.searchPerson == null) || (widget.postType == "academic posts" && widget.searchPerson == "")
                       ?
                   IconButton(
                       icon: Icon(Icons.search),
@@ -93,7 +93,6 @@ class _PostsPageState extends State<PostsPage>{
                           print(value);
                           print("dialog closed");
                           print(UniversalValues.searchCourseTerm);
-
                           // push to course page then reset search term
                           if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
                             var searchTerm = UniversalValues.searchCourseTerm;
