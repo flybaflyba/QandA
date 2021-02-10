@@ -47,6 +47,7 @@ class UniversalFunctions{
         .then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var userName = prefs.getString("userName");
+      var profileImageUrl = prefs.getString("profileImageUrl");
       if(userName == null || userName == "") {
         print("missing user name from database");
         // ask user for info
@@ -58,7 +59,7 @@ class UniversalFunctions{
             useRootNavigator: true,
             context: context,
             duration: Duration(milliseconds: 700),
-            builder: (context) => UserInfoFormWidget(userName: userName, messageText: messageText,),
+            builder: (context) => UserInfoFormWidget(userName: userName, messageText: messageText, profileUrl: profileImageUrl,),
 
         );
       } else {

@@ -99,6 +99,8 @@ class _PersonalPageState extends State<PersonalPage>{
                        userInformation.name = snapshot.data.data()["name"];
                      }
                       return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(top: 30),
@@ -126,6 +128,10 @@ class _PersonalPageState extends State<PersonalPage>{
                                                   ?
                                               AssetImage("assets/images/no_photo.png")
                                                   :
+                                              userInformation.profileImageUrl == ""
+                                                  ?
+                                              AssetImage("assets/images/no_photo.png")
+                                                  :
                                               NetworkImage(userInformation.profileImageUrl)
                                           )
                                       )
@@ -138,6 +144,14 @@ class _PersonalPageState extends State<PersonalPage>{
                             child: Center(
                               child: InkWell(
                                   onTap: () {
+                                    showCupertinoModalBottomSheet(
+                                      enableDrag: true,
+                                      isDismissible: true,
+                                      useRootNavigator: true,
+                                      context: context,
+                                      duration: Duration(milliseconds: 700),
+                                      builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
+                                    );
                                   },
                                   child: Container(
                                       child: Text(
