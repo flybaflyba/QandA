@@ -33,7 +33,6 @@ class Comment {
         .set({
       "content": content,
       "time": time,
-      "by": by,
       "by email": byEmail,
       "replies": replies,
     })
@@ -49,7 +48,6 @@ class Comment {
         .update({
       "content": content,
       "time": time,
-      "by": by,
       "by email": byEmail,
       "replies": replies,
     })

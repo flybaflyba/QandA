@@ -127,7 +127,7 @@ class UniversalFunctions{
                                         UniversalFunctions.askForUserMissingInfo(context, true, "Tell us who is commenting");
                                       } else {
                                         var currentTimeInUtc = DateTime.now().toUtc();
-                                        Comment commentTemp = new Comment(content: currentComment, time: currentTimeInUtc, by: userName, byEmail: FirebaseAuth.instance.currentUser.email);
+                                        Comment commentTemp = new Comment(content: currentComment, time: currentTimeInUtc, byEmail: FirebaseAuth.instance.currentUser.email);
 
                                         // check if we are creating a new comment, or we are replying a comment.
                                         if(comment == null) {
@@ -135,7 +135,6 @@ class UniversalFunctions{
                                           commentTemp.create(post);
                                         } else {
                                           // update, add a reply to existing comment
-                                          commentTemp.to = to;
                                           commentTemp.toEmail = toEmail;
                                           comment.replies.add(commentTemp.toMap());
                                           comment.update(post);
