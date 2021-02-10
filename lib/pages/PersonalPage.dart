@@ -2,11 +2,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:nice_button/nice_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:qanda/customWidgets/PostListWidget.dart';
 import 'package:qanda/customWidgets/TitleWidget.dart';
 import 'package:qanda/customWidgets/UserInfoFormWidget.dart';
 import 'package:qanda/models/UserInformation.dart';
+import 'package:qanda/pages/PostsPage.dart';
 import 'package:qanda/pages/SignInUpPage.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
@@ -80,82 +84,163 @@ class _PersonalPageState extends State<PersonalPage>{
             ),
           ],
         ),
-      body: Center(
-        child: Container(
-        constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
-    child: ListView(
-      children: [
-
-        StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(userInformation == null ? "" : userInformation.email)
-                .snapshots(),
-            builder: (context, snapshot){
-              if(snapshot.hasData) {
-                userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
-                userInformation.name = snapshot.data.data()["name"];
-              }
-              return Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: InkWell(
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                              enableDrag: true,
-                              isDismissible: true,
-                              useRootNavigator: true,
-                              context: context,
-                              duration: Duration(milliseconds: 700),
-                              builder: (context) => UserInfoFormWidget(userName: " ", messageText: "UpdateProfile",),
-                            );
-                          },
-                          child: Container(
-                              width: 150,
-                              height: 150,
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image:
-                                      userInformation == null
-                                          ?
-                                      AssetImage("assets/images/no_photo.png")
-                                          :
-                                      NetworkImage(userInformation.profileImageUrl)
+        body: Center(
+            child: Container(
+              constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
+              child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(userInformation == null ? "ss" : userInformation.email)
+                      .snapshots(),
+                  builder: (context, snapshot){
+                    if(snapshot.hasData && snapshot.data.data() != null) {
+                      userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
+                      userInformation.name = snapshot.data.data()["name"];
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 30),
+                            child: Center(
+                              child: InkWell(
+                                  onTap: () {
+                                    showCupertinoModalBottomSheet(
+                                      enableDrag: true,
+                                      isDismissible: true,
+                                      useRootNavigator: true,
+                                      context: context,
+                                      duration: Duration(milliseconds: 700),
+                                      builder: (context) => UserInfoFormWidget(userName: " ", messageText: "UpdateProfile",),
+                                    );
+                                  },
+                                  child: Container(
+                                      width: 150,
+                                      height: 150,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image:
+                                              userInformation == null
+                                                  ?
+                                              AssetImage("assets/images/no_photo.png")
+                                                  :
+                                              NetworkImage(userInformation.profileImageUrl)
+                                          )
+                                      )
                                   )
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Center(
+                              child: InkWell(
+                                  onTap: () {
+                                  },
+                                  child: Container(
+                                      child: Text(
+                                        userInformation == null ? "   " : userInformation.name,
+                                        style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                                      )
+                                  )
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: Container(
+                                        child: FlatButton(
+                                          color: Colors.blue,
+                                          textColor: Colors.white,
+                                          disabledColor: Colors.grey,
+                                          disabledTextColor: Colors.black,
+                                          padding: EdgeInsets.all(8.0),
+                                          splashColor: Colors.blueAccent,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(18.0),
+                                          ),
+                                          onPressed: () {
+                                            pushNewScreen(
+                                              context,
+                                              screen: PostsPage(postType: "campus life posts"),
+                                              withNavBar: false, // OPTIONAL VALUE. True by default.
+                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            );
+
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Icon(Icons.nightlife),
+                                            ],
+                                          ),
+                                        )
+                                      )
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: Container(
+                                        child: FlatButton(
+                                          color: Colors.blue,
+                                          textColor: Colors.white,
+                                          disabledColor: Colors.grey,
+                                          disabledTextColor: Colors.black,
+                                          padding: EdgeInsets.all(8.0),
+                                          splashColor: Colors.blueAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18.0),
+                                          ),
+                                          onPressed: () {
+                                            pushNewScreen(
+                                              context,
+                                              screen: PostsPage(postType: "academic posts", searchBy: "author email", searchTerm: userInformation.email,),
+                                              withNavBar: false, // OPTIONAL VALUE. True by default.
+                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            );
+
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Icon(Icons.school),
+                                            ],
+                                          ),
+                                        )
+
+
+                                      )
+                                  ),
+                                ],
                               )
-                          )
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Center(
-                      child: InkWell(
-                          onTap: () {
+                            )
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Center(
+                        child: NiceButton(
+                          // width: 250,
+                          radius: 40,
+                          padding: const EdgeInsets.all(15),
+                          icon: Icons.flight_takeoff_rounded,
+                          gradientColors: [Color(0xff5b86e5), Color(0xff36d1dc)],
+                          text: "Sign In",
+                          onPressed: () {
+                            print("go to sign in page");
 
                           },
-                          child: Container(
-                              child: Text(
-                                userInformation == null ? "   " : userInformation.name,
-                                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
-                              )
-                          )
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-        ),
+                        ),
 
-
-
-      ],
-    )))
+                      );
+                    }
+                  }
+              ),
+            )
+        )
     );
   }
 }

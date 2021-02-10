@@ -19,10 +19,11 @@ import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostsPage extends StatefulWidget{
-  PostsPage({Key key, @required this.postType, this.searchCourse}) : super(key: key);
+  PostsPage({Key key, @required this.postType, this.searchTerm,  this.searchBy}) : super(key: key);
 
   final postType;
-  final searchCourse;
+  final searchTerm;
+  final searchBy; // course, author email
 
   @override
   _PostsPageState createState() => _PostsPageState();
@@ -44,7 +45,7 @@ class _PostsPageState extends State<PostsPage>{
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
 
-              widget.searchCourse == null ?
+              widget.searchBy == null ?
               Expanded(
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -57,11 +58,11 @@ class _PostsPageState extends State<PostsPage>{
               Text(
                   widget.postType == "academic posts"
                       ?
-                  widget.searchCourse == null
+                  widget.searchBy == null
                       ?
                   "Academic"
                       :
-                  widget.searchCourse
+                  widget.searchBy
                       :
                   "Campus Life"
               ),
@@ -90,8 +91,8 @@ class _PostsPageState extends State<PostsPage>{
 
                             // push to course page then reset search term
                             if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
-                              var searchTerm = UniversalValues.searchCourseTerm;
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
+                              var searchCourseTerm = UniversalValues.searchCourseTerm;
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchBy: "course", searchTerm: searchCourseTerm,)));
                             }
                             UniversalValues.searchCourseTerm = "";
                           });
@@ -104,40 +105,7 @@ class _PostsPageState extends State<PostsPage>{
               )
             ],
           ),
-          // leading: widget.searchCourse == null ? Text("a") : BackButton(),
           actions: [
-            // widget.postType == "academic posts"
-            //     ?
-            // IconButton(
-            //     icon: Icon(Icons.search),
-            //     onPressed: () {
-            //       print("search by subject");
-            //       AwesomeDialog(
-            //         context: context,
-            //         useRootNavigator: true,
-            //         animType: AnimType.SCALE,
-            //         dialogType: DialogType.QUESTION,
-            //         dialogBackgroundColor: Color(0x00000000),
-            //         body: SearchCourseWidget(),
-            //
-            //       )..show()
-            //           .then((value) {
-            //         print(value);
-            //         print("dialog closed");
-            //         print(UniversalValues.searchCourseTerm);
-            //
-            //         // push to course page then reset search term
-            //         if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
-            //           var searchTerm = UniversalValues.searchCourseTerm;
-            //           Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
-            //         }
-            //         UniversalValues.searchCourseTerm = "";
-            //       });
-            //     }
-            // )
-            //     :
-            // Text("a")
-
 
           ],
         ),
@@ -148,9 +116,8 @@ class _PostsPageState extends State<PostsPage>{
                     Stack(
                       children: [
 
-                        widget.searchCourse == null
+                        widget.searchBy == null
                             ?
-
                         // TODO we might want to change this later
                         // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
                         StreamBuilder<QuerySnapshot>(
@@ -175,7 +142,7 @@ class _PostsPageState extends State<PostsPage>{
                         StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection("posts")
-                                .where("course", isEqualTo: widget.searchCourse)
+                                .where(widget.searchBy, isEqualTo: widget.searchTerm)
                                 .snapshots(),
                             builder: (context, snapshot){
                               if(snapshot.hasData){
