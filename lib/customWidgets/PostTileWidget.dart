@@ -34,6 +34,7 @@ class PostTileWidget extends StatelessWidget{
           child: InkWell(
             onTap: () {
               print("tapped on Post: " + post.postDocName);
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
               Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
             },
             child: Column(
