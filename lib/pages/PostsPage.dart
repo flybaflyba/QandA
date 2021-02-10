@@ -19,11 +19,11 @@ import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 class PostsPage extends StatefulWidget{
-  PostsPage({Key key, @required this.postType, this.searchTerm,  this.searchBy}) : super(key: key);
+  PostsPage({Key key, @required this.postType, this.searchCourse, this.searchPerson}) : super(key: key);
 
   final postType;
-  final searchTerm;
-  final searchBy; // course, author email
+  final searchCourse;
+  final searchPerson;
 
   @override
   _PostsPageState createState() => _PostsPageState();
@@ -45,7 +45,7 @@ class _PostsPageState extends State<PostsPage>{
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
 
-              widget.searchBy == null ?
+              widget.searchCourse == null ?
               Expanded(
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -56,20 +56,24 @@ class _PostsPageState extends State<PostsPage>{
               SizedBox(width: 0,),
 
               Text(
+                  widget.searchPerson != null
+                      ?
+                  ""
+                      :
                   widget.postType == "academic posts"
                       ?
-                  widget.searchBy == null
+                  widget.searchCourse == null
                       ?
                   "Academic"
                       :
-                  widget.searchBy
+                  widget.searchCourse
                       :
                   "Campus Life"
               ),
               Expanded(
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: widget.postType == "academic posts"
+                    child: widget.postType == "academic posts" && widget.searchPerson == null
                         ?
                     IconButton(
                         icon: Icon(Icons.search),
@@ -91,8 +95,8 @@ class _PostsPageState extends State<PostsPage>{
 
                             // push to course page then reset search term
                             if(UniversalValues.courses.contains(UniversalValues.searchCourseTerm)) {
-                              var searchCourseTerm = UniversalValues.searchCourseTerm;
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchBy: "course", searchTerm: searchCourseTerm,)));
+                              var searchTerm = UniversalValues.searchCourseTerm;
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: searchTerm,)));
                             }
                             UniversalValues.searchCourseTerm = "";
                           });
@@ -105,7 +109,9 @@ class _PostsPageState extends State<PostsPage>{
               )
             ],
           ),
+          // leading: widget.searchCourse == null ? Text("a") : BackButton(),
           actions: [
+
 
           ],
         ),
@@ -115,12 +121,15 @@ class _PostsPageState extends State<PostsPage>{
                 child:
                     Stack(
                       children: [
-
-                        widget.searchBy == null
+                        //(((((((((((((((((((((((((((((((
+                        widget.searchPerson == null
+                        ?
+                        //(((((((((((((((((((((((((((((((
+                        widget.searchCourse == null
                             ?
-                        // TODO we might want to change this later
-                        // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
                         StreamBuilder<QuerySnapshot>(
+                          // TODO we might want to change this later
+                          // right now, we use stream view, but when a user is viewing post list, the list might update as other people views it, and it takes more data
                             stream: FirebaseFirestore.instance
                                 .collection("posts")
                                 .where("topic", isEqualTo: widget.postType == "academic posts" ? "Academic" : "Campus Life")
@@ -142,7 +151,28 @@ class _PostsPageState extends State<PostsPage>{
                         StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection("posts")
-                                .where(widget.searchBy, isEqualTo: widget.searchTerm)
+                                .where("course", isEqualTo: widget.searchCourse)
+                                .snapshots(),
+                            builder: (context, snapshot){
+                              if(snapshot.hasData){
+                                var docs = snapshot.data.docs.reversed;
+                                print(docs.length);
+                                return PostListWidget(allPostsStream: docs,);
+                              } else {
+                                return SpinKitRipple(
+                                  color: Colors.blue,
+                                  size: 50.0,
+                                );
+                              }
+                            }
+                        )
+                        //))))))))))))))))))))))))))))
+                        :
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection("posts")
+                                .where("topic", isEqualTo: widget.postType == "academic posts" ? "Academic" : "Campus Life")
+                                .where("author email", isEqualTo: widget.searchPerson)
                                 .snapshots(),
                             builder: (context, snapshot){
                               if(snapshot.hasData){
@@ -157,9 +187,10 @@ class _PostsPageState extends State<PostsPage>{
                               }
                             }
                         ),
-
+                        //))))))))))))))))))))))))))))
                       ],
                     )
+
 
 
 

@@ -168,7 +168,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                           onPressed: () {
                                             pushNewScreen(
                                               context,
-                                              screen: PostsPage(postType: "campus life posts"),
+                                              screen: PostsPage(postType: "campus life posts", searchPerson: userInformation.email,),
                                               withNavBar: false, // OPTIONAL VALUE. True by default.
                                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                             );
@@ -198,7 +198,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                           onPressed: () {
                                             pushNewScreen(
                                               context,
-                                              screen: PostsPage(postType: "academic posts", searchBy: "author email", searchTerm: userInformation.email,),
+                                              screen: PostsPage(postType: "academic posts", searchPerson: userInformation.email,),
                                               withNavBar: false, // OPTIONAL VALUE. True by default.
                                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                             );
