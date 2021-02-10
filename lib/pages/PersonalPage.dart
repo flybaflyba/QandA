@@ -46,11 +46,7 @@ class _PersonalPageState extends State<PersonalPage>{
           signInOurButtonIcon = Icon(Icons.logout);
           userInformation = new UserInformation(email: user.email);
         });
-        userInformation.get().whenComplete(() {
-          setState(() {
-            userInformation.profileImageUrl = userInformation.profileImageUrl;
-          });
-        });
+        userInformation.get();
       }
     });
 
@@ -90,78 +86,74 @@ class _PersonalPageState extends State<PersonalPage>{
     child: ListView(
       children: [
 
-        // Center(
-        //   child: FlatButton(
-        //     onPressed: () {
-        //       userInformation.printOut();
-        //       print(userInformation.name);
-        //       print(userInformation.email);
-        //       print(userInformation.profileImageUrl);
-        //     },
-        //     child: Text("Aloha"),
-        //   ),
-        // ),
+        StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(userInformation == null ? "" : userInformation.email)
+                .snapshots(),
+            builder: (context, snapshot){
+              if(snapshot.hasData) {
+                userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
+                userInformation.name = snapshot.data.data()["name"];
+              }
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                    child: Center(
+                      child: InkWell(
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                              enableDrag: true,
+                              isDismissible: true,
+                              useRootNavigator: true,
+                              context: context,
+                              duration: Duration(milliseconds: 700),
+                              builder: (context) => UserInfoFormWidget(userName: " ", messageText: "UpdateProfile",),
+                            );
+                          },
+                          child: Container(
+                              width: 150,
+                              height: 150,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image:
+                                      userInformation == null
+                                          ?
+                                      AssetImage("assets/images/no_photo.png")
+                                          :
+                                      NetworkImage(userInformation.profileImageUrl)
+                                  )
+                              )
+                          )
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Center(
+                      child: InkWell(
+                          onTap: () {
 
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: Center(
-            child: InkWell(
-                onTap: () {
-
-                  showCupertinoModalBottomSheet(
-                    enableDrag: true,
-                    isDismissible: true,
-                    useRootNavigator: true,
-                    context: context,
-                    duration: Duration(milliseconds: 700),
-                    builder: (context) => UserInfoFormWidget(userName: " ", messageText: "UpdateProfile",),
-                  ).then((value) {
-                    print("user info updated ++++++++++++++++++++++++++++++");
-                    userInformation.get()
-                    .whenComplete(() { // bug here, when dialog close, user info is not updated in database, might use stream
-                      setState(() {
-                        userInformation.profileImageUrl = userInformation.profileImageUrl;
-                      });
-                    });
-                  });
-
-
-                },
-                child: Container(
-                    width: 150,
-                    height: 150,
-                    decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image:
-                            userInformation == null
-                                ?
-                            AssetImage("assets/images/no_photo.png")
-                                :
-                            NetworkImage(userInformation.profileImageUrl)
-                        )
-                    )
-                )
-            ),
-          ),
+                          },
+                          child: Container(
+                              child: Text(
+                                userInformation == null ? "   " : userInformation.name,
+                                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                              )
+                          )
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 10),
-          child: Center(
-            child: InkWell(
-                onTap: () {
 
-                },
-                child: Container(
-                  child: Text(
-                    userInformation == null ? "   " : userInformation.name,
-                    style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
-                  )
-                )
-            ),
-          ),
-        ),
+
+
       ],
     )))
     );
