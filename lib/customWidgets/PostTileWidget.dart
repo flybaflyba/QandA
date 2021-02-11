@@ -134,7 +134,7 @@ class PostTileWidget extends StatelessWidget{
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      post.author + " " + position.toString(),
+                                      post.author, // + " " + position.toString(),
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
