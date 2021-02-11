@@ -409,7 +409,7 @@ class _EditPostPageState extends State<EditPostPage>{
           resetCreatePostPageFields();
           Navigator.pop(context);
           // push to a new page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
         });
 
       } else {
@@ -433,7 +433,7 @@ class _EditPostPageState extends State<EditPostPage>{
           resetCreatePostPageFields();
           Navigator.pop(context);
           // push to a new page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
         });
 
       }

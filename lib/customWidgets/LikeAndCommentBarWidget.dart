@@ -158,7 +158,7 @@ class LikeAndCommentBarWidget extends StatelessWidget{
                         icon: Icon(Icons.comment_bank_outlined),
                         onPressed: () {
                           if(pushToNewPage) {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
                           }
                           UniversalFunctions.showCommentInput(context, post, null, post.author, post.authorEmail);
                         }

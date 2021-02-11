@@ -39,7 +39,7 @@ class PostTileWidget extends StatelessWidget{
             onTap: () {
               print("tapped on Post: " + post.postDocName);
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(postDocName: post.postDocName,),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

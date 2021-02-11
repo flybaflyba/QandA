@@ -22,8 +22,8 @@ class ShowPostPage extends StatefulWidget{
 
   // ShowPostPage({Key key,this.postDocName}) : super(key: key);
   // var postDocName;
-  ShowPostPage({Key key,this.postDocName}) : super(key: key);
-  var postDocName;
+  ShowPostPage({Key key,this.post}) : super(key: key);
+  var post;
 
   @override
   _ShowPostPageState createState() => _ShowPostPageState();
@@ -55,7 +55,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
         appBar: AppBar(
           actions: [
 
-            widget.postDocName.contains(FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser.email : "user is not logged in and this sentence won't be in doc name so it returns false")
+            widget.post.postDocName.contains(FirebaseAuth.instance.currentUser != null ? FirebaseAuth.instance.currentUser.email : "user is not logged in and this sentence won't be in doc name so it returns false")
             ?
             IconButton(
                 icon: Icon(Icons.edit),
@@ -86,7 +86,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                             // go to post page, then delete so that we don't see error because we try to show something that's deleted
                             Navigator.pop(context);
                             Future.delayed(Duration(milliseconds: 500)).then((_) async {
-                              Post post = new Post(postDocName: widget.postDocName);
+                              Post post = new Post(postDocName: widget.post.postDocName);
                               post.delete();
                             });
 
@@ -106,7 +106,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                       DocumentSnapshot postDoc = await
                       FirebaseFirestore.instance
                           .collection("posts")
-                          .doc(widget.postDocName).get();
+                          .doc(widget.post.postDocName).get();
                       post.setPostWithDocumentSnapshot(postDoc);
                       Navigator.pop(context);
                       pushNewScreen(
@@ -135,7 +135,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                   StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("posts")
-                        .doc(widget.postDocName)
+                        .doc(widget.post.postDocName)
                         .snapshots(),
                     builder: (context, snapshot){
                       Widget contentToDisplay = Center(child: Text("Nothing here"),);
@@ -283,7 +283,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                   StreamBuilder<QuerySnapshot>(
                                       stream: FirebaseFirestore.instance
                                           .collection("posts")
-                                          .doc(widget.postDocName)
+                                          .doc(widget.post.postDocName)
                                           .collection("comments")
                                           .snapshots(),
                                       builder: (context, snapshot){
