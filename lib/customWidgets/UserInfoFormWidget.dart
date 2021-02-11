@@ -225,8 +225,6 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
                                               animatedContainerHeight = 30;
                                             });
                                           }
-
-
                                         },
                                         child: Container(
                                             width: 15.0,

@@ -27,12 +27,12 @@ class _PostListWidgetState extends State<PostListWidget>{
   final int increment = 7;
   // bool isLoadingVertical = false;
   // var allPosts;
+  RefreshController refreshController = RefreshController(initialRefresh: true);
+  var showLoader = true;
 
   Widget item(int position) {
-
     Post post = new Post();
     post.setPostWithDocumentSnapshot(widget.allPostsStream.elementAt(position));
-
     return PostTileWidget(position: position, post: post,);
 
   }
@@ -50,9 +50,6 @@ class _PostListWidgetState extends State<PostListWidget>{
   //
   // }
 
-  RefreshController refreshController = RefreshController(initialRefresh: true);
-
-  var showLoader = true;
 
   void onRefresh() async{
     // monitor network fetch
@@ -70,7 +67,6 @@ class _PostListWidgetState extends State<PostListWidget>{
     data.addAll(
         List.generate(increment, (index) => data.length + index));
 
-
     if(mounted)
       setState(() {
       });
@@ -83,13 +79,14 @@ class _PostListWidgetState extends State<PostListWidget>{
     super.initState();
     // getPosts();
     onLoading();
-
+    setState(() {
+      showLoader = true;
+    });
     Future.delayed(Duration(milliseconds: 2000)).then((_) async {
       setState(() {
         showLoader = false;
       });
     });
-
   }
 
   @override
@@ -165,7 +162,6 @@ class _PostListWidgetState extends State<PostListWidget>{
               ),
             ),
 
-
             IgnorePointer(
               ignoring: !showLoader,
               child: AnimatedOpacity(
@@ -174,11 +170,11 @@ class _PostListWidgetState extends State<PostListWidget>{
                 child: Center(
                     child: Container(
                       color: Colors.grey[300],
-                      child: Expanded(
-                        child: SpinKitChasingDots(
-                          color: Colors.blueAccent,
-                          size: 50.0,
-                        ),
+                      child:
+    //Center(child: Text(showLoader.toString()),)
+                      SpinKitChasingDots(
+                        color: Colors.blueAccent,
+                        size: 50.0,
                       ),
                     )
                 )
