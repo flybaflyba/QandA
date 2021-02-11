@@ -9,6 +9,7 @@ import 'package:qanda/models/Post.dart';
 import 'package:qanda/pages/PersonalPage.dart';
 import 'package:qanda/pages/PostsPage.dart';
 import 'package:qanda/pages/ShowPostPage.dart';
+import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 
@@ -43,18 +44,26 @@ class PostTileWidget extends StatelessWidget{
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+
                 post.course != ""
                     ?
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    post.course,
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54
+                  child: InkWell(
+                    onTap: (){
+                      UniversalValues.searchCourseTerm = post.course;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => PostsPage(postType: "academic posts", searchCourse: UniversalValues.searchCourseTerm,)));
+                    },
+                    child: Text(
+                      post.course,
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54
+                      ),
                     ),
-                  ),
+                  )
                 )
                     :
                 SizedBox(height: 0,),
