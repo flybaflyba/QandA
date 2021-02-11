@@ -44,8 +44,6 @@ class PostTileWidget extends StatelessWidget{
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-
                 post.course != ""
                     ?
                 Align(
