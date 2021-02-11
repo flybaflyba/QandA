@@ -165,19 +165,25 @@ class _PostListWidgetState extends State<PostListWidget>{
               ),
             ),
 
-            showLoader ?
-            Center(
-                child: Container(
-                  color: Colors.grey[300],
-                  child: Expanded(
-                    child: SpinKitChasingDots(
-                      color: Colors.blueAccent,
-                      size: 50.0,
-                    ),
-                  ),
+
+            IgnorePointer(
+              ignoring: !showLoader,
+              child: AnimatedOpacity(
+                opacity: showLoader ? 1 : 0,
+                duration: Duration(milliseconds: 500),
+                child: Center(
+                    child: Container(
+                      color: Colors.grey[300],
+                      child: Expanded(
+                        child: SpinKitChasingDots(
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
+                      ),
+                    )
                 )
-            ) :
-            SizedBox(height: 0,)
+              ),
+            )
 
 
           ],
