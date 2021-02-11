@@ -14,6 +14,7 @@ import 'package:qanda/customWidgets/NetworkImageWidget.dart';
 import 'package:qanda/models/Comment.dart';
 import 'package:qanda/models/Post.dart';
 import 'package:qanda/pages/EditPostPage.dart';
+import 'package:qanda/pages/PersonalPage.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
@@ -132,6 +133,70 @@ class _ShowPostPageState extends State<ShowPostPage>{
               constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
               child: ListView(
                 children: [
+
+                  SizedBox(height: 10,),
+
+                  // Padding(
+                  //   padding: EdgeInsets.all(10),
+                  //   child:
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: [
+                  //       InkWell(
+                  //         onTap: () {
+                  //           // Navigator.push(context, MaterialPageRoute(builder: (context) =>  PersonalPage(userEmail: post.authorEmail,),));
+                  //           pushNewScreen(
+                  //             context,
+                  //             screen: PersonalPage(userEmail: widget.post.authorEmail,),
+                  //             withNavBar: true,
+                  //             pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  //           );
+                  //         },
+                  //         child: Column(
+                  //           children: [
+                  //             Padding(
+                  //               padding: EdgeInsets.all(3),
+                  //               child: Align(
+                  //                   alignment: Alignment.centerLeft,
+                  //                   child: Container(
+                  //                     height: 45,
+                  //                     width: 45,
+                  //                     decoration: BoxDecoration(
+                  //                         shape: BoxShape.circle,
+                  //                         color: Colors.grey[300],
+                  //                         border: Border.all(color: const Color(0x33A6A6A6)),
+                  //                         image: DecorationImage(
+                  //                             image:
+                  //                             widget.post.authorImageUrl == ""
+                  //                                 ?
+                  //                             AssetImage('assets/images/no_photo.png',)
+                  //                                 :
+                  //                             NetworkImage(widget.post.authorImageUrl),
+                  //                             fit: BoxFit.fill)
+                  //                     ),
+                  //                   )
+                  //               ),
+                  //             ),
+                  //             Padding(
+                  //               padding: EdgeInsets.all(3),
+                  //               child: Align(
+                  //                 alignment: Alignment.centerLeft,
+                  //                 child: Text(
+                  //                   widget.post.author,
+                  //                   style: TextStyle(
+                  //                     fontSize: 15,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+
                   StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("posts")
@@ -188,6 +253,8 @@ class _ShowPostPageState extends State<ShowPostPage>{
                               }
                               return  Column(
                                 children: [
+
+
                                   Padding(
                                     padding: EdgeInsets.only(top: 5, bottom: 5),
                                     child:
@@ -248,7 +315,24 @@ class _ShowPostPageState extends State<ShowPostPage>{
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Center(child: Text(post.topic + " " + post.course),),
-                                                Center(child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
+                                                // Center(child: Text(timeAgo.format(DateTime.fromMicrosecondsSinceEpoch(post.createdTime.microsecondsSinceEpoch)) + " by " + post.author),),
+
+                                                Center(
+                                                  child: InkWell(
+                                                    child: Center(
+                                                      child: Text("by " + post.author),
+                                                    ),
+                                                    onTap: () {
+                                                      pushNewScreen(
+                                                      context,
+                                                      screen: PersonalPage(userEmail: widget.post.authorEmail,),
+                                                      withNavBar: true,
+                                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                      );
+                                                    },
+
+                                                  ),
+                                                )
                                               ],
                                             ),
                                           ),
