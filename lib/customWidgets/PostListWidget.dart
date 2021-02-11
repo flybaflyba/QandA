@@ -24,7 +24,7 @@ class PostListWidget extends StatefulWidget{
 class _PostListWidgetState extends State<PostListWidget>{
 
   List<int> data = [];
-  final int increment = 10;
+  final int increment = 7;
   // bool isLoadingVertical = false;
   // var allPosts;
 

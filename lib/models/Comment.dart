@@ -38,6 +38,14 @@ class Comment {
     })
         .then((value) => print("Comment created"))
         .catchError((error) => print("Failed to create Comments: $error"));
+
+    FirebaseFirestore.instance.collection('posts')
+        .doc(post.postDocName)
+        .update({
+      "most recent activity time": DateTime.now(),
+    })
+        .then((value) => print("most recent activity time set"))
+        .catchError((error) => print("most recent activity time Comments: $error"));
   }
 
   void update(Post post) {
@@ -53,6 +61,14 @@ class Comment {
     })
         .then((value) => print("Comment created"))
         .catchError((error) => print("Failed to create Comments: $error"));
+
+    FirebaseFirestore.instance.collection('posts')
+        .doc(post.postDocName)
+        .update({
+      "most recent activity time": DateTime.now(),
+    })
+        .then((value) => print("most recent activity time set"))
+        .catchError((error) => print("most recent activity time Comments: $error"));
   }
 
   Map toMap() {

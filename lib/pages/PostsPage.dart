@@ -133,10 +133,12 @@ class _PostsPageState extends State<PostsPage>{
                       stream: FirebaseFirestore.instance
                           .collection("posts")
                           .where("topic", isEqualTo: widget.postType == "academic posts" ? "Academic" : "Campus Life")
+                          .orderBy('most recent activity time', descending: true)
                           .snapshots(),
                       builder: (context, snapshot){
                         if(snapshot.hasData){
-                          var docs = snapshot.data.docs.reversed;
+                          // var docs = snapshot.data.docs.reversed;
+                          var docs = snapshot.data.docs;
                           print(docs.length);
                           return PostListWidget(allPostsStream: docs,);
                         } else {
@@ -152,10 +154,11 @@ class _PostsPageState extends State<PostsPage>{
                       stream: FirebaseFirestore.instance
                           .collection("posts")
                           .where("course", isEqualTo: widget.searchCourse)
+                          .orderBy('most recent activity time', descending: true)
                           .snapshots(),
                       builder: (context, snapshot){
                         if(snapshot.hasData){
-                          var docs = snapshot.data.docs.reversed;
+                          var docs = snapshot.data.docs;
                           print(docs.length);
                           return PostListWidget(allPostsStream: docs,);
                         } else {
@@ -173,10 +176,11 @@ class _PostsPageState extends State<PostsPage>{
                           .collection("posts")
                           .where("topic", isEqualTo: widget.postType == "academic posts" ? "Academic" : "Campus Life")
                           .where("author email", isEqualTo: widget.searchPerson)
+                          .orderBy('most recent activity time', descending: true)
                           .snapshots(),
                       builder: (context, snapshot){
                         if(snapshot.hasData){
-                          var docs = snapshot.data.docs.reversed;
+                          var docs = snapshot.data.docs;
                           print(docs.length);
                           return PostListWidget(allPostsStream: docs,);
                         } else {

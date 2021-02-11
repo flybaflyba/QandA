@@ -63,6 +63,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                 onPressed: ()  async {
 
                   AwesomeDialog(
+                    width: 400,
                     context: context,
                     useRootNavigator: true,
                     dialogType: DialogType.QUESTION,
@@ -74,6 +75,7 @@ class _ShowPostPageState extends State<ShowPostPage>{
                     btnCancelOnPress: () {
 
                       AwesomeDialog(
+                        width: 400,
                           context: context,
                           useRootNavigator: true,
                           dialogType: DialogType.INFO,

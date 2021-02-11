@@ -28,6 +28,8 @@ class Post {
   Map thumbnailAndImageUrls = Map<dynamic, dynamic>();
   var authorImageUrl = "";
 
+  var mostRecentActivityTime;
+
   Post({
     var title,
     var content,
@@ -201,6 +203,7 @@ class Post {
           if(thumbnailAndImageUrls.length != imageUint8Lists.length) {
             UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
           }
+          mostRecentActivityTime = DateTime.now();
           // url list is where the images are saved
           FirebaseFirestore.instance.collection('posts')
               .doc(postDocName)
@@ -215,6 +218,7 @@ class Post {
             "liked by": likedBy,
             "comments": comments,
             "thumbnail and image urls": thumbnailAndImageUrls,
+            "most recent activity time": mostRecentActivityTime,
           })
               .then((value) => print("Post Created"))
               .catchError((error) => print("Failed to create Post: $error"));
@@ -238,6 +242,7 @@ class Post {
       if(thumbnailAndImageUrls.length != imageUint8Lists.length) {
         UniversalFunctions.showToast("Image uploading failed", UniversalValues.toastMessageTypeWarningColor);
       }
+      mostRecentActivityTime = DateTime.now();
       // url list is where the images are saved
       FirebaseFirestore.instance.collection('posts')
           .doc(postDocName)
@@ -252,6 +257,7 @@ class Post {
         "liked by": likedBy,
         "comments": comments,
         "thumbnail and image urls": thumbnailAndImageUrls,
+        "most recent activity time": mostRecentActivityTime,
       })
           .then((value) => print("Post Created"))
           .catchError((error) => print("Failed to create Post: $error"));
