@@ -65,6 +65,10 @@ class UserInformation {
     await prefs.setString('userEmail', "");
     await prefs.setString('userMajor',  "");
     await prefs.setString('profileImageUrl',  "");
+    name = "";
+    email = "";
+    major = "";
+    profileImageUrl = "";
 
   }
 

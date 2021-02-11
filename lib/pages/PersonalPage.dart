@@ -1,4 +1,5 @@
 
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class PersonalPage extends StatefulWidget{
+  PersonalPage({Key key,this.userEmail}) : super(key: key);
+  final userEmail;
 
   @override
   _PersonalPageState createState() => _PersonalPageState();
@@ -27,33 +30,47 @@ class PersonalPage extends StatefulWidget{
 class _PersonalPageState extends State<PersonalPage>{
 
   var signInOurButtonIcon = Icon(Icons.person);
-  UserInformation userInformation;
+  // UserInformation userInformation;
+  UserInformation userInformation = new UserInformation();
 
+  var email = "signed out";
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance
-        .authStateChanges()
-        .listen((User user) {
-      if (user == null) {
-        print('User is currently signed out!');
-        setState(() {
-          signInOurButtonIcon = Icon(Icons.login);
-          if(userInformation != null) {
+    email = widget.userEmail;
+    // if passed in email is "" they we listen to auth change
+    // otherwise it's just another user viewing the profile, no need to listen
+
+    if(email == "signed out") {
+      FirebaseAuth.instance
+          .authStateChanges()
+          .listen((User user) {
+        if (user == null) {
+          print('User is currently signed out!');
+          setState(() {
+            signInOurButtonIcon = Icon(Icons.login);
+            // if(userInformation != null) {
+            //   userInformation.clearLocal();
+            //   userInformation = null;
+            // }
+            email = "signed out";
             userInformation.clearLocal();
-            userInformation = null;
-          }
-        });
-      } else {
-        print('User is signed in!');
-        setState(() {
-          signInOurButtonIcon = Icon(Icons.logout);
-          userInformation = new UserInformation(email: user.email);
-        });
-        userInformation.get();
-      }
-    });
+          });
+        } else {
+          print('User is signed in!');
+          setState(() {
+            signInOurButtonIcon = Icon(Icons.logout);
+            // userInformation = new UserInformation(email: user.email);
+            email = user.email;
+          });
+          // userInformation.get();
+        }
+      });
+    }
+
+
+
   }
 
   void askForSignIn() {
@@ -85,9 +102,10 @@ class _PersonalPageState extends State<PersonalPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("Home"),),
-          leading: Icon(Icons.logout, color: UniversalValues.primaryColor,), //  to make the title center
+          title: Center(child: Text(""),),
+          leading: widget.userEmail == "signed out" ? SizedBox(width: 0,) : BackButton(),
           actions: [
+            widget.userEmail == "signed out" ?
             FirebaseAuth.instance.currentUser == null ?
             SizedBox(width: 0,) :
             IconButton(
@@ -107,8 +125,10 @@ class _PersonalPageState extends State<PersonalPage>{
                   }
 
                 }
-            ),
+            ) :
+            SizedBox(width: 0,),
 
+            widget.userEmail == "signed out" ?
             IconButton(
                 icon: Icon(Icons.more_horiz),
                 onPressed: () {
@@ -126,8 +146,8 @@ class _PersonalPageState extends State<PersonalPage>{
                     btnOkOnPress: () {},
                   )..show();
                 }
-            ),
-
+            ) :
+            SizedBox(width: 0,),
           ],
         ),
         body: Center(
@@ -136,14 +156,18 @@ class _PersonalPageState extends State<PersonalPage>{
               child: StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(userInformation == null ? "ss" : userInformation.email)
+                      .doc(email)
                       .snapshots(),
                   builder: (context, snapshot){
                     if(snapshot.hasData && snapshot.data.data() != null) {
-                     if(userInformation != null) {
-                       userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
-                       userInformation.name = snapshot.data.data()["name"];
-                     }
+                     // if(userInformation != null) {
+                     //   userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
+                     //   userInformation.name = snapshot.data.data()["name"];
+                     // }
+
+                     userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
+                     userInformation.name = snapshot.data.data()["name"];
+                     userInformation.email = snapshot.data.data()["email"];
                     }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -154,18 +178,22 @@ class _PersonalPageState extends State<PersonalPage>{
                           child: Center(
                             child: InkWell(
                                 onTap: () {
-                                  if(userInformation != null) {
-                                    showCupertinoModalBottomSheet(
-                                      enableDrag: true,
-                                      isDismissible: true,
-                                      useRootNavigator: true,
-                                      context: context,
-                                      duration: Duration(milliseconds: 700),
-                                      builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
-                                    );
-                                  } else {
-                                    askForSignIn();
+
+                                  if(widget.userEmail == "signed out") {
+                                    if(FirebaseAuth.instance.currentUser != null) {
+                                      showCupertinoModalBottomSheet(
+                                        enableDrag: true,
+                                        isDismissible: true,
+                                        useRootNavigator: true,
+                                        context: context,
+                                        duration: Duration(milliseconds: 700),
+                                        builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
+                                      );
+                                    } else {
+                                      askForSignIn();
+                                    }
                                   }
+
 
                                 },
                                 child: Container(
@@ -196,19 +224,20 @@ class _PersonalPageState extends State<PersonalPage>{
                           child: Center(
                             child: InkWell(
                                 onTap: () {
-                                  if(userInformation != null) {
-                                    showCupertinoModalBottomSheet(
-                                      enableDrag: true,
-                                      isDismissible: true,
-                                      useRootNavigator: true,
-                                      context: context,
-                                      duration: Duration(milliseconds: 700),
-                                      builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
-                                    );
-                                  } else {
-                                    askForSignIn();
+                                  if(widget.userEmail == "signed out") {
+                                    if(FirebaseAuth.instance.currentUser != null) {
+                                      showCupertinoModalBottomSheet(
+                                        enableDrag: true,
+                                        isDismissible: true,
+                                        useRootNavigator: true,
+                                        context: context,
+                                        duration: Duration(milliseconds: 700),
+                                        builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
+                                      );
+                                    } else {
+                                      askForSignIn();
+                                    }
                                   }
-
                                 },
                                 child: Container(
                                     child: Text(
@@ -229,28 +258,36 @@ class _PersonalPageState extends State<PersonalPage>{
                                         padding: EdgeInsets.only(top: 10),
                                         child: Container(
                                             child: FlatButton(
-                                              color: userInformation == null ? Colors.grey : Colors.blue,
+                                              color: widget.userEmail == "signed out" ? FirebaseAuth.instance.currentUser == null ? Colors.grey : Colors.blue : Colors.blueAccent,
                                               textColor: Colors.white,
                                               disabledColor: Colors.grey,
                                               disabledTextColor: Colors.black,
                                               padding: EdgeInsets.all(8.0),
-                                              splashColor: userInformation == null ? Colors.black54 : Colors.blueAccent,
+                                              splashColor: widget.userEmail == "signed out" ? FirebaseAuth.instance.currentUser == null ? Colors.black54 : Colors.blueAccent : Colors.blueAccent,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(18.0),
                                               ),
                                               onPressed: () {
 
-                                                if(userInformation != null) {
+                                                if(widget.userEmail == "signed out") {
+                                                  if(FirebaseAuth.instance.currentUser != null) {
+                                                    pushNewScreen(
+                                                      context,
+                                                      screen: PostsPage(postType: "campus life posts", searchPerson: userInformation.email,),
+                                                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                    );
+                                                  } else {
+                                                    askForSignIn();
+                                                  }
+                                                } else {
                                                   pushNewScreen(
                                                     context,
                                                     screen: PostsPage(postType: "campus life posts", searchPerson: userInformation.email,),
                                                     withNavBar: false, // OPTIONAL VALUE. True by default.
                                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                                   );
-                                                } else {
-                                                  askForSignIn();
                                                 }
-
 
 
                                               },
@@ -266,27 +303,37 @@ class _PersonalPageState extends State<PersonalPage>{
                                         padding: EdgeInsets.only(top: 10),
                                         child: Container(
                                             child: FlatButton(
-                                              color: userInformation == null ? Colors.grey : Colors.blue,
+                                              color: widget.userEmail == "signed out" ? FirebaseAuth.instance.currentUser == null ? Colors.grey : Colors.blue : Colors.blueAccent,
                                               textColor: Colors.white,
                                               disabledColor: Colors.grey,
                                               disabledTextColor: Colors.black,
                                               padding: EdgeInsets.all(8.0),
-                                              splashColor: userInformation == null ? Colors.black54 : Colors.blueAccent,
+                                              splashColor: widget.userEmail == "signed out" ? FirebaseAuth.instance.currentUser == null ? Colors.black54 : Colors.blueAccent : Colors.blueAccent,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(18.0),
                                               ),
                                               onPressed: () {
 
-                                                if(userInformation != null) {
+                                                if(widget.userEmail == "signed out") {
+                                                  if(FirebaseAuth.instance.currentUser != null) {
+                                                    pushNewScreen(
+                                                      context,
+                                                      screen: PostsPage(postType: "academic posts", searchPerson: userInformation.email,),
+                                                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                    );
+                                                  } else {
+                                                    askForSignIn();
+                                                  }
+                                                } else {
                                                   pushNewScreen(
                                                     context,
                                                     screen: PostsPage(postType: "academic posts", searchPerson: userInformation.email,),
                                                     withNavBar: false, // OPTIONAL VALUE. True by default.
                                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                                   );
-                                                } else {
-                                                  askForSignIn();
                                                 }
+
 
 
                                               },

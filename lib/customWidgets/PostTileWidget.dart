@@ -2,9 +2,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:qanda/customWidgets/ImageGridViewWidget.dart';
 import 'package:qanda/customWidgets/LikeAndCommentBarWidget.dart';
 import 'package:qanda/models/Post.dart';
+import 'package:qanda/pages/PersonalPage.dart';
+import 'package:qanda/pages/PostsPage.dart';
 import 'package:qanda/pages/ShowPostPage.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
@@ -72,7 +75,6 @@ class PostTileWidget extends StatelessWidget{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     StreamBuilder<DocumentSnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection('users')
@@ -82,48 +84,57 @@ class PostTileWidget extends StatelessWidget{
                           if(snapshot.hasData) {
                             post.authorImageUrl = snapshot.data.data()["profile image url"];
                             post.author = snapshot.data.data()["name"];
-
                           }
-                          return Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(3),
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      height: 45,
-                                      width: 45,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.grey[300],
-                                          border: Border.all(color: const Color(0x33A6A6A6)),
-                                          image: DecorationImage(
-                                              image:
-                                              post.authorImageUrl == ""
-                                                  ?
-                                              AssetImage('assets/images/no_photo.png',)
-                                                  :
-                                              NetworkImage(post.authorImageUrl),
-                                              fit: BoxFit.fill)
-                                      ),
-                                    )
+                          return InkWell(
+                            onTap: () {
+                              // Navigator.push(context, MaterialPageRoute(builder: (context) =>  PersonalPage(userEmail: post.authorEmail,),));
+                              pushNewScreen(
+                                context,
+                                screen: PersonalPage(userEmail: post.authorEmail,),
+                                withNavBar: true,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(3),
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.grey[300],
+                                            border: Border.all(color: const Color(0x33A6A6A6)),
+                                            image: DecorationImage(
+                                                image:
+                                                post.authorImageUrl == ""
+                                                    ?
+                                                AssetImage('assets/images/no_photo.png',)
+                                                    :
+                                                NetworkImage(post.authorImageUrl),
+                                                fit: BoxFit.fill)
+                                        ),
+                                      )
+                                  ),
                                 ),
-                              ),
-
-                              Padding(
-                                padding: EdgeInsets.all(3),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    post.author + " " + position.toString(),
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+                                Padding(
+                                  padding: EdgeInsets.all(3),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      post.author + " " + position.toString(),
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         }
                     ),
