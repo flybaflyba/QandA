@@ -46,7 +46,7 @@ class _EditPostPageState extends State<EditPostPage>{
   var course = "";
   var title = "";
   var content = "";
-  var topic = "What are Your Posting for?";
+  var topic = "What are You Posting for?";
   List<bool> topicSelectionList = [false, false];
   List<Asset> imageAssets = List<Asset>();
   List<dynamic> imageUint8Lists = List<dynamic>();
@@ -71,7 +71,7 @@ class _EditPostPageState extends State<EditPostPage>{
 
     if (widget.post == null) {
       print("creating new post");
-      topic = "What are you posting for?";
+      topic = "What are You Posting for?";
     } else {
       print("editing post");
       setState(() {
@@ -695,7 +695,9 @@ class _EditPostPageState extends State<EditPostPage>{
                                   // print(titleTextEditingController.text);
                                   // print(titleTextEditingController.value);
                                   // if (title != "" && content != "" && topic != "What are Your Posting for?") {
-                                  if (content != "" && topic != "What are Your Posting for?") {
+                                  print(topic);
+                                  print(content);
+                                  if (content != "" && topic != "What are You Posting for?") {
                                     if (FirebaseAuth.instance.currentUser != null) {
 
                                       if(topic == "Academic") {
@@ -727,10 +729,10 @@ class _EditPostPageState extends State<EditPostPage>{
                                     //   UniversalFunctions.showToast("What's the title?", UniversalValues.toastMessageTypeWarningColor);
                                     // } else
 
-                                      if (content == "") {
+                                    if (content == "") {
                                       UniversalFunctions.showToast("Please provide some content.", UniversalValues.toastMessageTypeWarningColor);
                                     } else {
-                                      UniversalFunctions.showToast("What are you posting for?", UniversalValues.toastMessageTypeWarningColor);
+                                      UniversalFunctions.showToast("What are You Posting for?", UniversalValues.toastMessageTypeWarningColor);
                                     }
                                   }
                                 },
