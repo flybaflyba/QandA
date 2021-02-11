@@ -117,7 +117,7 @@ class _PersonalPageState extends State<PersonalPage>{
                     customHeader: Image.asset("assets/images/byu_hawaii_medallion_logo.png"),
                     animType: AnimType.BOTTOMSLIDE,
                     title: 'About BYU-H App',
-                    desc: "Created by BYU-Hawaii students.",
+                    desc: "Programming by Litian Zhang under the supervision of Dr. Geoffrey Draper at Brigham Young University--Hawaii.",
                     btnOkText: "Dismiss",
                     btnOkColor: Colors.blueAccent,
                     btnOkOnPress: () {},
