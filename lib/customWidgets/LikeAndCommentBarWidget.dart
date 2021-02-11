@@ -121,12 +121,13 @@ class LikeAndCommentBarWidget extends StatelessWidget{
                     } else {
                       // ask for login
                       print("ask for login");
-                      pushNewScreen(
-                        context,
-                        screen: SignInUpPage(),
-                        withNavBar: false, // OPTIONAL VALUE. True by default.
-                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                      );
+                      // pushNewScreen(
+                      //   context,
+                      //   screen: SignInUpPage(),
+                      //   withNavBar: false, // OPTIONAL VALUE. True by default.
+                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      // );
+                      UniversalFunctions.askForSignIn(context);
                     }
 
                   }

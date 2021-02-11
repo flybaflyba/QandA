@@ -150,13 +150,13 @@ class UniversalFunctions{
                                       // hide keyboard
                                       // FocusScope.of(context).requestFocus(FocusNode()); // cannot user, for some reason there is a red error after i enter text, does not cause any crashing but i think that is why i cannot use this to close keyborad
                                       SystemChannels.textInput.invokeMethod('TextInput.hide');
-
-                                      pushNewScreen(
-                                        context,
-                                        screen: SignInUpPage(),
-                                        withNavBar: false, // OPTIONAL VALUE. True by default.
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      );
+                                      UniversalFunctions.askForSignIn(context);
+                                      // pushNewScreen(
+                                      //   context,
+                                      //   screen: SignInUpPage(),
+                                      //   withNavBar: false, // OPTIONAL VALUE. True by default.
+                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      // );
                                       }
                                   }
                                 },
