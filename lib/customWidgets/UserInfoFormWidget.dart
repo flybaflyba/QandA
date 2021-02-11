@@ -40,6 +40,7 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
   final picker = ImagePicker();
 
   var userName = "";
+  var animatedContainerHeight = 140.0;
 
   Future getImageOnPhones(ImageSource imageSource) async {
     final pickedFile = await picker.getImage(source: imageSource);
@@ -147,115 +148,126 @@ class _UserInfoFormWidgetState extends State<UserInfoFormWidget>{
 
                     Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-                        child:
-                        pickImageOptionShow
-                            ?
-                        Container(
-                          // color: Colors.grey[300],
-                          child: Stack(
-                            children: [
-
-                              Positioned(
-                                right: 0.0,
-                                child: GestureDetector(
-                                  onTap: (){
-                                    setState(() {
-                                      pickImageOptionShow = false;
-                                    });
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: CircleAvatar(
-                                      radius: 14.0,
-                                      backgroundColor: Colors.grey[300],
-                                      child: Icon(Icons.close, color: Colors.red),
+                        child: AnimatedContainer(
+                          height: animatedContainerHeight,
+                          duration: Duration(milliseconds: 500),
+                          child: AnimatedSwitcher(
+                              // transitionBuilder: (Widget child, Animation<double> animation) {
+                              //   return ScaleTransition(child: child, scale: animation);
+                              // },
+                              duration: Duration(milliseconds: 300),
+                              child: pickImageOptionShow
+                                  ?
+                              Container(
+                                // color: Colors.grey[300],
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      right: 0.0,
+                                      child: GestureDetector(
+                                        onTap: (){
+                                          setState(() {
+                                            pickImageOptionShow = false;
+                                            animatedContainerHeight = 140.0;
+                                          });
+                                        },
+                                        child: Align(
+                                          alignment: Alignment.topRight,
+                                          child: CircleAvatar(
+                                            radius: 14.0,
+                                            backgroundColor: Colors.grey[300],
+                                            child: Icon(Icons.close, color: Colors.red),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        IconButton(
+                                            icon: Icon(Icons.camera_alt, color: Colors.blueAccent,),
+                                            onPressed: () {
+                                              getImageOnPhones(ImageSource.camera);
+                                            }
+                                        ),
+                                        IconButton(
+                                            icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent,),
+                                            onPressed: () {
+                                              getImageOnPhones(ImageSource.gallery);
+                                            }
+                                        )
+                                      ],
+                                    ),
+
+                                  ],
                                 ),
-                              ),
+                              )
+                                  :
+                              GridView.count(
+                                physics: ScrollPhysics(),
+                                // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
+                                shrinkWrap: true,
+                                crossAxisCount: 5,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                children: List.generate(sampleProfileImageUrls.length, (index) {
+                                  if(index == 0) {
+                                    return InkWell(
+                                        onTap: () {
+
+                                          if(kIsWeb) {
+                                            getImageOnWeb();
+                                          } else {
+                                            setState(() {
+                                              pickImageOptionShow = true;
+                                              animatedContainerHeight = 30;
+                                            });
+                                          }
 
 
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  IconButton(
-                                      icon: Icon(Icons.camera_alt, color: Colors.blueAccent,),
-                                      onPressed: () {
-                                        getImageOnPhones(ImageSource.camera);
-                                      }
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.insert_photo_sharp, color: Colors.blueAccent,),
-                                      onPressed: () {
-                                        getImageOnPhones(ImageSource.gallery);
-                                      }
-                                  )
-                                ],
-                              ),
+                                        },
+                                        child: Container(
+                                            width: 15.0,
+                                            height: 15.0,
+                                            decoration: new BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.grey[300]
+                                            ),
+                                            child: Icon(Icons.add_photo_alternate),
+                                          ),
 
-                            ],
+                                    );
+                                  } else {
+                                    return InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            profileImageUrlOrUInt8List.clear();
+                                            profileImageUrlOrUInt8List.add(sampleProfileImageUrls[index]);
+                                          });
+                                        },
+                                        child: Container(
+                                            width: 15.0,
+                                            height: 15.0,
+                                            decoration: new BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: new DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: new NetworkImage(
+                                                        sampleProfileImageUrls[index]
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    );
+                                  }
+                                }
+                                ),
+                              )
                           ),
                         )
-                            :
 
-                        GridView.count(
-                          physics: ScrollPhysics(),
-                          // fix scroll event conflict problem, without this line, when scroll on gridview, listview does not scroll
-                          shrinkWrap: true,
-                          crossAxisCount: 5,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          children: List.generate(sampleProfileImageUrls.length, (index) {
-                            if(index == 0) {
-                              return InkWell(
-                                  onTap: () {
-
-                                    if(kIsWeb) {
-                                      getImageOnWeb();
-                                    } else {
-                                      setState(() {
-                                        pickImageOptionShow = true;
-                                      });
-                                    }
-
-
-                                  },
-                                  child:  Container(
-                                    width: 15.0,
-                                    height: 15.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey[300]
-                                    ),
-                                    child: Icon(Icons.add_photo_alternate),
-                                  )
-                              );
-                            } else {
-                              return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      profileImageUrlOrUInt8List.clear();
-                                      profileImageUrlOrUInt8List.add(sampleProfileImageUrls[index]);
-                                    });
-                                  },
-                                  child: Container(
-                                      width: 15.0,
-                                      height: 15.0,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: new NetworkImage(
-                                                  sampleProfileImageUrls[index]
-                                              )
-                                          )
-                                      )
-                                  )
-                              );
-                            }
-                          }
-                          ),
-                        )
                     ),
 
 
