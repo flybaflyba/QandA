@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -299,5 +300,29 @@ class UniversalFunctions{
 
   }
 
+  static void askForSignIn(BuildContext context) {
+    AwesomeDialog(
+      width: 400,
+      context: context,
+      useRootNavigator: true,
+      dialogType: DialogType.INFO,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Please Login',
+      desc: "",
+      btnCancelText: "Later",
+      btnCancelColor: Colors.red,
+      btnCancelOnPress: () {},
+      btnOkText: "Login",
+      btnOkColor: Colors.blueAccent,
+      btnOkOnPress: () {
+        pushNewScreen(
+          context,
+          screen: SignInUpPage(),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
+      },
+    )..show();
+  }
 
 }

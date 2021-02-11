@@ -73,30 +73,7 @@ class _PersonalPageState extends State<PersonalPage>{
 
   }
 
-  void askForSignIn() {
-    AwesomeDialog(
-      width: 400,
-      context: context,
-      useRootNavigator: true,
-      dialogType: DialogType.INFO,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'Please Login',
-      desc: "",
-      btnCancelText: "Later",
-      btnCancelColor: Colors.red,
-      btnCancelOnPress: () {},
-      btnOkText: "Login",
-      btnOkColor: Colors.blueAccent,
-      btnOkOnPress: () {
-        pushNewScreen(
-          context,
-          screen: SignInUpPage(),
-          withNavBar: false, // OPTIONAL VALUE. True by default.
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        );
-      },
-    )..show();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +167,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                         builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
                                       );
                                     } else {
-                                      askForSignIn();
+                                      UniversalFunctions.askForSignIn(context);
                                     }
                                   }
 
@@ -235,7 +212,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                         builder: (context) => UserInfoFormWidget(userName: userInformation.name, messageText: "Update Profile", profileUrl: userInformation.profileImageUrl,),
                                       );
                                     } else {
-                                      askForSignIn();
+                                      UniversalFunctions.askForSignIn(context);
                                     }
                                   }
                                 },
@@ -278,7 +255,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                                     );
                                                   } else {
-                                                    askForSignIn();
+                                                    UniversalFunctions.askForSignIn(context);
                                                   }
                                                 } else {
                                                   pushNewScreen(
@@ -323,7 +300,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                                     );
                                                   } else {
-                                                    askForSignIn();
+                                                    UniversalFunctions.askForSignIn(context);
                                                   }
                                                 } else {
                                                   pushNewScreen(
