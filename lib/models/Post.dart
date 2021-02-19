@@ -118,7 +118,7 @@ class Post {
         dateTimeNow = DateTime.now();
         print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
         dateTimeLast = DateTime.now();
-        imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200);
+        imagePackage.Image thumbnail = imagePackage.copyResize(image, width: 200); // TODO possible bug, when ios image is an HDR image, this line cannot run
         dateTimeNow = DateTime.now();
         print("resizing image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
         dateTimeLast = DateTime.now();
