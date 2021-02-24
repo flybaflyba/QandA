@@ -55,7 +55,11 @@ class _PersonalPageState extends State<PersonalPage>{
             //   userInformation = null;
             // }
             email = "signed out";
-            userInformation.clearLocal();
+            // userInformation.clearLocal();
+            userInformation.name = "";
+            userInformation.email = "";
+            userInformation.major = "";
+            userInformation.profileImageUrl = "";
           });
         } else {
           print('User is signed in!');
@@ -142,9 +146,9 @@ class _PersonalPageState extends State<PersonalPage>{
                      //   userInformation.name = snapshot.data.data()["name"];
                      // }
 
-                     userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
-                     userInformation.name = snapshot.data.data()["name"];
-                     userInformation.email = snapshot.data.data()["email"];
+                      userInformation.profileImageUrl = snapshot.data.data()["profile image url"];
+                      userInformation.name = snapshot.data.data()["name"];
+                      userInformation.email = snapshot.data.data()["email"];
                     }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -181,11 +185,12 @@ class _PersonalPageState extends State<PersonalPage>{
                                         image: new DecorationImage(
                                             fit: BoxFit.fill,
                                             image:
-                                            userInformation == null
-                                                ?
-                                            AssetImage("assets/images/no_photo.png")
-                                                :
-                                            userInformation.profileImageUrl == ""
+                                            // userInformation == null
+                                            //     ?
+                                            // AssetImage("assets/images/no_photo.png")
+                                            //     :
+                                            // userInformation.profileImageUrl == ""
+                                            email == "signed out"
                                                 ?
                                             AssetImage("assets/images/no_photo.png")
                                                 :
@@ -218,7 +223,9 @@ class _PersonalPageState extends State<PersonalPage>{
                                 },
                                 child: Container(
                                     child: Text(
-                                      userInformation == null ? "   " : userInformation.name,
+                                      // userInformation == null ? "   "
+                                      email == "signed out" ? "    "
+                                          : userInformation.name,
                                       style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
                                     )
                                 )
