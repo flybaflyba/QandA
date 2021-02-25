@@ -12,6 +12,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void onIntroEnd(context) {
+    Navigator.pop(context);
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => MenuPage()),
     );

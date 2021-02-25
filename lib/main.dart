@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:qanda/pages/MenuPage.dart';
 import 'package:qanda/pages/OnBoardingPage.dart';
+import 'package:qanda/pages/WelcomePage.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 
 Future<void> main() async {
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: MenuPage(),
-      home: OnBoardingPage(),
+      home: WelcomePage(),
 
     );
   }
