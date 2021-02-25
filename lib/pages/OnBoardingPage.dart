@@ -19,7 +19,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   Widget buildImage(String assetName) {
     return Align(
-      child: Image.asset('assets/images/$assetName.jpg', width: 350.0),
+      child: Image.asset('assets/images/$assetName.png', width: 350.0),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -31,38 +31,38 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
       descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
-      imagePadding: EdgeInsets.all(10),
+      pageColor: Colors.lightBlue,
+      imagePadding: EdgeInsets.only(top: 70),
     );
 
     return IntroductionScreen(
       key: introKey,
       pages: [
         PageViewModel(
-          title: "Academic Posts",
+          title: "\n\nAcademic Posts",
           body:
           "Find an answer when you questions about a class.",
-          image: buildImage('intro_a'),
+          image: buildImage('intro_academic'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Campus Life Posts",
+          title: "\n\nCampus Life Posts",
           body:
           "See what is going on on campus.",
-          image: buildImage('intro_b'),
+          image: buildImage('intro_campus_life'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Post Something",
+          title: "\n\nPost Something",
           body:
           "Share your life, or ask a question.",
-          image: buildImage('intro_c'),
+          image: buildImage('intro_post'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Large Image View",
+          title: "\n\nLarge Image View",
           body: "View an image in large scale, support zoom in and out!",
-          image: buildImage('intro_d'),
+          image: buildImage('intro_large'),
           // footer: RaisedButton(
           //   onPressed: () {
           //     introKey.currentState?.animateScroll(0);
@@ -79,9 +79,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Your Home Page",
+          title: "\n\nYour Home Page",
           body: "Update your profile, and view the posts you made",
-          image: buildImage('intro_e'),
+          image: buildImage('intro_home'),
           decoration: pageDecoration,
         ),
       ],
@@ -96,6 +96,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),
+        activeColor: Colors.black,
         activeSize: Size(22.0, 10.0),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),

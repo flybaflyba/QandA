@@ -326,7 +326,7 @@ class _EditPostPageState extends State<EditPostPage>{
           }
         }
 
-        // when deselect some images in album, we also remove from the page. 
+        // when deselect some images in album, we also remove from the page.
         var deselecteds = new List<dynamic>();
         for(var x in imageUint8Lists) {
           if(x.runtimeType != String) {
