@@ -312,6 +312,7 @@ class _EditPostPageState extends State<EditPostPage>{
       if (resultList.length != 0) {
         imageAssets = resultList;
         for (var i in imageUint8ListsTemp) {
+          // do not add images again
           bool duplicate = false;
           for (var j in imageUint8Lists) {
             if (i.toString() == j.toString()) {
@@ -319,10 +320,32 @@ class _EditPostPageState extends State<EditPostPage>{
               break;
             }
           }
-          print(duplicate);
+          // print(duplicate);
           if(!duplicate) {
             imageUint8Lists.add(i);
           }
+        }
+
+        // when deselect some images in album, we also remove from the page. 
+        var deselecteds = new List<dynamic>();
+        for(var x in imageUint8Lists) {
+          if(x.runtimeType != String) {
+            // if an image is de-selected in album
+            bool deselected = true;
+            for (var y in imageUint8ListsTemp) {
+              if(x.toString() == y.toString()) {
+                deselected = false;
+                break;
+              }
+            }
+            if(deselected){
+              deselecteds.add(x);
+            }
+          }
+        }
+
+        for(var a in deselecteds) {
+          imageUint8Lists.remove(a);
         }
         // imageUint8Lists = imageUint8ListsTemp;
       }
