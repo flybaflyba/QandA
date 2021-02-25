@@ -27,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as imagePackage;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+
 class EditPostPage extends StatefulWidget{
 
   EditPostPage({Key key, this.post}) : super(key: key);
@@ -311,7 +312,17 @@ class _EditPostPageState extends State<EditPostPage>{
       if (resultList.length != 0) {
         imageAssets = resultList;
         for (var i in imageUint8ListsTemp) {
-          imageUint8Lists.add(i);
+          bool duplicate = false;
+          for (var j in imageUint8Lists) {
+            if (i.toString() == j.toString()) {
+              duplicate = true;
+              break;
+            }
+          }
+          print(duplicate);
+          if(!duplicate) {
+            imageUint8Lists.add(i);
+          }
         }
         // imageUint8Lists = imageUint8ListsTemp;
       }
@@ -323,7 +334,7 @@ class _EditPostPageState extends State<EditPostPage>{
     FilePickerResult result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: true,
-        allowedExtensions: ['png', 'jpg', 'svg', 'jpeg']
+        allowedExtensions: ['png', 'jpg', 'jpeg']
     );
 
     if (result != null) {
@@ -351,9 +362,6 @@ class _EditPostPageState extends State<EditPostPage>{
   }
 
   Future<void> savePost(BuildContext context) async {
-
-
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // prefs.setString("userName", "");
