@@ -82,7 +82,7 @@ class Post {
 
 
   static imagePackage.Image decodeImage(dynamic imageUint8List) {
-     return imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+     return imagePackage.decodeImage(imageUint8List);
   }
 
   // upload images, and get their urls to store in the post doc
@@ -129,9 +129,10 @@ class Post {
 
         // create a thumbnail to store in the data base, we don't need the larger image every time
 
-        // imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+        // imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODODone this process of is taking long time
 
         imagePackage.Image image = await compute(decodeImage, imageUint8List);
+        // TODO this process of is taking long time, we fixed mobile versions with isolate, but seems like isolate is not supported on web, might need to use "worker" - more study to come...
 
         dateTimeNow = DateTime.now();
         print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
