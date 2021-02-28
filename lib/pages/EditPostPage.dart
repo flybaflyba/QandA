@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +27,7 @@ import 'package:qanda/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as imagePackage;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/foundation.dart';
 
 
 class EditPostPage extends StatefulWidget{
@@ -384,6 +386,7 @@ class _EditPostPageState extends State<EditPostPage>{
     }
   }
 
+
   Future<void> savePost(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -407,7 +410,6 @@ class _EditPostPageState extends State<EditPostPage>{
       print("saving post now");
       var currentUserEmail = FirebaseAuth.instance.currentUser.email;
 
-
       Post post;
 
       if(widget.post == null) {
@@ -429,21 +431,22 @@ class _EditPostPageState extends State<EditPostPage>{
           authorImageUrl: userImageUrl,
         );
 
-        Future.delayed(Duration(milliseconds: 1)).then((_) async {
-          post.printOut();
-          print("start saving post to database");
-          post.create()
-              .then((value) {
-            print("finish saving post");
-            setState(() {
-              workInProgress = false;
-            });
-            resetCreatePostPageFields();
-            Navigator.pop(context);
-            // push to a new page
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
+
+
+        post.printOut();
+        print("start saving post to database");
+        post.create()
+            .then((value) {
+          print("finish saving post");
+          setState(() {
+            workInProgress = false;
           });
+          resetCreatePostPageFields();
+          Navigator.pop(context);
+          // push to a new page
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
         });
+
 
       } else {
 

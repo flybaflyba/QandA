@@ -13,6 +13,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 
 class Post {
   var title = "";
@@ -79,6 +80,11 @@ class Post {
     thumbnailAndImageUrls = postDocumentSnapshot.data().keys.contains("thumbnail and image urls") ? postDocumentSnapshot["thumbnail and image urls"] : Map();
   }
 
+
+  static imagePackage.Image decodeImage(dynamic imageUint8List) {
+     return imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+  }
+
   // upload images, and get their urls to store in the post doc
   Future<Map<dynamic, dynamic>> uploadImages(List<dynamic> imageUint8Lists) async {
     // List<String> urls = List<String>();
@@ -118,7 +124,11 @@ class Post {
         dateTimeLast = DateTime.now();
 
         // create a thumbnail to store in the data base, we don't need the larger image every time
-        imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+
+        // imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
+
+        imagePackage.Image image = await compute(decodeImage, imageUint8List);
+
         dateTimeNow = DateTime.now();
         print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
         dateTimeLast = DateTime.now();
