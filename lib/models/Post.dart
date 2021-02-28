@@ -108,7 +108,7 @@ class Post {
         String name = postDocName + " - " + imageUint8Lists.indexOf(imageUint8List).toString();
         Reference ref = FirebaseStorage.instance.ref('post images/$postDocName/$name');
 
-        if(kIsWeb) {
+        if(!kIsWeb) {
           Fluttertoast.cancel();
         }
 
@@ -137,7 +137,7 @@ class Post {
         // if we don't set this, it's not being recognized as image when web, might not be an issue, but I would like to set it
         SettableMetadata settableMetadata = SettableMetadata(contentType: 'image');
         try {
-          if(kIsWeb) {
+          if(!kIsWeb) {
             Fluttertoast.cancel();
           }
           UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
