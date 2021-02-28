@@ -429,18 +429,20 @@ class _EditPostPageState extends State<EditPostPage>{
           authorImageUrl: userImageUrl,
         );
 
-        post.printOut();
-        print("start saving post to database");
-        post.create()
-            .then((value) {
-          print("finish saving post");
-          setState(() {
-            workInProgress = false;
+        Future.delayed(Duration(milliseconds: 1)).then((_) async {
+          post.printOut();
+          print("start saving post to database");
+          post.create()
+              .then((value) {
+            print("finish saving post");
+            setState(() {
+              workInProgress = false;
+            });
+            resetCreatePostPageFields();
+            Navigator.pop(context);
+            // push to a new page
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
           });
-          resetCreatePostPageFields();
-          Navigator.pop(context);
-          // push to a new page
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
         });
 
       } else {
@@ -466,6 +468,7 @@ class _EditPostPageState extends State<EditPostPage>{
           // push to a new page
           Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
         });
+
 
       }
 

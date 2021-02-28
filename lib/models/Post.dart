@@ -114,7 +114,7 @@ class Post {
         dateTimeLast = DateTime.now();
 
         // create a thumbnail to store in the data base, we don't need the larger image every time
-        imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time only ON WEB
+        imagePackage.Image image = imagePackage.decodeImage(imageUint8List); // TODO this process of is taking long time
         dateTimeNow = DateTime.now();
         print("decoding image took " + dateTimeNow.difference(dateTimeLast).inSeconds.toString());
         dateTimeLast = DateTime.now();
