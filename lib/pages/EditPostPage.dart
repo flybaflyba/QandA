@@ -58,6 +58,8 @@ class _EditPostPageState extends State<EditPostPage>{
   var workInProgress = false;
   String _error = 'No Error Detected';
 
+  var imageUploadingMessage = "";
+
   int countUrls() {
     int count = 0;
     for(var i in imageUint8Lists){
@@ -259,7 +261,6 @@ class _EditPostPageState extends State<EditPostPage>{
                         widget.post.thumbnailAndImageUrls.remove(imageValue);
                       }
 
-
                     });
                   }
               )
@@ -412,6 +413,16 @@ class _EditPostPageState extends State<EditPostPage>{
 
       Post post;
 
+      new Timer.periodic(Duration(milliseconds: 1000), (timer) {
+        setState(() {
+          imageUploadingMessage = UniversalValues.imageUploadingMessage;
+        });
+        // print(imageUploadingMessage);
+        if(!workInProgress) {
+          timer.cancel();
+        }
+      });
+
       if(widget.post == null) {
 
         var currentTimeInUtc = DateTime.now().toUtc();
@@ -472,8 +483,9 @@ class _EditPostPageState extends State<EditPostPage>{
           Navigator.push(context, MaterialPageRoute(builder: (context) => ShowPostPage(post: post,),));
         });
 
-
       }
+
+
 
 
     }
@@ -785,26 +797,38 @@ class _EditPostPageState extends State<EditPostPage>{
                   Center(
                     child: workInProgress
                         ?
-                    SpinKitFadingCircle(
-                      color: Colors.blue,
-                      size: 50.0,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          backgroundColor: UniversalValues.primaryColor,
+                          valueColor: AlwaysStoppedAnimation(Colors.green),
+                          strokeWidth: 10,
+                        ),
+                        // SpinKitFadingCircle(
+                        //   color: Colors.blue,
+                        //   size: 50.0,
+                        // ),
+                        SizedBox(height: 15,),
+
+                        Stack(
+                          children: [
+                            LinearProgressIndicator(
+                              backgroundColor: UniversalValues.primaryColor,
+                              valueColor: AlwaysStoppedAnimation(Colors.green),
+                              minHeight: 20,
+                            ),
+                            Center(
+                              child: Text(
+                                imageUploadingMessage,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        )
+
+                      ],
                     )
-                    // Column(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     CircularProgressIndicator(
-                    //       backgroundColor: UniversalValues.primaryColor,
-                    //       valueColor: AlwaysStoppedAnimation(Colors.green),
-                    //       strokeWidth: 10,
-                    //     ),
-                    //     SizedBox(height: 15,),
-                    //     LinearProgressIndicator(
-                    //       backgroundColor: UniversalValues.primaryColor,
-                    //       valueColor: AlwaysStoppedAnimation(Colors.green),
-                    //       minHeight: 10,
-                    //     )
-                    //   ],
-                    // )
 
                         :
                     SizedBox(height: 0,),)

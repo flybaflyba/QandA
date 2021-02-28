@@ -20,7 +20,7 @@ class UniversalValues {
   ];
 
   static var currentViewingImageIndex = 0;
-
   static var searchCourseTerm = "";
+  static var imageUploadingMessage = "";
 
 }

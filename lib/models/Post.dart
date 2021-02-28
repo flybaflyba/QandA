@@ -118,7 +118,11 @@ class Post {
           Fluttertoast.cancel();
         }
 
-        UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+        UniversalValues.imageUploadingMessage = "Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}";
+        if (kIsWeb) {
+          UniversalFunctions.showToast("Processing Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+        }
+
         dateTimeNow = DateTime.now();
         print("start creating thumbnail");
         dateTimeLast = DateTime.now();
@@ -150,7 +154,11 @@ class Post {
           if(!kIsWeb) {
             Fluttertoast.cancel();
           }
-          UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+          UniversalValues.imageUploadingMessage = "Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}";
+          if (kIsWeb) {
+            UniversalFunctions.showToast("Uploading Image ${(imageUint8Lists.indexOf(imageUint8List) + 1).toString()}", UniversalValues.toastMessageTypeGoodColor);
+          }
+
           // Upload raw data.
           await ref.putData(imageUint8List, settableMetadata)
               .timeout((Duration(seconds: 10)), onTimeout: () {
