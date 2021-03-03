@@ -42,7 +42,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "\n\nAcademic Posts",
           body:
-          "Find an answer when you questions about a class.",
+          "Find answers to your questions for any class.",
           image: buildImage('intro_academic'),
           decoration: pageDecoration,
         ),
