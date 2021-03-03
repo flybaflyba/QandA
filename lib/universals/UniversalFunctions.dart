@@ -164,25 +164,25 @@ class UniversalFunctions{
                           ),
 
                           // indicating who we are replying to if we are replying
-                          comment == null
-                              ?
-                          SizedBox(height: 0,)
-                              :
-                          Container(
-                            margin: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-                            child: Row(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Replying "),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(comment.by, style: TextStyle(fontWeight: FontWeight.bold),),
-                                ),
-                              ],
-                            )
-                          ),
+                          // comment == null
+                          //     ?
+                          // SizedBox(height: 0,)
+                          //     :
+                          // Container(
+                          //   margin: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+                          //   child: Row(
+                          //     children: [
+                          //       Align(
+                          //         alignment: Alignment.centerLeft,
+                          //         child: Text("Replying "),
+                          //       ),
+                          //       Align(
+                          //         alignment: Alignment.centerLeft,
+                          //         child: Text(comment.by, style: TextStyle(fontWeight: FontWeight.bold),),
+                          //       ),
+                          //     ],
+                          //   )
+                          // ),
 
                           Container(
                             // color: Colors.blueAccent,
