@@ -130,11 +130,23 @@ class _SignInUpPageState extends State<SignInUpPage> {
     });
   }
 
-  Future<String> recoverPassword(String name) {
-    print('Name: $name');
-    return Future.delayed(animationTime).then((_) {
-
-      return "You cannot reset your password";
+  Future<String> recoverPassword(String email) {
+    print('Name: $email');
+    return Future.delayed(animationTime).then((_) async {
+      try {
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      }
+      on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          return 'User not found';
+        } else {
+          return 'Something went wrong';
+        }
+      }
+      catch (e) {
+        print(e);
+      }
+      return null;
       // return null;
     });
   }
@@ -176,6 +188,9 @@ class _SignInUpPageState extends State<SignInUpPage> {
           buttonTheme: LoginButtonTheme(
             backgroundColor: UniversalValues.buttonColor,
           ),
+        ),
+        messages: LoginMessages(
+          recoverPasswordDescription: "We will send you an email to reset your password."
         ),
       ),
     );

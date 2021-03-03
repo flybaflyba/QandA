@@ -68,20 +68,19 @@ class _ShowPostPageState extends State<ShowPostPage>{
                     useRootNavigator: true,
                     dialogType: DialogType.QUESTION,
                     animType: AnimType.BOTTOMSLIDE,
-                    title: 'Update your post?',
-                    desc: "",
+                    title: "Update",
+                    desc: "What do you want to do with your post?",
                     btnCancelText: "Delete",
                     btnCancelColor: Colors.red,
                     btnCancelOnPress: () {
-
                       AwesomeDialog(
                         width: 400,
                           context: context,
                           useRootNavigator: true,
                           dialogType: DialogType.INFO,
                           animType: AnimType.BOTTOMSLIDE,
-                          title: 'Are you sure to delete?',
-                          desc: "",
+                          title: "Delete",
+                          desc: "Are you sure to delete this post?",
                           btnCancelText: "Delete",
                           btnCancelColor: Colors.red,
                           btnCancelOnPress: ()
