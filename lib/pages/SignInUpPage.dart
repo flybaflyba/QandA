@@ -172,7 +172,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
       ),
       body: FlutterLogin(
         title: 'BYU Hawaii',
-        logo: 'assets/images/byu_hawaii_medallion_logo.png',
+        logo: 'assets/images/logo.png',
         onLogin: signIn,
         onSignup: signUp,
         onSubmitAnimationCompleted: () {

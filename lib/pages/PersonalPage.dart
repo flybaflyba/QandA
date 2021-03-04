@@ -118,7 +118,7 @@ class _PersonalPageState extends State<PersonalPage>{
                     context: context,
                     useRootNavigator: true,
                     dialogType: DialogType.NO_HEADER,
-                    customHeader: Image.asset("assets/images/byu_hawaii_medallion_logo.png"),
+                    customHeader: Image.asset("assets/images/logo.png"),
                     animType: AnimType.BOTTOMSLIDE,
                     title: 'About BYU-H App',
                     desc: "Programming by Litian Zhang under the supervision of Dr. Geoffrey Draper at Brigham Young University--Hawaii.",
