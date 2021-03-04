@@ -31,6 +31,8 @@ class NetworkImageWidget extends StatelessWidget{
         },
         errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
           print("error loading network image");
+          print(exception);
+          print(stackTrace);
           return Icon(Icons.image_not_supported);
         },
       ),
