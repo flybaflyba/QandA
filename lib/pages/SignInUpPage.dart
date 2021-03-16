@@ -5,6 +5,7 @@ import 'package:qanda/models/UserInformation.dart';
 import 'package:qanda/universals/UniversalFunctions.dart';
 import 'package:qanda/universals/UniversalValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SignInUpPage extends StatefulWidget{
 
@@ -16,6 +17,17 @@ class _SignInUpPageState extends State<SignInUpPage> {
 
   Duration get animationTime => Duration(milliseconds: 2000);
 
+  var pushToHome = true;
+
+  String messageCode(String s) {
+    if(kIsWeb) {
+      UniversalFunctions.showToast(s, UniversalValues.toastMessageTypeWarningColor);
+      pushToHome = false;
+      return null;
+    } else {
+      return s;
+    }
+  }
 
   @override
   void initState() {
@@ -56,21 +68,42 @@ class _SignInUpPageState extends State<SignInUpPage> {
               print("user name is not saved locally but get from database");
             }
           });
+
+          if (!FirebaseAuth.instance.currentUser.emailVerified) {
+            try {
+              await FirebaseAuth.instance.currentUser.sendEmailVerification();
+            } on FirebaseAuthException catch (e) {
+              return messageCode('Something went wrong. ${e.message}');
+              return "Something went wrong. ${e.message}";
+            } catch (e) {
+              print(e);
+            }
+            FirebaseAuth.instance.signOut();
+            return messageCode('Email not verified. Please check your inbox to verify.');
+            return "Email not verified. Please check your inbox to verify.";
+          } else {
+            // return null;
+          }
+
         }
 
       } on FirebaseAuthException catch (e) {
         print(e);
         if (e.code == 'user-not-found') {
           print('No user found');
-          return 'No user found';
+          return messageCode('No user found');
+          // return 'No user found';
         } else if (e.code == 'wrong-password') {
           print('Wrong password');
+          return messageCode('Wrong password');
           return 'Wrong password';
         } else if (e.code == 'invalid-email') {
           print('Invalid email');
+          return messageCode('Invalid email');
           return 'Invalid email';
         } else {
           print('Something went wrong');
+          return messageCode('Something went wrong');
           return 'Something went wrong';
         }
       }
@@ -78,19 +111,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
         print(e);
       }
 
-      if (!FirebaseAuth.instance.currentUser.emailVerified) {
-        try {
-          await FirebaseAuth.instance.currentUser.sendEmailVerification();
-        } on FirebaseAuthException catch (e) {
-          return "Something went wrong. ${e.message}";
-        } catch (e) {
-          print(e);
-        }
-        FirebaseAuth.instance.signOut();
-        return "Email not verified. Please check your inbox to verify.";
-      } else {
-        return null;
-      }
+      return null;
 
     });
   }
@@ -100,7 +121,8 @@ class _SignInUpPageState extends State<SignInUpPage> {
     return Future.delayed(animationTime).then((_) async {
 
       if(!data.name.contains("byuh.edu")) {
-        return "Please use your BYUH email.";
+        return messageCode('Please use your BYU-H email.');
+        return "Please use your BYU-H email.";
       } else {
         try {
           UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -126,36 +148,42 @@ class _SignInUpPageState extends State<SignInUpPage> {
             }
           });
 
+          if (!FirebaseAuth.instance.currentUser.emailVerified) {
+            try {
+              await FirebaseAuth.instance.currentUser.sendEmailVerification();
+            } on FirebaseAuthException catch (e) {
+              return messageCode('Something went wrong. ${e.message}');
+              return "Something went wrong. ${e.message}";
+            } catch (e) {
+              print(e);
+            }
+            FirebaseAuth.instance.signOut();
+            return messageCode('Please check your inbox to verify your email before log in.');
+            return "Please check your inbox to verify your email before log in.";
+          } else {
+            // return null;
+          }
+
         }
         on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             print('Password is too weak');
+            return messageCode('Password is too weak');
             return 'Password is too weak';
           } else if (e.code == 'email-already-in-use') {
             print('Account exists');
+            return messageCode('Account exists');
             return 'Account exists';
           } else if (e.code == 'invalid-email') {
             print('Invalid email');
+            return messageCode('Invalid email');
             return 'Invalid email';
           }
         }
         catch (e) {
           print(e);
         }
-
-        if (!FirebaseAuth.instance.currentUser.emailVerified) {
-          try {
-            await FirebaseAuth.instance.currentUser.sendEmailVerification();
-          } on FirebaseAuthException catch (e) {
-            return "Something went wrong. ${e.message}";
-          } catch (e) {
-            print(e);
-          }
-          FirebaseAuth.instance.signOut();
-          return "Please check your inbox to verify your email before log in.";
-        } else {
-          return null;
-        }
+        return null;
       }
 
 
@@ -170,8 +198,10 @@ class _SignInUpPageState extends State<SignInUpPage> {
       }
       on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
+          return messageCode('User not found');
           return 'User not found';
         } else {
+          return messageCode('Something went wrong');
           return 'Something went wrong';
         }
       }
@@ -207,19 +237,23 @@ class _SignInUpPageState extends State<SignInUpPage> {
         logo: 'assets/images/logo.png',
         onLogin: signIn,
         onSignup: signUp,
-        onSubmitAnimationCompleted: () async {
+        onSubmitAnimationCompleted: () {
           // if (!FirebaseAuth.instance.currentUser.emailVerified) {
           //   UniversalFunctions.showToast("Email not verified. Please check your inbox to verify.", UniversalValues.toastMessageTypeWarningColor);
           //   await FirebaseAuth.instance.currentUser.sendEmailVerification();
           //   FirebaseAuth.instance.signOut();
           // } else {
-            Navigator.pop(context);
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),))
+          Navigator.pop(context);
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),))
+
+          UniversalFunctions.askForUserMissingInfo(context, true, "A couple more things");
+          if(pushToHome) {
             UniversalFunctions.showToast("Your are logged in", UniversalValues.toastMessageTypeGoodColor);
-            UniversalFunctions.askForUserMissingInfo(context, true, "A couple more things");
+          } else {
+          }
+          pushToHome = true;
 
           // }
-
           },
         onRecoverPassword: recoverPassword,
         // showDebugButtons: true,
@@ -230,7 +264,9 @@ class _SignInUpPageState extends State<SignInUpPage> {
           ),
         ),
         messages: LoginMessages(
-          recoverPasswordDescription: "We will send you an email to reset your password."
+          recoverPasswordDescription: "We will send you an email to reset your password.",
+          
+
         ),
       ),
     );
