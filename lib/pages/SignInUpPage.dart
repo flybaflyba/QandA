@@ -78,7 +78,20 @@ class _SignInUpPageState extends State<SignInUpPage> {
         print(e);
       }
 
-      return null;
+      if (!FirebaseAuth.instance.currentUser.emailVerified) {
+        try {
+          await FirebaseAuth.instance.currentUser.sendEmailVerification();
+        } on FirebaseAuthException catch (e) {
+          return "Something went wrong. ${e.message}";
+        } catch (e) {
+          print(e);
+        }
+        FirebaseAuth.instance.signOut();
+        return "Email not verified. Please check your inbox to verify.";
+      } else {
+        return null;
+      }
+
     });
   }
 
@@ -86,47 +99,66 @@ class _SignInUpPageState extends State<SignInUpPage> {
     print('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(animationTime).then((_) async {
 
-      try {
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: data.name,
-          password: data.password,
-        );
-        print(userCredential);
-        // we can use this to set some simple user inf
-        // userCredential.user.updateProfile(displayName: 'Litian', photoURL: 'www.litianzhang.com');
+      if(!data.name.contains("byuh.edu")) {
+        return "Please use your BYUH email.";
+      } else {
+        try {
+          UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: data.name,
+            password: data.password,
+          );
+          print(userCredential);
+          // we can use this to set some simple user inf
+          // userCredential.user.updateProfile(displayName: 'Litian', photoURL: 'www.litianzhang.com');
 
-        // create a user information document in database
-        UserInformation userInformation = UserInformation(email: data.name);
-        userInformation.create();
+          // create a user information document in database
+          UserInformation userInformation = UserInformation(email: data.name);
+          userInformation.create();
 
-        userInformation.get()
-            .then((value) async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          var userName = prefs.getString("userName");
-          if(userName == null || userName == "") {
-            print("missing user name from database");
-          } else {
-            print("user name is not saved locally but get from database");
+          userInformation.get()
+              .then((value) async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            var userName = prefs.getString("userName");
+            if(userName == null || userName == "") {
+              print("missing user name from database");
+            } else {
+              print("user name is not saved locally but get from database");
+            }
+          });
+
+        }
+        on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            print('Password is too weak');
+            return 'Password is too weak';
+          } else if (e.code == 'email-already-in-use') {
+            print('Account exists');
+            return 'Account exists';
+          } else if (e.code == 'invalid-email') {
+            print('Invalid email');
+            return 'Invalid email';
           }
-        });
+        }
+        catch (e) {
+          print(e);
+        }
 
-      }
-      on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('Password is too weak');
-          return 'Password is too weak';
-        } else if (e.code == 'email-already-in-use') {
-          print('Account exists');
-          return 'Account exists';
-        } else if (e.code == 'invalid-email') {
-          print('Invalid email');
-          return 'Invalid email';
+        if (!FirebaseAuth.instance.currentUser.emailVerified) {
+          try {
+            await FirebaseAuth.instance.currentUser.sendEmailVerification();
+          } on FirebaseAuthException catch (e) {
+            return "Something went wrong. ${e.message}";
+          } catch (e) {
+            print(e);
+          }
+          FirebaseAuth.instance.signOut();
+          return "Please check your inbox to verify your email before log in.";
+        } else {
+          return null;
         }
       }
-      catch (e) {
-        print(e);
-      }
-      return null;
+
+
     });
   }
 
@@ -175,12 +207,20 @@ class _SignInUpPageState extends State<SignInUpPage> {
         logo: 'assets/images/logo.png',
         onLogin: signIn,
         onSignup: signUp,
-        onSubmitAnimationCompleted: () {
-          Navigator.pop(context);
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),))
-          UniversalFunctions.showToast("Your are logged in", UniversalValues.toastMessageTypeGoodColor);
-          UniversalFunctions.askForUserMissingInfo(context, true, "A couple more things");
-        },
+        onSubmitAnimationCompleted: () async {
+          // if (!FirebaseAuth.instance.currentUser.emailVerified) {
+          //   UniversalFunctions.showToast("Email not verified. Please check your inbox to verify.", UniversalValues.toastMessageTypeWarningColor);
+          //   await FirebaseAuth.instance.currentUser.sendEmailVerification();
+          //   FirebaseAuth.instance.signOut();
+          // } else {
+            Navigator.pop(context);
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage(),))
+            UniversalFunctions.showToast("Your are logged in", UniversalValues.toastMessageTypeGoodColor);
+            UniversalFunctions.askForUserMissingInfo(context, true, "A couple more things");
+
+          // }
+
+          },
         onRecoverPassword: recoverPassword,
         // showDebugButtons: true,
         theme: LoginTheme(
