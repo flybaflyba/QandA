@@ -413,14 +413,17 @@ class _EditPostPageState extends State<EditPostPage>{
 
       Post post;
 
-      new Timer.periodic(Duration(milliseconds: 1000), (timer) {
+      // if(imageUint8Lists.length != 0) {
+      //
+      // }
+      var timer = new Timer.periodic(Duration(milliseconds: 1000), (timer) {
         setState(() {
           imageUploadingMessage = UniversalValues.imageUploadingMessage;
         });
         // print(imageUploadingMessage);
-        if(!workInProgress) {
-          timer.cancel();
-        }
+        // if(!workInProgress) {
+        //   timer.cancel();
+        // }
       });
 
       if(widget.post == null) {
@@ -442,8 +445,6 @@ class _EditPostPageState extends State<EditPostPage>{
           authorImageUrl: userImageUrl,
         );
 
-
-
         post.printOut();
         print("start saving post to database");
         post.create()
@@ -452,6 +453,7 @@ class _EditPostPageState extends State<EditPostPage>{
           setState(() {
             workInProgress = false;
           });
+          timer.cancel();
           resetCreatePostPageFields();
           Navigator.pop(context);
           // push to a new page
@@ -477,6 +479,7 @@ class _EditPostPageState extends State<EditPostPage>{
           setState(() {
             workInProgress = false;
           });
+          timer.cancel();
           resetCreatePostPageFields();
           Navigator.pop(context);
           // push to a new page
