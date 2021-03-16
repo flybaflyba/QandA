@@ -266,7 +266,7 @@ class _SignInUpPageState extends State<SignInUpPage> {
         messages: LoginMessages(
           recoverPasswordDescription: "We will send you an email to reset your password.",
           // recoverPasswordButton: kIsWeb ? "" : "Forgot Password?",
-          forgotPasswordButton: kIsWeb ? "" : "Forgot Password?",
+          // forgotPasswordButton: kIsWeb ? "" : "Forgot Password?",
         ),
       ),
     );
