@@ -121,18 +121,18 @@ class _EditPostPageState extends State<EditPostPage>{
   }
 
   void resetCreatePostPageFields() {
-   setState(() {
-     titleTextEditingController.text = "";
-     contentTextEditingController.text = "";
-     courseTextEditingController.text = "";
-     title = "";
-     content = "";
-     topic = "What are your posting for?";
-     topicSelectionList = [false, false];
-     workInProgress = false;
-     imageAssets.clear();
-     imageUint8Lists.clear();
-   });
+    setState(() {
+      titleTextEditingController.text = "";
+      contentTextEditingController.text = "";
+      courseTextEditingController.text = "";
+      title = "";
+      content = "";
+      topic = "What are your posting for?";
+      topicSelectionList = [false, false];
+      workInProgress = false;
+      imageAssets.clear();
+      imageUint8Lists.clear();
+    });
   }
 
   // void createThumbnails() {
@@ -293,7 +293,7 @@ class _EditPostPageState extends State<EditPostPage>{
     } on Exception catch (e) {
       error = e.toString();
     }
-    
+
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -310,7 +310,7 @@ class _EditPostPageState extends State<EditPostPage>{
       Uint8List bytes = imageFile.readAsBytesSync();
       imageUint8ListsTemp.add(bytes);
     }
-    
+
     setState(() {
       if (resultList.length != 0) {
         imageAssets = resultList;
@@ -413,14 +413,17 @@ class _EditPostPageState extends State<EditPostPage>{
 
       Post post;
 
-      new Timer.periodic(Duration(milliseconds: 1000), (timer) {
+      // if(imageUint8Lists.length != 0) {
+      //
+      // }
+      var timer = new Timer.periodic(Duration(milliseconds: 1000), (timer) {
         setState(() {
           imageUploadingMessage = UniversalValues.imageUploadingMessage;
         });
         // print(imageUploadingMessage);
-        if(!workInProgress) {
-          timer.cancel();
-        }
+        // if(!workInProgress) {
+        //   timer.cancel();
+        // }
       });
 
       if(widget.post == null) {
@@ -442,8 +445,6 @@ class _EditPostPageState extends State<EditPostPage>{
           authorImageUrl: userImageUrl,
         );
 
-
-
         post.printOut();
         print("start saving post to database");
         post.create()
@@ -452,6 +453,7 @@ class _EditPostPageState extends State<EditPostPage>{
           setState(() {
             workInProgress = false;
           });
+          timer.cancel();
           resetCreatePostPageFields();
           Navigator.pop(context);
           // push to a new page
@@ -477,6 +479,7 @@ class _EditPostPageState extends State<EditPostPage>{
           setState(() {
             workInProgress = false;
           });
+          timer.cancel();
           resetCreatePostPageFields();
           Navigator.pop(context);
           // push to a new page
@@ -531,7 +534,7 @@ class _EditPostPageState extends State<EditPostPage>{
                       courseTextEditingController.text = temp;
                     });
                   }
-                  },
+                },
                 child: Text(
                   temp,
                 ),
@@ -551,291 +554,291 @@ class _EditPostPageState extends State<EditPostPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text("Create Post"),),
-        actions: [
-          Icon(Icons.add, color: UniversalValues.primaryColor,), //  to make the title center
-        ],
-      ),
-      body:
-      // disable screen touch and show progress indicator when work in progress
-      AbsorbPointer(
-        absorbing: workInProgress,
-        child: Center(
-          child: Container(
-              constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
-              child: Stack(
-                children: [
-                  ListView(
+        appBar: AppBar(
+          title: Center(child: Text("Create Post"),),
+          actions: [
+            Icon(Icons.add, color: UniversalValues.primaryColor,), //  to make the title center
+          ],
+        ),
+        body:
+        // disable screen touch and show progress indicator when work in progress
+        AbsorbPointer(
+            absorbing: workInProgress,
+            child: Center(
+              child: Container(
+                  constraints: BoxConstraints(minWidth: 150, maxWidth: 800),
+                  child: Stack(
                     children: [
+                      ListView(
+                        children: [
 
-                      TitleWidget(title: topic == "Campus Life" ? "Share your life" : topic == "Academic" ? "Ask a question" : topic,),
+                          TitleWidget(title: topic == "Campus Life" ? "Share your life" : topic == "Academic" ? "Ask a question" : topic,),
 
-                      Center(
-                        child: ToggleButtons(
-                          children: <Widget>[
-                            Icon(Icons.nightlife),
-                            Icon(Icons.school),
-                          ],
-                          onPressed: (int index) {
-                            setState(() {
-                              for (int buttonIndex = 0; buttonIndex < topicSelectionList.length; buttonIndex++) {
-                                if (buttonIndex == index) {
-                                  topicSelectionList[buttonIndex] = !topicSelectionList[buttonIndex];
-                                } else {
-                                  topicSelectionList[buttonIndex] = false;
-                                }
-                              }
-                              if(index == 0) {
+                          Center(
+                            child: ToggleButtons(
+                              children: <Widget>[
+                                Icon(Icons.nightlife),
+                                Icon(Icons.school),
+                              ],
+                              onPressed: (int index) {
                                 setState(() {
-                                  topic = "Campus Life";
-                                });
-                              } else {
-                                setState(() {
-                                  topic = "Academic";
-                                });
-                              }
-                              // print(index);
-                            });
-                          },
-                          isSelected: topicSelectionList,
-                        ),
-                      ),
-
-                      topic == "Academic" ?
-
-                      Container(
-                          margin: EdgeInsets.all(20),
-                          child:
-                          Column(
-                            children: [
-                              TextField(
-                                controller: courseTextEditingController,
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                                onChanged: (value){
-                                  setState(() {
-                                     course = value;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Course",
-                                  alignLabelWithHint: true,
-                                  // focusedBorder: OutlineInputBorder(
-                                  //   borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                  // ),
-                                  // enabledBorder: OutlineInputBorder(
-                                  //   borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                                  // ),
-                                ),
-                              ),
-                              Container(
-                                color: Colors.grey[300],
-                                constraints: BoxConstraints(minHeight: 0, maxHeight: 200),
-                                child: listMatchedCourses(course),
-                              )
-                            ],
-                          )
-                      )
-
-
-                      :
-                      SizedBox(height: 0,),
-
-
-
-                      // // no need title
-                      // Container(
-                      //   margin: EdgeInsets.all(20),
-                      //   child:
-                      //   Column(
-                      //     children: [
-                      //       title != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Title",),),) : SizedBox(height: 0,),
-                      //       TextField(
-                      //         controller: titleTextEditingController,
-                      //         style: TextStyle(fontSize: 25),
-                      //         textAlign: TextAlign.center,
-                      //         onChanged: (value){
-                      //           setState(() {
-                      //             title = value;
-                      //           });
-                      //         },
-                      //         decoration: InputDecoration(
-                      //           hintText: "Title",
-                      //           alignLabelWithHint: true,
-                      //           focusedBorder: OutlineInputBorder(
-                      //             borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                      //           ),
-                      //           enabledBorder: OutlineInputBorder(
-                      //             borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   )
-                      // ),
-
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            content != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("say something",),),) : SizedBox(height: 0,),
-                            TextField(
-                              controller: contentTextEditingController,
-                              minLines: 1,
-                              maxLines: 100,
-                              textAlign: TextAlign.left,
-                              onChanged: (value){
-                                setState(() {
-                                  content = value;
-                                });
-
-                              },
-                              decoration: InputDecoration(
-                                hintText: "say something",
-                                alignLabelWithHint: true,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ),
-
-                      // Container(
-                      //   margin: EdgeInsets.all(20),
-                      //   child:
-                      //   Column(
-                      //     children: <Widget>[
-                      //       Center(child: Text('Error: $_error')),
-                      //       RaisedButton(
-                      //         child: Text("Pick images"),
-                      //         onPressed: loadAssets,
-                      //       ),
-                      //
-                      //     ],
-                      //   ),
-                      // ),
-
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child: buildGridView(),
-                      ),
-
-
-                      Container(
-                          margin: EdgeInsets.all(20),
-                          child:   Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              NiceButton(
-                                width: 255,
-                                elevation: 8.0,
-                                radius: 52.0,
-                                text: "Post",
-                                background: UniversalValues.buttonColor,
-                                onPressed: () {
-                                  // widget.post.printOut();
-                                  // print(images);
-                                  // print(titleTextEditingController.text);
-                                  // print(titleTextEditingController.value);
-                                  // if (title != "" && content != "" && topic != "What are Your Posting for?") {
-                                  print(topic);
-                                  print(content);
-                                  if (content != "" && topic != "What are You Posting for?") {
-                                    if (FirebaseAuth.instance.currentUser != null) {
-
-                                      if(topic == "Academic") {
-                                        if (!UniversalValues.courses.contains(course)) {
-                                          UniversalFunctions.showToast("Please search/select a course.", UniversalValues.toastMessageTypeWarningColor);
-                                        } else {
-                                          // save post
-                                          savePost(context);
-                                        }
-                                      } else {
-                                        //save post
-                                        savePost(context);
-                                      }
-
-
+                                  for (int buttonIndex = 0; buttonIndex < topicSelectionList.length; buttonIndex++) {
+                                    if (buttonIndex == index) {
+                                      topicSelectionList[buttonIndex] = !topicSelectionList[buttonIndex];
                                     } else {
-                                      // ask for login
-                                      print("ask for login");
-                                      pushNewScreen(
-                                        context,
-                                        screen: SignInUpPage(),
-                                        withNavBar: false, // OPTIONAL VALUE. True by default.
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      );
-                                    }
-
-                                  } else {
-                                    // if (title == "") {
-                                    //   UniversalFunctions.showToast("What's the title?", UniversalValues.toastMessageTypeWarningColor);
-                                    // } else
-
-                                    if (content == "") {
-                                      UniversalFunctions.showToast("Please provide some content.", UniversalValues.toastMessageTypeWarningColor);
-                                    } else {
-                                      UniversalFunctions.showToast("What are You Posting for?", UniversalValues.toastMessageTypeWarningColor);
+                                      topicSelectionList[buttonIndex] = false;
                                     }
                                   }
-                                },
-                              ),
-                            ],
+                                  if(index == 0) {
+                                    setState(() {
+                                      topic = "Campus Life";
+                                    });
+                                  } else {
+                                    setState(() {
+                                      topic = "Academic";
+                                    });
+                                  }
+                                  // print(index);
+                                });
+                              },
+                              isSelected: topicSelectionList,
+                            ),
+                          ),
+
+                          topic == "Academic" ?
+
+                          Container(
+                              margin: EdgeInsets.all(20),
+                              child:
+                              Column(
+                                children: [
+                                  TextField(
+                                    controller: courseTextEditingController,
+                                    style: TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                    onChanged: (value){
+                                      setState(() {
+                                        course = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: "Course",
+                                      alignLabelWithHint: true,
+                                      // focusedBorder: OutlineInputBorder(
+                                      //   borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                      // ),
+                                      // enabledBorder: OutlineInputBorder(
+                                      //   borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                      // ),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.grey[300],
+                                    constraints: BoxConstraints(minHeight: 0, maxHeight: 200),
+                                    child: listMatchedCourses(course),
+                                  )
+                                ],
+                              )
                           )
+
+
+                              :
+                          SizedBox(height: 0,),
+
+
+
+                          // // no need title
+                          // Container(
+                          //   margin: EdgeInsets.all(20),
+                          //   child:
+                          //   Column(
+                          //     children: [
+                          //       title != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("Title",),),) : SizedBox(height: 0,),
+                          //       TextField(
+                          //         controller: titleTextEditingController,
+                          //         style: TextStyle(fontSize: 25),
+                          //         textAlign: TextAlign.center,
+                          //         onChanged: (value){
+                          //           setState(() {
+                          //             title = value;
+                          //           });
+                          //         },
+                          //         decoration: InputDecoration(
+                          //           hintText: "Title",
+                          //           alignLabelWithHint: true,
+                          //           focusedBorder: OutlineInputBorder(
+                          //             borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                          //           ),
+                          //           enabledBorder: OutlineInputBorder(
+                          //             borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   )
+                          // ),
+
+                          Container(
+                              margin: EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  content != "" ? Container(margin: EdgeInsets.only(bottom: 5), child: Center(child: Text("say something",),),) : SizedBox(height: 0,),
+                                  TextField(
+                                    controller: contentTextEditingController,
+                                    minLines: 1,
+                                    maxLines: 100,
+                                    textAlign: TextAlign.left,
+                                    onChanged: (value){
+                                      setState(() {
+                                        content = value;
+                                      });
+
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: "say something",
+                                      alignLabelWithHint: true,
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+
+                          // Container(
+                          //   margin: EdgeInsets.all(20),
+                          //   child:
+                          //   Column(
+                          //     children: <Widget>[
+                          //       Center(child: Text('Error: $_error')),
+                          //       RaisedButton(
+                          //         child: Text("Pick images"),
+                          //         onPressed: loadAssets,
+                          //       ),
+                          //
+                          //     ],
+                          //   ),
+                          // ),
+
+                          Container(
+                            margin: EdgeInsets.all(20),
+                            child: buildGridView(),
+                          ),
+
+
+                          Container(
+                              margin: EdgeInsets.all(20),
+                              child:   Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  NiceButton(
+                                    width: 255,
+                                    elevation: 8.0,
+                                    radius: 52.0,
+                                    text: "Post",
+                                    background: UniversalValues.buttonColor,
+                                    onPressed: () {
+                                      // widget.post.printOut();
+                                      // print(images);
+                                      // print(titleTextEditingController.text);
+                                      // print(titleTextEditingController.value);
+                                      // if (title != "" && content != "" && topic != "What are Your Posting for?") {
+                                      print(topic);
+                                      print(content);
+                                      if (content != "" && topic != "What are You Posting for?") {
+                                        if (FirebaseAuth.instance.currentUser != null) {
+
+                                          if(topic == "Academic") {
+                                            if (!UniversalValues.courses.contains(course)) {
+                                              UniversalFunctions.showToast("Please search/select a course.", UniversalValues.toastMessageTypeWarningColor);
+                                            } else {
+                                              // save post
+                                              savePost(context);
+                                            }
+                                          } else {
+                                            //save post
+                                            savePost(context);
+                                          }
+
+
+                                        } else {
+                                          // ask for login
+                                          print("ask for login");
+                                          pushNewScreen(
+                                            context,
+                                            screen: SignInUpPage(),
+                                            withNavBar: false, // OPTIONAL VALUE. True by default.
+                                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                          );
+                                        }
+
+                                      } else {
+                                        // if (title == "") {
+                                        //   UniversalFunctions.showToast("What's the title?", UniversalValues.toastMessageTypeWarningColor);
+                                        // } else
+
+                                        if (content == "") {
+                                          UniversalFunctions.showToast("Please provide some content.", UniversalValues.toastMessageTypeWarningColor);
+                                        } else {
+                                          UniversalFunctions.showToast("What are You Posting for?", UniversalValues.toastMessageTypeWarningColor);
+                                        }
+                                      }
+                                    },
+                                  ),
+                                ],
+                              )
+                          ),
+
+                          SizedBox(height: 200,)
+
+                        ],
                       ),
-
-                      SizedBox(height: 200,)
-
-                    ],
-                  ),
-                  Center(
-                    child: workInProgress
-                        ?
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          backgroundColor: UniversalValues.primaryColor,
-                          valueColor: AlwaysStoppedAnimation(Colors.green),
-                          strokeWidth: 10,
-                        ),
-                        // SpinKitFadingCircle(
-                        //   color: Colors.blue,
-                        //   size: 50.0,
-                        // ),
-                        SizedBox(height: 15,),
-
-                        Stack(
+                      Center(
+                        child: workInProgress
+                            ?
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            LinearProgressIndicator(
+                            CircularProgressIndicator(
                               backgroundColor: UniversalValues.primaryColor,
                               valueColor: AlwaysStoppedAnimation(Colors.green),
-                              minHeight: 20,
+                              strokeWidth: 10,
                             ),
-                            Center(
-                              child: Text(
-                                imageUploadingMessage,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                            // SpinKitFadingCircle(
+                            //   color: Colors.blue,
+                            //   size: 50.0,
+                            // ),
+                            SizedBox(height: 15,),
+
+                            Stack(
+                              children: [
+                                LinearProgressIndicator(
+                                  backgroundColor: UniversalValues.primaryColor,
+                                  valueColor: AlwaysStoppedAnimation(Colors.green),
+                                  minHeight: 20,
+                                ),
+                                Center(
+                                  child: Text(
+                                    imageUploadingMessage,
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
                             )
+
                           ],
                         )
 
-                      ],
-                    )
-
-                        :
-                    SizedBox(height: 0,),)
-                ],
-              )
-          ),
+                            :
+                        SizedBox(height: 0,),)
+                    ],
+                  )
+              ),
+            )
         )
-      )
     );
   }}
