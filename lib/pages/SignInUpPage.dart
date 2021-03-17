@@ -273,3 +273,11 @@ class _SignInUpPageState extends State<SignInUpPage> {
   }
 
 }
+
+// master branch broken for some reason ...
+
+// an error appears occasionally ...
+
+// * What went wrong:
+// Execution failed for task ':fluttertoast:compileDebugKotlin'.
+// > Compilation error. See log for more details
